@@ -1,7 +1,7 @@
 {
   "name": "@vinejs/compiler",
   "version": "0.0.0",
-  "description": "",
+  "description": "Low level compiler for VineJS validator",
   "type": "module",
   "main": "build/index.js",
   "files": [
@@ -32,7 +32,11 @@
     "version": "npm run build",
     "prepublishOnly": "npm run build"
   },
-  "keywords": ["vinejs", "compiler", "validator"],
+  "keywords": [
+    "vinejs",
+    "compiler",
+    "validator"
+  ],
   "author": "virk",
   "license": "MIT",
   "devDependencies": {
@@ -60,6 +64,14 @@
     "typescript": "^5.0.4",
     "zod": "^3.21.4"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vinejs/compiler.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vinejs/compiler/issues"
+  },
+  "homepage": "https://github.com/vinejs/compiler#readme",
   "eslintConfig": {
     "extends": [
       "plugin:adonis/typescriptPackage",
