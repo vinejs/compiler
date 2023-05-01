@@ -7,7 +7,6 @@
  * file that was distributed with this source code.
  */
 
-import { EOL } from 'node:os'
 import type { Compiler } from '../main.js'
 import type { CompilerBuffer } from '../buffer.js'
 import { defineObjectGuard } from '../../scripts/object/guard.js'
@@ -132,7 +131,9 @@ export class ObjectNodeCompiler {
       guardedCodeSnippet: `${defineObjectInitialOutput({
         outputExpression: field.outputExpression,
         outputValueExpression: '{}',
-      })}${EOL}${this.#compileObjectChildren(field)}${EOL}${defineMoveProperties({
+      })}${this.#buffer.newLine}${this.#compileObjectChildren(field)}${
+        this.#buffer.newLine
+      }${defineMoveProperties({
         variableName: field.variableName,
         outputExpression: field.outputExpression,
         allowUnknownProperties: this.#node.allowUnknownProperties,
@@ -161,7 +162,7 @@ export class ObjectNodeCompiler {
      * block.
      */
     this.#buffer.writeStatement(
-      `${isValueAnObject}${EOL}${defineFieldNullOutput({
+      `${isValueAnObject}${this.#buffer.newLine}${defineFieldNullOutput({
         variableName: field.variableName,
         allowNull: this.#node.allowNull,
         outputExpression: field.outputExpression,

@@ -7,8 +7,6 @@
  * file that was distributed with this source code.
  */
 
-import { EOL } from 'node:os'
-
 /**
  * Compiler buffer to collect JS fragments in memory
  */
@@ -16,10 +14,15 @@ export class CompilerBuffer {
   #content: string = ''
 
   /**
+   * The character used to create a new line
+   */
+  newLine = '\n'
+
+  /**
    * Write statement ot the output
    */
   writeStatement(statement: string) {
-    this.#content = `${this.#content}${EOL}${statement}`
+    this.#content = `${this.#content}${this.newLine}${statement}`
   }
 
   /**

@@ -7,7 +7,6 @@
  * file that was distributed with this source code.
  */
 
-import { EOL } from 'node:os'
 import type { Compiler } from '../main.js'
 import type { CompilerBuffer } from '../buffer.js'
 import { defineFieldVariables } from '../../scripts/field/variables.js'
@@ -113,7 +112,7 @@ export class LiteralNodeCompiler {
         variableName: field.variableName,
         outputExpression: field.outputExpression,
         transformFnRefId: this.#node.transformFnId,
-      })}${EOL}${defineFieldNullOutput({
+      })}${this.#buffer.newLine}${defineFieldNullOutput({
         variableName: field.variableName,
         allowNull: this.#node.allowNull,
         outputExpression: field.outputExpression,

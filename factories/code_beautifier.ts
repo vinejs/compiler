@@ -9,14 +9,13 @@
 
 // @ts-expect-error
 import js from 'js-beautify'
-import { EOL } from 'node:os'
 
 /**
  * Validates a JS snippet using acorn
  */
 export function beautifyCode(input: string | string[]) {
   return {
-    value: js(Array.isArray(input) ? input.join(EOL) : input, {
+    value: js(Array.isArray(input) ? input.join('\n') : input, {
       indent_size: '2',
       indent_char: ' ',
       max_preserve_newlines: '-1',
@@ -39,7 +38,7 @@ export function beautifyCode(input: string | string[]) {
       return this.value
     },
     toArray() {
-      return this.value.split(EOL)
+      return this.value.split('\n')
     },
   }
 }

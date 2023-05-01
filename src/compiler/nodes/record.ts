@@ -7,7 +7,6 @@
  * file that was distributed with this source code.
  */
 
-import { EOL } from 'node:os'
 import type { Compiler } from '../main.js'
 import type { CompilerBuffer } from '../buffer.js'
 import { defineRecordLoop } from '../../scripts/record/loop.js'
@@ -155,7 +154,7 @@ export class RecordNodeCompiler {
         validations: this.#node.validations,
         bail: this.#node.bail,
         dropMissingCheck: true,
-      })}${EOL}${isObjectValidBlock}`,
+      })}${this.#buffer.newLine}${isObjectValidBlock}`,
     })
 
     /**
@@ -163,7 +162,7 @@ export class RecordNodeCompiler {
      * block.
      */
     this.#buffer.writeStatement(
-      `${isValueAnObjectBlock}${EOL}${defineFieldNullOutput({
+      `${isValueAnObjectBlock}${this.#buffer.newLine}${defineFieldNullOutput({
         allowNull: this.#node.allowNull,
         outputExpression: field.outputExpression,
         variableName: field.variableName,

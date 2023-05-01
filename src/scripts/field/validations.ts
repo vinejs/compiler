@@ -7,7 +7,6 @@
  * file that was distributed with this source code.
  */
 
-import { EOL } from 'node:os'
 import { CompilerValidationNode } from '../../types.js'
 
 /**
@@ -94,5 +93,5 @@ export function defineFieldValidations({
 }: ValidationOptions) {
   return `${validations
     .map((one) => emitValidationSnippet(one, variableName, bail, dropMissingCheck))
-    .join(EOL)}`
+    .join('\n')}`
 }

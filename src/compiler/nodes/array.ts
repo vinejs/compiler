@@ -7,7 +7,6 @@
  * file that was distributed with this source code.
  */
 
-import { EOL } from 'node:os'
 import type { Compiler } from '../main.js'
 import type { CompilerBuffer } from '../buffer.js'
 import { defineArrayLoop } from '../../scripts/array/loop.js'
@@ -167,7 +166,9 @@ export class ArrayNodeCompiler {
         outputValueExpression: this.#node.allowUnknownProperties
           ? `copyProperties(${field.variableName}.value)`
           : `[]`,
-      })}${this.#compileTupleChildren(field)}${EOL}${this.#compileArrayElements(field)}`,
+      })}${this.#compileTupleChildren(field)}${this.#buffer.newLine}${this.#compileArrayElements(
+        field
+      )}`,
     })
 
     /**
@@ -183,7 +184,7 @@ export class ArrayNodeCompiler {
         validations: this.#node.validations,
         bail: this.#node.bail,
         dropMissingCheck: true,
-      })}${EOL}${isArrayValidBlock}`,
+      })}${this.#buffer.newLine}${isArrayValidBlock}`,
     })
 
     /**
@@ -191,7 +192,7 @@ export class ArrayNodeCompiler {
      * block.
      */
     this.#buffer.writeStatement(
-      `${isValueAnArrayBlock}${EOL}${defineFieldNullOutput({
+      `${isValueAnArrayBlock}${this.#buffer.newLine}${defineFieldNullOutput({
         allowNull: this.#node.allowNull,
         outputExpression: field.outputExpression,
         variableName: field.variableName,
