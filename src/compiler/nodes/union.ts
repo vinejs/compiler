@@ -10,9 +10,9 @@
 import { BaseNode } from './base.js'
 import type { Compiler } from '../main.js'
 import type { CompilerBuffer } from '../buffer.js'
-import { defineConditionalGuard } from '../../scripts/define_conditional_guard.js'
-import type { CompilerField, CompilerParent, UnionNode } from '../../types.js'
 import { defineElseCondition } from '../../scripts/define_else_conditon.js'
+import type { CompilerField, CompilerParent, UnionNode } from '../../types.js'
+import { defineConditionalGuard } from '../../scripts/define_conditional_guard.js'
 
 /**
  * Compiles a union schema node to JS string output.

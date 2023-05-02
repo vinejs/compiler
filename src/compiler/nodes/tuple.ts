@@ -44,14 +44,15 @@ export class TupleNodeCompiler extends BaseNode {
    */
   #compileTupleChildren() {
     const buffer = this.#buffer.child()
+    const parent = {
+      type: 'tuple',
+      fieldPathExpression: this.field.fieldPathExpression,
+      outputExpression: this.field.outputExpression,
+      variableName: this.field.variableName,
+    } as const
 
     this.#node.properties.forEach((child) => {
-      this.#compiler.compileNode(child, buffer, {
-        type: 'tuple',
-        fieldPathExpression: this.field.fieldPathExpression,
-        outputExpression: this.field.outputExpression,
-        variableName: this.field.variableName,
-      })
+      this.#compiler.compileNode(child, buffer, parent)
     })
 
     return buffer.toString()

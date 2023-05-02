@@ -71,16 +71,14 @@ export class ObjectNodeCompiler extends BaseNode {
    */
   #compileObjectChildren() {
     const buffer = this.#buffer.child()
+    const parent = {
+      type: 'object',
+      fieldPathExpression: this.field.fieldPathExpression,
+      outputExpression: this.field.outputExpression,
+      variableName: this.field.variableName,
+    } as const
 
-    this.#node.properties.forEach((child) => {
-      this.#compiler.compileNode(child, buffer, {
-        type: 'object',
-        fieldPathExpression: this.field.fieldPathExpression,
-        outputExpression: this.field.outputExpression,
-        variableName: this.field.variableName,
-      })
-    })
-
+    this.#node.properties.forEach((child) => this.#compiler.compileNode(child, buffer, parent))
     return buffer.toString()
   }
 
@@ -89,35 +87,34 @@ export class ObjectNodeCompiler extends BaseNode {
    */
   #compileObjectGroups() {
     const buffer = this.#buffer.child()
-    this.#node.groups.forEach((group) => {
-      this.#compileObjectGroup(group, buffer, this.field)
-    })
+    const parent = {
+      type: 'object',
+      fieldPathExpression: this.field.fieldPathExpression,
+      outputExpression: this.field.outputExpression,
+      variableName: this.field.variableName,
+    } as const
+    this.#node.groups.forEach((group) => this.#compileObjectGroup(group, buffer, parent))
     return buffer.toString()
   }
 
   /**
    * Compiles an object groups recursively
    */
-  #compileObjectGroup(group: ObjectGroupNode, buffer: CompilerBuffer, field: CompilerField) {
+  #compileObjectGroup(group: ObjectGroupNode, buffer: CompilerBuffer, parent: CompilerParent) {
     group.conditions.forEach((condition, index) => {
       const guardBuffer = buffer.child()
 
       if (condition.schema.type === 'group') {
-        this.#compileObjectGroup(condition.schema, guardBuffer, field)
+        this.#compileObjectGroup(condition.schema, guardBuffer, parent)
       } else {
         condition.schema.children.forEach((child) => {
-          this.#compiler.compileNode(child, guardBuffer, {
-            type: 'object',
-            fieldPathExpression: field.fieldPathExpression,
-            outputExpression: field.outputExpression,
-            variableName: field.variableName,
-          })
+          this.#compiler.compileNode(child, guardBuffer, parent)
         })
       }
 
       buffer.writeStatement(
         defineConditionalGuard({
-          variableName: field.variableName,
+          variableName: this.field.variableName,
           conditional: index === 0 ? 'if' : 'else if',
           conditionalFnRefId: condition.conditionalFnRefId,
           guardedCodeSnippet: guardBuffer.toString(),
@@ -131,7 +128,7 @@ export class ObjectNodeCompiler extends BaseNode {
     if (group.elseConditionalFnRefId && group.conditions.length) {
       buffer.writeStatement(
         defineElseCondition({
-          variableName: field.variableName,
+          variableName: this.field.variableName,
           conditionalFnRefId: group.elseConditionalFnRefId,
         })
       )
