@@ -26,7 +26,7 @@ import type {
   RefIdentifier,
   CompilerNodes,
   CompilerParent,
-  CompilerRootNode,
+  RootNode,
   CompilerUnionParent,
   ErrorReporterContract,
 } from '../types.js'
@@ -50,14 +50,14 @@ export class Compiler {
   /**
    * An array of nodes to process
    */
-  #rootNode: CompilerRootNode
+  #rootNode: RootNode
 
   /**
    * Buffer for collection the JS output string
    */
   #buffer: CompilerBuffer = new CompilerBuffer()
 
-  constructor(rootNode: CompilerRootNode) {
+  constructor(rootNode: RootNode) {
     this.#rootNode = rootNode
   }
 

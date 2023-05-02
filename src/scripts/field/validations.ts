@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import { CompilerValidationNode } from '../../types.js'
+import { ValidationNode } from '../../types.js'
 
 /**
  * Options accepts by the validation script
@@ -15,7 +15,7 @@ import { CompilerValidationNode } from '../../types.js'
 type ValidationOptions = {
   bail: boolean
   variableName: string
-  validations: CompilerValidationNode[]
+  validations: ValidationNode[]
 
   /**
    * Drop missing conditional check regardless of whether
@@ -54,7 +54,7 @@ function wrapInConditional(conditions: [string, string], wrappingCode: string) {
  * Emits code for executing a validation function
  */
 function emitValidationSnippet(
-  { isAsync, implicit, ruleFnId }: CompilerValidationNode,
+  { isAsync, implicit, ruleFnId }: ValidationNode,
   variableName: string,
   bail: boolean,
   dropMissingCheck: boolean

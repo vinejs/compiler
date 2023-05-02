@@ -19,7 +19,7 @@ test.group('Union node', () => {
         type: 'union',
         fieldName: '*',
         propertyName: '*',
-        children: [
+        conditions: [
           {
             conditionalFnRefId: 'ref://1',
             schema: {
@@ -79,7 +79,7 @@ test.group('Union node', () => {
         type: 'union',
         fieldName: '*',
         propertyName: '*',
-        children: [
+        conditions: [
           {
             conditionalFnRefId: 'ref://1',
             schema: {
@@ -92,7 +92,7 @@ test.group('Union node', () => {
               allowNull: false,
               isOptional: false,
               allowUnknownProperties: false,
-              children: [
+              properties: [
                 {
                   type: 'literal',
                   bail: true,
@@ -126,7 +126,7 @@ test.group('Union node', () => {
               allowNull: false,
               isOptional: false,
               allowUnknownProperties: false,
-              children: [
+              properties: [
                 {
                   type: 'literal',
                   bail: true,
@@ -163,7 +163,7 @@ test.group('Union node', () => {
         type: 'union',
         fieldName: '*',
         propertyName: '*',
-        children: [
+        conditions: [
           {
             conditionalFnRefId: 'ref://1',
             schema: {
@@ -185,7 +185,7 @@ test.group('Union node', () => {
                 isOptional: false,
                 propertyName: '*',
                 validations: [],
-                children: [
+                properties: [
                   {
                     type: 'literal',
                     bail: true,
@@ -220,7 +220,7 @@ test.group('Union node', () => {
                 isOptional: false,
                 propertyName: '*',
                 validations: [],
-                children: [
+                properties: [
                   {
                     type: 'literal',
                     bail: true,
@@ -258,14 +258,14 @@ test.group('Union node', () => {
         type: 'union',
         fieldName: '*',
         propertyName: '*',
-        children: [
+        conditions: [
           {
             conditionalFnRefId: 'ref://1',
             schema: {
               type: 'union',
               fieldName: '*',
               propertyName: '*',
-              children: [
+              conditions: [
                 {
                   conditionalFnRefId: 'ref://3',
                   schema: {
@@ -278,7 +278,7 @@ test.group('Union node', () => {
                     fieldName: '*',
                     propertyName: '*',
                     isOptional: false,
-                    children: [
+                    properties: [
                       {
                         type: 'literal',
                         fieldName: 'twitter_handle',
@@ -303,7 +303,7 @@ test.group('Union node', () => {
                     fieldName: '*',
                     propertyName: '*',
                     isOptional: false,
-                    children: [
+                    properties: [
                       {
                         type: 'literal',
                         fieldName: 'github_username',
@@ -325,7 +325,7 @@ test.group('Union node', () => {
               type: 'union',
               fieldName: '*',
               propertyName: '*',
-              children: [
+              conditions: [
                 {
                   conditionalFnRefId: 'ref://5',
                   schema: {
@@ -338,7 +338,7 @@ test.group('Union node', () => {
                     fieldName: '*',
                     propertyName: '*',
                     isOptional: false,
-                    children: [
+                    properties: [
                       {
                         type: 'literal',
                         fieldName: 'email',
@@ -363,7 +363,7 @@ test.group('Union node', () => {
                     fieldName: '*',
                     propertyName: '*',
                     isOptional: false,
-                    children: [
+                    properties: [
                       {
                         type: 'literal',
                         fieldName: 'phone',
@@ -411,7 +411,7 @@ test.group('Union node', () => {
         type: 'union',
         fieldName: '*',
         propertyName: '*',
-        children: [
+        conditions: [
           {
             conditionalFnRefId: 'ref://1',
             schema: {

@@ -10,7 +10,7 @@
 import type { Compiler } from '../main.js'
 import type { CompilerBuffer } from '../buffer.js'
 import { defineFieldVariables } from '../../scripts/field/variables.js'
-import type { CompilerLiteralNode, CompilerParent, CompilerUnionParent } from '../../types.js'
+import type { LiteralNode, CompilerParent, CompilerUnionParent } from '../../types.js'
 import { defineFieldValidations } from '../../scripts/field/validations.js'
 import { defineFieldNullOutput } from '../../scripts/field/null_output.js'
 import { defineFieldValueOutput } from '../../scripts/field/value_output.js'
@@ -20,14 +20,14 @@ import { defineFieldExistenceValidations } from '../../scripts/field/existence_v
  * Compiles a literal schema node to JS string output.
  */
 export class LiteralNodeCompiler {
-  #node: CompilerLiteralNode
+  #node: LiteralNode
   #buffer: CompilerBuffer
   #compiler: Compiler
   #parent?: CompilerParent
   #union?: CompilerUnionParent
 
   constructor(
-    node: CompilerLiteralNode,
+    node: LiteralNode,
     buffer: CompilerBuffer,
     compiler: Compiler,
     parent?: CompilerParent,

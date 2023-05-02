@@ -2,7 +2,8 @@
 
 The compiler is used to convert an array of schema nodes to a function with imperative JavaScript code that can be executed to validate a data object. The compiler operates at the low-level and does not offer any JavaScript API for creating the schema (see vinejs for user-land APIs).
 
-## Schema 
+## Schema
+
 Schema refers to an object or an array of objects that the compiler takes as an input to generate JavaScript output. Following is an example of `literal` schema node.
 
 ```ts
@@ -38,6 +39,7 @@ Consider the following simplified flow of using refs.
 ![](./compiler_parsing_flow.png)
 
 ## Schema types
+
 Following is the list of supported schema types.
 
 - `literal`: Literal refers to any value that does not have children schema nodes. For example: `number`, `string`, `boolean`, `dates`, and so on. Custom data types like `file` can be a literal schema type.
@@ -48,14 +50,17 @@ Following is the list of supported schema types.
 - `record`: Record refers to a JavaScript Object data type with unknown keys. Each element of a record must have the same type.
 
 ## Schema moving parts
+
 There are moving parts inside the schema nodes. These moving parts generate different outputs based on their state.
 
 ### Standalone moving parts
+
 Standalone moving parts refers to conditions that act individually and does not get impacted if other moving parts are enabled or disabled.
 
 - `parseFnId`: A function to convert the input value before the validation lifecycle of the input begins. The function receives the exact value of the input, so consider the value as `unknown`.
 
-- `transformFnId`: A function to convert the output value after all the validations of the input field are over. 
+- `transformFnId`: A function to convert the output value after all the validations of the input field are over.
+
   - The function can only be defined for the `literal` schema type.
   - The function is invoked only when the value is written to the output. Any conditions that do not write value to the output will also skip calling the transform function.
 
@@ -64,12 +69,13 @@ Standalone moving parts refers to conditions that act individually and does not 
 - `bail`: When enabled, the flag will stop validating the field after the first error. In the case of `arrays` and `objects`, the validation of children nodes will also be skipped.
 
 ### Dependent flags (optional and null)
+
 Flags that behave differently when used together.
 
 - `isOptional`: Mark the field under validation as optional. It means the field value can be `undefined` or `null`.
 
 - `allowNull`: Mark the field under validation to be `null`, but not undefined. However, when both `isOptional` and `allowNull` flags are used, the undefined values will also be allowed.
-  
+
   The `null` values are written to the output when `allowNull` flag is enabled.
 
 ## Validations behavior
@@ -81,7 +87,9 @@ The validations are functions executed one after the other in the same sequence 
 - When the `bail` mode is enabled for the field, the next validation will not run if the previous one fails. There is no way for rules to bypass this behavior.
 
 ## Implicit rules
+
 The validation rules are not executed by default when the field's value is `null` or `undefined`. However, the implicit rules can bypass this check by enabling the `implicit` flag inside the schema object.
 
 ## Writing value to the output
+
 If the value of a field is `null` or `undefined` it will not be written to the output. However, the `null` values are written to the output when `allowNull` flag is enabled.

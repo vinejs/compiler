@@ -31,7 +31,7 @@ test.group('Object node', () => {
             ruleFnId: 'ref://2',
           },
         ],
-        children: [],
+        properties: [],
         allowUnknownProperties: false,
       },
     })
@@ -83,7 +83,7 @@ test.group('Object node', () => {
             ruleFnId: 'ref://2',
           },
         ],
-        children: [],
+        properties: [],
         allowUnknownProperties: false,
       },
     })
@@ -132,7 +132,7 @@ test.group('Object node', () => {
         fieldName: '*',
         propertyName: '*',
         validations: [],
-        children: [],
+        properties: [],
         allowUnknownProperties: false,
       },
     })
@@ -178,7 +178,7 @@ test.group('Object node', () => {
         fieldName: 'profile',
         propertyName: 'userProfile',
         validations: [],
-        children: [
+        properties: [
           {
             type: 'literal',
             allowNull: false,
@@ -264,7 +264,7 @@ test.group('Object node', () => {
             ruleFnId: 'ref://2',
           },
         ],
-        children: [],
+        properties: [],
         allowUnknownProperties: false,
       },
     })
@@ -315,7 +315,7 @@ test.group('Object node', () => {
             ruleFnId: 'ref://2',
           },
         ],
-        children: [],
+        properties: [],
         allowUnknownProperties: true,
       },
     })
@@ -361,7 +361,7 @@ test.group('Object node', () => {
         fieldName: '*',
         propertyName: '*',
         validations: [],
-        children: [
+        properties: [
           {
             type: 'literal',
             allowNull: false,
@@ -506,7 +506,7 @@ test.group('Object node', () => {
         fieldName: 'login',
         propertyName: 'login',
         validations: [],
-        children: [
+        properties: [
           {
             type: 'literal',
             allowNull: false,
@@ -724,7 +724,7 @@ test.group('Object node', () => {
         fieldName: 'login',
         propertyName: 'login',
         validations: [],
-        children: [
+        properties: [
           {
             type: 'literal',
             allowNull: false,

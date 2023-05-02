@@ -17,25 +17,20 @@ import { defineFieldNullOutput } from '../../scripts/field/null_output.js'
 import { defineFieldValidations } from '../../scripts/field/validations.js'
 import { defineArrayInitialOutput } from '../../scripts/array/initial_output.js'
 import { defineFieldExistenceValidations } from '../../scripts/field/existence_validations.js'
-import type {
-  CompilerField,
-  CompilerParent,
-  CompilerArrayNode,
-  CompilerUnionParent,
-} from '../../types.js'
+import type { CompilerField, CompilerParent, ArrayNode, CompilerUnionParent } from '../../types.js'
 
 /**
  * Compiles an array schema node to JS string output.
  */
 export class ArrayNodeCompiler {
-  #node: CompilerArrayNode
+  #node: ArrayNode
   #buffer: CompilerBuffer
   #compiler: Compiler
   #parent?: CompilerParent
   #union?: CompilerUnionParent
 
   constructor(
-    node: CompilerArrayNode,
+    node: ArrayNode,
     buffer: CompilerBuffer,
     compiler: Compiler,
     parent?: CompilerParent,

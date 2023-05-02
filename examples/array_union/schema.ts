@@ -1,6 +1,6 @@
-import { CompilerRootNode } from '../../src/types.js'
+import { RootNode } from '../../src/types.js'
 
-export const schema: CompilerRootNode = {
+export const schema: RootNode = {
   type: 'root',
   schema: {
     type: 'array',
@@ -15,7 +15,7 @@ export const schema: CompilerRootNode = {
       fieldName: '*',
       propertyName: '*',
       type: 'union',
-      children: [
+      conditions: [
         {
           conditionalFnRefId: 'ref://1',
           schema: {
@@ -24,7 +24,7 @@ export const schema: CompilerRootNode = {
             allowUnknownProperties: false,
             bail: true,
             groups: [],
-            children: [
+            properties: [
               {
                 type: 'literal',
                 fieldName: 'phone',
@@ -49,7 +49,7 @@ export const schema: CompilerRootNode = {
             allowUnknownProperties: false,
             bail: true,
             groups: [],
-            children: [
+            properties: [
               {
                 type: 'literal',
                 fieldName: 'email',

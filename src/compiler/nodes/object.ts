@@ -21,9 +21,9 @@ import { defineFieldExistenceValidations } from '../../scripts/field/existence_v
 import type {
   CompilerField,
   CompilerParent,
-  CompilerObjectNode,
+  ObjectNode,
   CompilerUnionParent,
-  CompilerObjectGroupNode,
+  ObjectGroupNode,
 } from '../../types.js'
 import { defineConditionalGuard } from '../../scripts/union/conditional_guard.js'
 
@@ -31,14 +31,14 @@ import { defineConditionalGuard } from '../../scripts/union/conditional_guard.js
  * Compiles an object schema node to JS string output.
  */
 export class ObjectNodeCompiler {
-  #node: CompilerObjectNode
+  #node: ObjectNode
   #buffer: CompilerBuffer
   #compiler: Compiler
   #parent?: CompilerParent
   #union?: CompilerUnionParent
 
   constructor(
-    node: CompilerObjectNode,
+    node: ObjectNode,
     buffer: CompilerBuffer,
     compiler: Compiler,
     parent?: CompilerParent,
@@ -55,7 +55,7 @@ export class ObjectNodeCompiler {
    * Returns known field names for the object
    */
   #getFieldNames(): string[] {
-    let fieldNames = this.#node.children.map((child) => child.fieldName)
+    let fieldNames = this.#node.properties.map((child) => child.fieldName)
     const groupsFieldNames = this.#node.groups.flatMap((group) => this.#getGroupFieldNames(group))
     return fieldNames.concat(groupsFieldNames)
   }
@@ -63,7 +63,7 @@ export class ObjectNodeCompiler {
   /**
    * Returns field names of a group.
    */
-  #getGroupFieldNames(group: CompilerObjectGroupNode): string[] {
+  #getGroupFieldNames(group: ObjectGroupNode): string[] {
     return group.conditions.flatMap((condition) => {
       if (condition.schema.type === 'sub_object') {
         return condition.schema.children.map((child) => {
@@ -102,7 +102,7 @@ export class ObjectNodeCompiler {
   #compileObjectChildren(field: CompilerField) {
     const buffer = this.#buffer.child()
 
-    this.#node.children.forEach((child) => {
+    this.#node.properties.forEach((child) => {
       this.#compiler.compileNode(child, buffer, {
         type: 'object',
         fieldPathExpression: field.fieldPathExpression,
@@ -128,11 +128,7 @@ export class ObjectNodeCompiler {
   /**
    * Compiles an object groups recursively
    */
-  #compileObjectGroup(
-    group: CompilerObjectGroupNode,
-    buffer: CompilerBuffer,
-    field: CompilerField
-  ) {
+  #compileObjectGroup(group: ObjectGroupNode, buffer: CompilerBuffer, field: CompilerField) {
     group.conditions.forEach((condition, index) => {
       const guardBuffer = buffer.child()
 

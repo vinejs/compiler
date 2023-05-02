@@ -18,25 +18,20 @@ import { defineFieldValidations } from '../../scripts/field/validations.js'
 import { defineObjectInitialOutput } from '../../scripts/object/initial_output.js'
 import { defineFieldExistenceValidations } from '../../scripts/field/existence_validations.js'
 
-import type {
-  CompilerField,
-  CompilerParent,
-  CompilerRecordNode,
-  CompilerUnionParent,
-} from '../../types.js'
+import type { CompilerField, CompilerParent, RecordNode, CompilerUnionParent } from '../../types.js'
 
 /**
  * Compiles a record schema node to JS string output.
  */
 export class RecordNodeCompiler {
-  #node: CompilerRecordNode
+  #node: RecordNode
   #buffer: CompilerBuffer
   #compiler: Compiler
   #parent?: CompilerParent
   #union?: CompilerUnionParent
 
   constructor(
-    node: CompilerRecordNode,
+    node: RecordNode,
     buffer: CompilerBuffer,
     compiler: Compiler,
     parent?: CompilerParent,

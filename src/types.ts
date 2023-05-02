@@ -130,7 +130,7 @@ export type ConditionalFn = (value: unknown, ctx: FieldContext) => any
 /**
  * Shape of a validation rule accepted by the compiler
  */
-export type CompilerValidationNode = {
+export type ValidationNode = {
   /**
    * Rule implementation function id.
    */
@@ -151,7 +151,7 @@ export type CompilerValidationNode = {
 /**
  * Shape of field inside a schema.
  */
-export type CompilerFieldNode = {
+export type FieldNode = {
   /**
    * Should the validation cycle stop after the first error.
    * Defaults to true
@@ -192,13 +192,13 @@ export type CompilerFieldNode = {
   /**
    * A set of validations to apply on the field
    */
-  validations: CompilerValidationNode[]
+  validations: ValidationNode[]
 }
 
 /**
  * Shape of a single field accepted by the compiler
  */
-export type CompilerLiteralNode = CompilerFieldNode & {
+export type LiteralNode = FieldNode & {
   type: 'literal'
 
   /**
@@ -212,7 +212,7 @@ export type CompilerLiteralNode = CompilerFieldNode & {
 /**
  * Shape of the object node accepted by the compiler
  */
-export type CompilerObjectNode = CompilerFieldNode & {
+export type ObjectNode = FieldNode & {
   type: 'object'
 
   /**
@@ -224,42 +224,50 @@ export type CompilerObjectNode = CompilerFieldNode & {
   allowUnknownProperties: boolean
 
   /**
-   * Object children
+   * Object known properties
    */
-  children: (CompilerArrayNode | CompilerLiteralNode | CompilerObjectNode | CompilerRecordNode)[]
+  properties: CompilerNodes[]
 
   /**
-   * A collect of object groups to merge into the main object.
-   * Each group reproduce one sub-object wrapped in one or
-   * more conditional.
+   * A collection of object groups to merge into the main object.
+   * Each group is a collection of conditionals with a sub-object
+   * inside them.
    */
-  groups: CompilerObjectGroupNode[]
+  groups: ObjectGroupNode[]
 }
 
 /**
  * A compiler object group produces a single sub object based upon
  * the defined conditions.
  */
-export type CompilerObjectGroupNode = {
+export type ObjectGroupNode = {
   type: 'group'
+
+  /**
+   * Conditions to evaluate
+   */
   conditions: {
     /**
      * The conditional function reference id
      */
     conditionalFnRefId: RefIdentifier
+
+    /**
+     * Schema to use when condition is true
+     */
     schema:
       | {
           type: 'sub_object'
           children: CompilerNodes[]
         }
-      | CompilerObjectGroupNode
+      | ObjectGroupNode
   }[]
 }
 
 /**
  * Shape of the record node accepted by the compiler
  */
-export type CompilerRecordNode = CompilerFieldNode & {
+export type RecordNode = FieldNode & {
   type: 'record'
 
   /**
@@ -271,7 +279,7 @@ export type CompilerRecordNode = CompilerFieldNode & {
 /**
  * Shape of the array node accepted by the compiler
  */
-export type CompilerArrayNode = CompilerFieldNode & {
+export type ArrayNode = FieldNode & {
   type: 'array'
 
   /**
@@ -296,26 +304,10 @@ export type CompilerArrayNode = CompilerFieldNode & {
 }
 
 /**
- * Representation of a conditional schema type. It is only allowed
- * as a children of a union.
- */
-export type CompilerConditionalNode = {
-  /**
-   * The conditional function reference id
-   */
-  conditionalFnRefId: RefIdentifier
-
-  /**
-   * Schema to compile when condition is true
-   */
-  schema: CompilerNodes
-}
-
-/**
  * Shape of the union node accepted by the compiler. A union is a combination
  * of conditionals.
  */
-export type CompilerUnionNode = {
+export type UnionNode = {
   type: 'union'
 
   /**
@@ -331,28 +323,37 @@ export type CompilerUnionNode = {
   propertyName: string
 
   /**
-   * Union children nodes. Each one should be a conditional node
+   * Conditions to evaluate
    */
-  children: CompilerConditionalNode[]
+  conditions: {
+    /**
+     * The conditional function reference id
+     */
+    conditionalFnRefId: RefIdentifier
+
+    /**
+     * Schema to use when condition is true
+     */
+    schema: CompilerNodes
+  }[]
 }
 
 /**
  * The root of the schema
  */
-export type CompilerRootNode = {
+export type RootNode = {
   type: 'root'
+
+  /**
+   * Schema at the root level
+   */
   schema: CompilerNodes
 }
 
 /**
  * Known tree nodes accepted by the compiler
  */
-export type CompilerNodes =
-  | CompilerLiteralNode
-  | CompilerObjectNode
-  | CompilerArrayNode
-  | CompilerUnionNode
-  | CompilerRecordNode
+export type CompilerNodes = LiteralNode | ObjectNode | ArrayNode | UnionNode | RecordNode
 
 /**
  * Properties of a parent node as the compiler loops through the

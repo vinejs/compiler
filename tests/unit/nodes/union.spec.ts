@@ -20,7 +20,7 @@ test.group('Union node', () => {
         type: 'union',
         fieldName: '*',
         propertyName: '*',
-        children: [
+        conditions: [
           {
             conditionalFnRefId: 'ref://1',
             schema: {

@@ -1,6 +1,6 @@
-import { CompilerRootNode } from '../../src/types.js'
+import { RootNode } from '../../src/types.js'
 
-export const schema: CompilerRootNode = {
+export const schema: RootNode = {
   type: 'root',
   schema: {
     type: 'object',
@@ -10,7 +10,7 @@ export const schema: CompilerRootNode = {
     isOptional: false,
     allowUnknownProperties: false,
     bail: true,
-    children: [
+    properties: [
       {
         type: 'literal',
         fieldName: 'username',

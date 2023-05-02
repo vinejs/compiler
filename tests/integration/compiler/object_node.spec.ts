@@ -26,7 +26,7 @@ test.group('Object node', () => {
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
-        children: [],
+        properties: [],
       },
     })
 
@@ -59,7 +59,7 @@ test.group('Object node', () => {
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
-        children: [],
+        properties: [],
       },
     })
 
@@ -92,7 +92,7 @@ test.group('Object node', () => {
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
-        children: [],
+        properties: [],
       },
     })
 
@@ -125,7 +125,7 @@ test.group('Object node', () => {
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
-        children: [
+        properties: [
           {
             type: 'literal',
             bail: true,
@@ -166,7 +166,7 @@ test.group('Object node', () => {
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
-        children: [],
+        properties: [],
       },
     })
 
@@ -199,7 +199,7 @@ test.group('Object node', () => {
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
-        children: [
+        properties: [
           {
             type: 'literal',
             bail: true,
@@ -249,7 +249,7 @@ test.group('Object node', () => {
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
-        children: [
+        properties: [
           {
             type: 'literal',
             bail: true,
@@ -299,7 +299,7 @@ test.group('Object node', () => {
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
-        children: [
+        properties: [
           {
             type: 'object',
             groups: [],
@@ -310,7 +310,7 @@ test.group('Object node', () => {
             allowNull: false,
             isOptional: false,
             allowUnknownProperties: false,
-            children: [
+            properties: [
               {
                 type: 'literal',
                 bail: true,
@@ -390,7 +390,7 @@ test.group('Object node', () => {
         allowUnknownProperties: false,
         allowNull: false,
         isOptional: false,
-        children: [],
+        properties: [],
       },
     })
 
@@ -463,7 +463,7 @@ test.group('Object node', () => {
         allowUnknownProperties: false,
         allowNull: false,
         isOptional: false,
-        children: [],
+        properties: [],
       },
     })
 
@@ -531,7 +531,7 @@ test.group('Object node', () => {
         allowUnknownProperties: false,
         allowNull: false,
         isOptional: false,
-        children: [],
+        properties: [],
       },
     })
 
@@ -602,7 +602,7 @@ test.group('Object node', () => {
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
-        children: [
+        properties: [
           {
             type: 'literal',
             bail: true,
@@ -696,7 +696,7 @@ test.group('Object node', () => {
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
-        children: [
+        properties: [
           {
             type: 'literal',
             bail: true,
@@ -846,7 +846,7 @@ test.group('Object node', () => {
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
-        children: [],
+        properties: [],
       },
     })
 
@@ -922,7 +922,7 @@ test.group('Object node', () => {
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: true,
-        children: [],
+        properties: [],
       },
     })
 
@@ -962,7 +962,7 @@ test.group('Object node | optional: true', () => {
         allowNull: false,
         isOptional: true,
         allowUnknownProperties: false,
-        children: [],
+        properties: [],
       },
     })
 
@@ -989,7 +989,7 @@ test.group('Object node | optional: true', () => {
         allowNull: false,
         isOptional: true,
         allowUnknownProperties: false,
-        children: [],
+        properties: [],
       },
     })
 
@@ -1016,7 +1016,7 @@ test.group('Object node | optional: true', () => {
         allowNull: false,
         isOptional: true,
         allowUnknownProperties: false,
-        children: [],
+        properties: [],
       },
     })
 
@@ -1045,7 +1045,7 @@ test.group('Object node | optional: true', () => {
         allowNull: false,
         isOptional: true,
         allowUnknownProperties: false,
-        children: [],
+        properties: [],
       },
     })
 
@@ -1078,7 +1078,7 @@ test.group('Object node | allowNull: true', () => {
         allowNull: true,
         isOptional: false,
         allowUnknownProperties: false,
-        children: [],
+        properties: [],
       },
     })
 
@@ -1105,7 +1105,7 @@ test.group('Object node | allowNull: true', () => {
         allowNull: true,
         isOptional: false,
         allowUnknownProperties: false,
-        children: [],
+        properties: [],
       },
     })
 
@@ -1134,7 +1134,7 @@ test.group('Object node | allowNull: true', () => {
         allowNull: true,
         isOptional: false,
         allowUnknownProperties: false,
-        children: [],
+        properties: [],
       },
     })
 
@@ -1167,7 +1167,7 @@ test.group('Object node | allowNull: true', () => {
         allowNull: true,
         isOptional: false,
         allowUnknownProperties: false,
-        children: [],
+        properties: [],
       },
     })
 
@@ -1200,7 +1200,7 @@ test.group('Object node | allowUnknownProperties', () => {
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: true,
-        children: [],
+        properties: [],
       },
     })
 
@@ -1231,7 +1231,7 @@ test.group('Object node | allowUnknownProperties', () => {
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: true,
-        children: [
+        properties: [
           {
             type: 'literal',
             bail: true,
@@ -1272,7 +1272,7 @@ test.group('Object node | allowUnknownProperties', () => {
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: true,
-        children: [
+        properties: [
           {
             type: 'literal',
             bail: true,
@@ -1319,7 +1319,7 @@ test.group('Object node | allowUnknownProperties', () => {
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: true,
-        children: [
+        properties: [
           {
             type: 'object',
             groups: [],
@@ -1330,7 +1330,7 @@ test.group('Object node | allowUnknownProperties', () => {
             allowNull: false,
             isOptional: false,
             allowUnknownProperties: true,
-            children: [
+            properties: [
               {
                 type: 'literal',
                 bail: true,

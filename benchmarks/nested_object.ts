@@ -36,7 +36,7 @@ const compiler = new Compiler({
     fieldName: '*',
     allowUnknownProperties: false,
     bail: true,
-    children: [
+    properties: [
       {
         type: 'object',
         propertyName: 'profile',
@@ -46,7 +46,7 @@ const compiler = new Compiler({
         fieldName: 'profile',
         bail: true,
         groups: [],
-        children: [
+        properties: [
           {
             type: 'literal',
             bail: true,

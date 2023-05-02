@@ -7,16 +7,16 @@
  * file that was distributed with this source code.
  */
 
-import { CompilerObjectNode, CompilerRootNode } from '../src/types.js'
+import { ObjectNode, RootNode } from '../src/types.js'
 
-export function createRoot(schema: CompilerObjectNode): CompilerRootNode {
+export function createRoot(schema: ObjectNode): RootNode {
   return {
     type: 'root',
     schema: schema,
   }
 }
 
-export function createObjectRoot(nodes: CompilerObjectNode['children']): CompilerRootNode {
+export function createObjectRoot(nodes: ObjectNode['properties']): RootNode {
   return createRoot({
     type: 'object',
     fieldName: '*',
@@ -25,7 +25,7 @@ export function createObjectRoot(nodes: CompilerObjectNode['children']): Compile
     allowNull: false,
     allowUnknownProperties: false,
     bail: true,
-    children: nodes,
+    properties: nodes,
     groups: [],
     validations: [],
   })

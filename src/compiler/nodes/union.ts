@@ -11,25 +11,20 @@ import type { Compiler } from '../main.js'
 import type { CompilerBuffer } from '../buffer.js'
 import { defineFieldVariables } from '../../scripts/field/variables.js'
 import { defineConditionalGuard } from '../../scripts/union/conditional_guard.js'
-import type {
-  CompilerField,
-  CompilerParent,
-  CompilerUnionNode,
-  CompilerUnionParent,
-} from '../../types.js'
+import type { CompilerField, CompilerParent, UnionNode, CompilerUnionParent } from '../../types.js'
 
 /**
  * Compiles a union schema node to JS string output.
  */
 export class UnionNodeCompiler {
   #compiler: Compiler
-  #node: CompilerUnionNode
+  #node: UnionNode
   #buffer: CompilerBuffer
   #parent?: CompilerParent
   #union?: CompilerUnionParent
 
   constructor(
-    node: CompilerUnionNode,
+    node: UnionNode,
     buffer: CompilerBuffer,
     compiler: Compiler,
     parent?: CompilerParent,
@@ -70,7 +65,7 @@ export class UnionNodeCompiler {
   #compileUnionChildren(field: CompilerField) {
     const childrenBuffer = this.#buffer.child()
 
-    this.#node.children.forEach((child, index) => {
+    this.#node.conditions.forEach((child, index) => {
       const conditionalBuffer = this.#buffer.child()
       this.#compiler.compileNode(child.schema, conditionalBuffer, this.#parent, {
         variableName: field.variableName,

@@ -7,10 +7,10 @@
  * file that was distributed with this source code.
  */
 
-import type { CompilerField, CompilerFieldNode, CompilerParent } from '../../types.js'
+import type { CompilerField, FieldNode, CompilerParent } from '../../types.js'
 
 export function createObjectField(
-  node: Pick<CompilerFieldNode, 'fieldName' | 'propertyName'>,
+  node: Pick<FieldNode, 'fieldName' | 'propertyName'>,
   variablesCounter: number,
   parent: CompilerParent
 ): CompilerField {

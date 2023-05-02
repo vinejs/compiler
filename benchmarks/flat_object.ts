@@ -34,7 +34,7 @@ const compiler = new Compiler({
     fieldName: '*',
     allowUnknownProperties: false,
     bail: true,
-    children: [
+    properties: [
       {
         type: 'literal',
         bail: true,
