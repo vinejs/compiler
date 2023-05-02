@@ -82,6 +82,7 @@ test.group('Union node', () => {
             conditionalFnRefId: 'ref://1',
             schema: {
               type: 'object',
+              groups: [],
               bail: true,
               fieldName: 'profile',
               validations: [],
@@ -115,6 +116,7 @@ test.group('Union node', () => {
             conditionalFnRefId: 'ref://2',
             schema: {
               type: 'object',
+              groups: [],
               bail: true,
               fieldName: 'profile',
               validations: [],
@@ -174,6 +176,7 @@ test.group('Union node', () => {
               allowUnknownProperties: false,
               each: {
                 type: 'object',
+                groups: [],
                 allowNull: false,
                 allowUnknownProperties: false,
                 bail: false,
@@ -208,6 +211,7 @@ test.group('Union node', () => {
               allowUnknownProperties: false,
               each: {
                 type: 'object',
+                groups: [],
                 allowNull: false,
                 allowUnknownProperties: false,
                 bail: false,
@@ -266,6 +270,7 @@ test.group('Union node', () => {
                   conditionalFnRefId: 'ref://3',
                   schema: {
                     type: 'object',
+                    groups: [],
                     allowNull: false,
                     allowUnknownProperties: false,
                     bail: true,
@@ -290,6 +295,7 @@ test.group('Union node', () => {
                   conditionalFnRefId: 'ref://4',
                   schema: {
                     type: 'object',
+                    groups: [],
                     allowNull: false,
                     allowUnknownProperties: false,
                     bail: true,
@@ -324,6 +330,7 @@ test.group('Union node', () => {
                   conditionalFnRefId: 'ref://5',
                   schema: {
                     type: 'object',
+                    groups: [],
                     allowNull: false,
                     allowUnknownProperties: false,
                     bail: true,
@@ -348,6 +355,7 @@ test.group('Union node', () => {
                   conditionalFnRefId: 'ref://6',
                   schema: {
                     type: 'object',
+                    groups: [],
                     allowNull: false,
                     allowUnknownProperties: false,
                     bail: true,

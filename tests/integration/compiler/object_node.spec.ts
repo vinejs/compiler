@@ -17,6 +17,7 @@ test.group('Object node', () => {
     const compiler = new Compiler([
       {
         type: 'object',
+        groups: [],
         bail: true,
         fieldName: 'profile',
         validations: [],
@@ -50,6 +51,7 @@ test.group('Object node', () => {
     const compiler = new Compiler([
       {
         type: 'object',
+        groups: [],
         bail: true,
         fieldName: 'profile',
         validations: [],
@@ -81,6 +83,7 @@ test.group('Object node', () => {
     const compiler = new Compiler([
       {
         type: 'object',
+        groups: [],
         bail: true,
         fieldName: 'profile',
         validations: [],
@@ -114,6 +117,7 @@ test.group('Object node', () => {
     const compiler = new Compiler([
       {
         type: 'object',
+        groups: [],
         bail: true,
         fieldName: 'profile',
         validations: [],
@@ -155,6 +159,7 @@ test.group('Object node', () => {
     const compiler = new Compiler([
       {
         type: 'object',
+        groups: [],
         bail: true,
         fieldName: 'profile',
         validations: [],
@@ -188,6 +193,7 @@ test.group('Object node', () => {
     const compiler = new Compiler([
       {
         type: 'object',
+        groups: [],
         bail: true,
         fieldName: 'profile',
         validations: [],
@@ -238,6 +244,7 @@ test.group('Object node', () => {
     const compiler = new Compiler([
       {
         type: 'object',
+        groups: [],
         bail: true,
         fieldName: 'profile',
         validations: [],
@@ -292,6 +299,7 @@ test.group('Object node', () => {
     const compiler = new Compiler([
       {
         type: 'object',
+        groups: [],
         bail: true,
         fieldName: 'profile',
         validations: [],
@@ -302,6 +310,7 @@ test.group('Object node', () => {
         children: [
           {
             type: 'object',
+            groups: [],
             bail: true,
             fieldName: 'social',
             validations: [],
@@ -375,6 +384,7 @@ test.group('Object node', () => {
     const compiler = new Compiler([
       {
         type: 'object',
+        groups: [],
         bail: true,
         fieldName: 'profile',
         validations: [
@@ -446,6 +456,7 @@ test.group('Object node', () => {
     const compiler = new Compiler([
       {
         type: 'object',
+        groups: [],
         bail: true,
         fieldName: 'profile',
         validations: [
@@ -512,6 +523,7 @@ test.group('Object node', () => {
     const compiler = new Compiler([
       {
         type: 'object',
+        groups: [],
         bail: false,
         fieldName: 'profile',
         validations: [
@@ -586,6 +598,7 @@ test.group('Object node', () => {
     const compiler = new Compiler([
       {
         type: 'object',
+        groups: [],
         bail: true,
         fieldName: 'profile',
         validations: [
@@ -680,6 +693,7 @@ test.group('Object node', () => {
     const compiler = new Compiler([
       {
         type: 'object',
+        groups: [],
         bail: false,
         fieldName: 'profile',
         validations: [
@@ -791,6 +805,162 @@ test.group('Object node', () => {
       assert.deepEqual(error.messages, ['ref://2 validation failed'])
     }
   })
+
+  test('process object groups', async ({ assert }) => {
+    const compiler = new Compiler([
+      {
+        type: 'object',
+        groups: [
+          {
+            type: 'group',
+            conditions: [
+              {
+                conditionalFnRefId: 'ref://1',
+                schema: {
+                  type: 'sub_object',
+                  children: [
+                    {
+                      type: 'literal',
+                      allowNull: false,
+                      isOptional: false,
+                      bail: true,
+                      fieldName: 'username',
+                      propertyName: 'username',
+                      validations: [],
+                    },
+                  ],
+                },
+              },
+              {
+                conditionalFnRefId: 'ref://2',
+                schema: {
+                  type: 'sub_object',
+                  children: [
+                    {
+                      type: 'literal',
+                      allowNull: false,
+                      isOptional: false,
+                      bail: true,
+                      fieldName: 'email',
+                      propertyName: 'email',
+                      validations: [],
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        ],
+        bail: true,
+        fieldName: 'login',
+        validations: [],
+        propertyName: 'login',
+        allowNull: false,
+        isOptional: false,
+        allowUnknownProperties: false,
+        children: [],
+      },
+    ])
+
+    const data: any = {
+      login: {
+        username: 'virk',
+      },
+    }
+    const meta = {}
+    const refs = {
+      'ref://1': () => true,
+      'ref://2': () => false,
+    }
+    const errorReporter = new ErrorReporterFactory().create()
+
+    const fn = compiler.compile()
+    const output = await fn(data, meta, refs, errorReporter)
+    assert.deepEqual(output, { login: { username: 'virk' } })
+
+    // Mutation test:
+    data.login.username = 'foo'
+    assert.deepEqual(output, { login: { username: 'virk' } })
+  })
+
+  test('allow unknowProperties when object groups are defined', async ({ assert }) => {
+    const compiler = new Compiler([
+      {
+        type: 'object',
+        groups: [
+          {
+            type: 'group',
+            conditions: [
+              {
+                conditionalFnRefId: 'ref://1',
+                schema: {
+                  type: 'sub_object',
+                  children: [
+                    {
+                      type: 'literal',
+                      allowNull: false,
+                      isOptional: false,
+                      bail: true,
+                      fieldName: 'username',
+                      propertyName: 'userName',
+                      validations: [],
+                    },
+                  ],
+                },
+              },
+              {
+                conditionalFnRefId: 'ref://2',
+                schema: {
+                  type: 'sub_object',
+                  children: [
+                    {
+                      type: 'literal',
+                      allowNull: false,
+                      isOptional: false,
+                      bail: true,
+                      fieldName: 'email',
+                      propertyName: 'email',
+                      validations: [],
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        ],
+        bail: true,
+        fieldName: 'login',
+        validations: [],
+        propertyName: 'login',
+        allowNull: false,
+        isOptional: false,
+        allowUnknownProperties: true,
+        children: [],
+      },
+    ])
+
+    const data: any = {
+      login: {
+        username: 'virk',
+        foo: 'bar',
+        baz: 'bam',
+      },
+    }
+    const meta = {}
+    const refs = {
+      'ref://1': () => true,
+      'ref://2': () => false,
+    }
+    const errorReporter = new ErrorReporterFactory().create()
+
+    const fn = compiler.compile()
+    const output = await fn(data, meta, refs, errorReporter)
+    assert.deepEqual(output, { login: { userName: 'virk', foo: 'bar', baz: 'bam' } })
+
+    // Mutation test:
+    data.login.username = 'foo'
+    assert.deepEqual(output, { login: { userName: 'virk', foo: 'bar', baz: 'bam' } })
+  })
 })
 
 test.group('Object node | optional: true', () => {
@@ -798,6 +968,7 @@ test.group('Object node | optional: true', () => {
     const compiler = new Compiler([
       {
         type: 'object',
+        groups: [],
         bail: true,
         fieldName: 'profile',
         validations: [],
@@ -825,6 +996,7 @@ test.group('Object node | optional: true', () => {
     const compiler = new Compiler([
       {
         type: 'object',
+        groups: [],
         bail: true,
         fieldName: 'profile',
         validations: [],
@@ -850,6 +1022,7 @@ test.group('Object node | optional: true', () => {
     const compiler = new Compiler([
       {
         type: 'object',
+        groups: [],
         bail: true,
         fieldName: 'profile',
         validations: [],
@@ -879,6 +1052,7 @@ test.group('Object node | optional: true', () => {
     const compiler = new Compiler([
       {
         type: 'object',
+        groups: [],
         bail: true,
         fieldName: 'profile',
         validations: [],
@@ -912,6 +1086,7 @@ test.group('Object node | allowNull: true', () => {
     const compiler = new Compiler([
       {
         type: 'object',
+        groups: [],
         bail: true,
         fieldName: 'profile',
         validations: [],
@@ -939,6 +1114,7 @@ test.group('Object node | allowNull: true', () => {
     const compiler = new Compiler([
       {
         type: 'object',
+        groups: [],
         bail: true,
         fieldName: 'profile',
         validations: [],
@@ -968,6 +1144,7 @@ test.group('Object node | allowNull: true', () => {
     const compiler = new Compiler([
       {
         type: 'object',
+        groups: [],
         bail: true,
         fieldName: 'profile',
         validations: [],
@@ -999,6 +1176,7 @@ test.group('Object node | allowNull: true', () => {
     const compiler = new Compiler([
       {
         type: 'object',
+        groups: [],
         bail: true,
         fieldName: 'profile',
         validations: [],
@@ -1032,6 +1210,7 @@ test.group('Object node | allowUnknownProperties', () => {
     const compiler = new Compiler([
       {
         type: 'object',
+        groups: [],
         bail: true,
         fieldName: 'profile',
         validations: [],
@@ -1067,6 +1246,7 @@ test.group('Object node | allowUnknownProperties', () => {
     const compiler = new Compiler([
       {
         type: 'object',
+        groups: [],
         bail: true,
         fieldName: 'profile',
         validations: [],
@@ -1108,6 +1288,7 @@ test.group('Object node | allowUnknownProperties', () => {
     const compiler = new Compiler([
       {
         type: 'object',
+        groups: [],
         bail: true,
         fieldName: 'profile',
         validations: [],
@@ -1153,6 +1334,7 @@ test.group('Object node | allowUnknownProperties', () => {
     const compiler = new Compiler([
       {
         type: 'object',
+        groups: [],
         bail: true,
         fieldName: 'profile',
         validations: [],
@@ -1163,6 +1345,7 @@ test.group('Object node | allowUnknownProperties', () => {
         children: [
           {
             type: 'object',
+            groups: [],
             bail: true,
             fieldName: 'social',
             validations: [],

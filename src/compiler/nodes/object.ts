@@ -23,7 +23,9 @@ import type {
   CompilerParent,
   CompilerObjectNode,
   CompilerUnionParent,
+  CompilerObjectGroupNode,
 } from '../../types.js'
+import { defineConditionalGuard } from '../../scripts/union/conditional_guard.js'
 
 /**
  * Compiles an object schema node to JS string output.
@@ -47,6 +49,30 @@ export class ObjectNodeCompiler {
     this.#compiler = compiler
     this.#parent = parent
     this.#union = union
+  }
+
+  /**
+   * Returns known field names for the object
+   */
+  #getFieldNames(): string[] {
+    let fieldNames = this.#node.children.map((child) => child.fieldName)
+    const groupsFieldNames = this.#node.groups.flatMap((group) => this.#getGroupFieldNames(group))
+    return fieldNames.concat(groupsFieldNames)
+  }
+
+  /**
+   * Returns field names of a group.
+   */
+  #getGroupFieldNames(group: CompilerObjectGroupNode): string[] {
+    return group.conditions.flatMap((condition) => {
+      if (condition.schema.type === 'sub_object') {
+        return condition.schema.children.map((child) => {
+          return child.fieldName
+        })
+      } else {
+        return this.#getGroupFieldNames(condition.schema)
+      }
+    })
   }
 
   /**
@@ -86,6 +112,52 @@ export class ObjectNodeCompiler {
     })
 
     return buffer.toString()
+  }
+
+  /**
+   * Compiles object groups with conditions to JS output.
+   */
+  #compileObjectGroups(field: CompilerField) {
+    const buffer = this.#buffer.child()
+    this.#node.groups.forEach((group) => {
+      this.#compileObjectGroup(group, buffer, field)
+    })
+    return buffer.toString()
+  }
+
+  /**
+   * Compiles an object groups recursively
+   */
+  #compileObjectGroup(
+    group: CompilerObjectGroupNode,
+    buffer: CompilerBuffer,
+    field: CompilerField
+  ) {
+    group.conditions.forEach((condition, index) => {
+      const guardBuffer = buffer.child()
+
+      if (condition.schema.type === 'group') {
+        this.#compileObjectGroup(condition.schema, guardBuffer, field)
+      } else {
+        condition.schema.children.forEach((child) => {
+          this.#compiler.compileNode(child, guardBuffer, {
+            type: 'object',
+            fieldPathExpression: field.fieldPathExpression,
+            outputExpression: field.outputExpression,
+            variableName: field.variableName,
+          })
+        })
+      }
+
+      buffer.writeStatement(
+        defineConditionalGuard({
+          variableName: field.variableName,
+          conditional: index === 0 ? 'if' : 'else if',
+          conditionalFnRefId: condition.conditionalFnRefId,
+          guardedCodeSnippet: guardBuffer.toString(),
+        })
+      )
+    })
   }
 
   compile() {
@@ -133,11 +205,11 @@ export class ObjectNodeCompiler {
         outputValueExpression: '{}',
       })}${this.#buffer.newLine}${this.#compileObjectChildren(field)}${
         this.#buffer.newLine
-      }${defineMoveProperties({
+      }${this.#compileObjectGroups(field)}${this.#buffer.newLine}${defineMoveProperties({
         variableName: field.variableName,
         outputExpression: field.outputExpression,
         allowUnknownProperties: this.#node.allowUnknownProperties,
-        fieldsToIgnore: this.#node.children.map((child) => child.fieldName),
+        fieldsToIgnore: this.#node.allowUnknownProperties ? this.#getFieldNames() : [],
       })}`,
     })
 

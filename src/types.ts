@@ -226,7 +226,34 @@ export type CompilerObjectNode = CompilerFieldNode & {
   /**
    * Object children
    */
-  children: CompilerNodes[]
+  children: (CompilerArrayNode | CompilerLiteralNode | CompilerObjectNode | CompilerRecordNode)[]
+
+  /**
+   * A collect of object groups to merge into the main object.
+   * Each group reproduce one sub-object wrapped in one or
+   * more conditional.
+   */
+  groups: CompilerObjectGroupNode[]
+}
+
+/**
+ * A compiler object group produces a single sub object based upon
+ * the defined conditions.
+ */
+export type CompilerObjectGroupNode = {
+  type: 'group'
+  conditions: {
+    /**
+     * The conditional function reference id
+     */
+    conditionalFnRefId: RefIdentifier
+    schema:
+      | {
+          type: 'sub_object'
+          children: CompilerNodes[]
+        }
+      | CompilerObjectGroupNode
+  }[]
 }
 
 /**
