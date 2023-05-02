@@ -10,7 +10,6 @@ export const schema: RootNode = {
     isOptional: false,
     bail: true,
     validations: [],
-    allowUnknownProperties: false,
     each: {
       fieldName: '*',
       propertyName: '*',

@@ -94,8 +94,6 @@ const ajvSchema = {
 
 const ajvValidate = ajv.compile(ajvSchema) as AsyncValidateFunction<any>
 
-console.log(fn.toString())
-
 suite
   .add('VineJS compiler', {
     defer: true,
