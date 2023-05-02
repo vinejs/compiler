@@ -4,25 +4,38 @@ The compiler is used to convert an array of schema nodes to a function with impe
 
 ## Schema
 
-Schema refers to an object or an array of objects that the compiler takes as an input to generate JavaScript output. Following is an example of `literal` schema node.
+Schema refers to an object or an array of objects that the compiler takes as an input to generate JavaScript output. Following is an example of an `object` schema node with `username` property.
 
 ```ts
 {
-  type: 'literal',
-  fieldName: 'username',
-  propertyName: 'userName',
-  transformFnId: 'ref://1',
-  parseFnId: 'ref://2',
-  bail: true,
-  allowNull: false,
-  isOptional: false,
-  validations: [
-    {
-      ruleFnId: 'ref://3',
-      isAsync: false,
-      implicit: false,
-    }
-  ]
+  type: 'root',
+  schema: {
+    type: 'object',
+    fieldName: '',
+    propertyName: '',
+    bail: true,
+    allowNull: false,
+    isOptional: false,
+    allowUnknownProperties: false,
+    properties: [
+      type: 'literal',
+      fieldName: 'username',
+      propertyName: 'userName',
+      transformFnId: 'ref://1',
+      parseFnId: 'ref://2',
+      bail: true,
+      allowNull: false,
+      isOptional: false,
+      validations: [
+        {
+          ruleFnId: 'ref://3',
+          isAsync: false,
+          implicit: false,
+        }
+      ]
+    ],
+    groups: [],
+  }
 }
 ```
 
