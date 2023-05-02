@@ -18,21 +18,23 @@ Schema refers to an object or an array of objects that the compiler takes as an 
     isOptional: false,
     allowUnknownProperties: false,
     properties: [
-      type: 'literal',
-      fieldName: 'username',
-      propertyName: 'userName',
-      transformFnId: 'ref://1',
-      parseFnId: 'ref://2',
-      bail: true,
-      allowNull: false,
-      isOptional: false,
-      validations: [
-        {
-          ruleFnId: 'ref://3',
-          isAsync: false,
-          implicit: false,
-        }
-      ]
+      {
+        type: 'literal',
+        fieldName: 'username',
+        propertyName: 'userName',
+        transformFnId: 'ref://1',
+        parseFnId: 'ref://2',
+        bail: true,
+        allowNull: false,
+        isOptional: false,
+        validations: [
+          {
+            ruleFnId: 'ref://3',
+            isAsync: false,
+            implicit: false,
+          }
+        ]
+      }
     ],
     groups: [],
   }
