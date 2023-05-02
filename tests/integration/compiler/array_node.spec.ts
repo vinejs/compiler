@@ -9,8 +9,8 @@
 
 import { test } from '@japa/runner'
 import { Compiler } from '../../../src/compiler/main.js'
+import type { ValidationRule } from '../../../src/types.js'
 import { ErrorReporterFactory } from '../../../factories/error_reporter.js'
-import { ValidationRule } from '../../../src/types.js'
 
 test.group('Array node', () => {
   test('process an array field', async ({ assert }) => {
@@ -24,7 +24,15 @@ test.group('Array node', () => {
         propertyName: '*',
         allowNull: false,
         isOptional: false,
-        allowUnknownProperties: false,
+        each: {
+          type: 'literal',
+          allowNull: false,
+          bail: true,
+          isOptional: false,
+          fieldName: '*',
+          propertyName: '*',
+          validations: [],
+        },
       },
     })
 
@@ -55,7 +63,15 @@ test.group('Array node', () => {
         propertyName: '*',
         allowNull: false,
         isOptional: false,
-        allowUnknownProperties: false,
+        each: {
+          type: 'literal',
+          allowNull: false,
+          bail: true,
+          isOptional: false,
+          fieldName: '*',
+          propertyName: '*',
+          validations: [],
+        },
       },
     })
 
@@ -86,7 +102,15 @@ test.group('Array node', () => {
         propertyName: '*',
         allowNull: false,
         isOptional: false,
-        allowUnknownProperties: false,
+        each: {
+          type: 'literal',
+          allowNull: false,
+          bail: true,
+          isOptional: false,
+          fieldName: '*',
+          propertyName: '*',
+          validations: [],
+        },
       },
     })
 
@@ -117,7 +141,15 @@ test.group('Array node', () => {
         propertyName: '*',
         allowNull: false,
         isOptional: false,
-        allowUnknownProperties: false,
+        each: {
+          type: 'literal',
+          allowNull: false,
+          bail: true,
+          isOptional: false,
+          fieldName: '*',
+          propertyName: '*',
+          validations: [],
+        },
       },
     })
 
@@ -135,64 +167,6 @@ test.group('Array node', () => {
     }
   })
 
-  test('ignore array elements when each node is not defined', async ({ assert }) => {
-    const compiler = new Compiler({
-      type: 'root',
-      schema: {
-        type: 'array',
-        bail: true,
-        fieldName: '*',
-        validations: [],
-        propertyName: '*',
-        allowNull: false,
-        isOptional: false,
-        allowUnknownProperties: false,
-      },
-    })
-
-    const data = ['hello world', 'hi world']
-    const meta = {}
-    const refs = {}
-    const errorReporter = new ErrorReporterFactory().create()
-
-    const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, [])
-
-    // Mutation test
-    data[0] = 'foo'
-    assert.deepEqual(output, [])
-  })
-
-  test('keep array items elements when unknown properties are allowed', async ({ assert }) => {
-    const compiler = new Compiler({
-      type: 'root',
-      schema: {
-        type: 'array',
-        bail: true,
-        fieldName: '*',
-        validations: [],
-        propertyName: '*',
-        allowNull: false,
-        isOptional: false,
-        allowUnknownProperties: true,
-      },
-    })
-
-    const data = ['hello world', 'hi world']
-    const meta = {}
-    const refs = {}
-    const errorReporter = new ErrorReporterFactory().create()
-
-    const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, ['hello world', 'hi world'])
-
-    // Mutation test
-    data[0] = 'foo'
-    assert.deepEqual(output, ['hello world', 'hi world'])
-  })
-
   test('validate each node', async ({ assert }) => {
     assert.plan(2)
 
@@ -206,7 +180,6 @@ test.group('Array node', () => {
         propertyName: '*',
         allowNull: false,
         isOptional: false,
-        allowUnknownProperties: false,
         each: {
           type: 'literal',
           bail: true,
@@ -244,7 +217,6 @@ test.group('Array node', () => {
         propertyName: '*',
         allowNull: false,
         isOptional: false,
-        allowUnknownProperties: false,
         each: {
           type: 'literal',
           bail: true,
@@ -282,7 +254,6 @@ test.group('Array node', () => {
         propertyName: '*',
         allowNull: false,
         isOptional: false,
-        allowUnknownProperties: false,
         each: {
           type: 'array',
           bail: true,
@@ -291,7 +262,6 @@ test.group('Array node', () => {
           propertyName: '*',
           allowNull: false,
           isOptional: false,
-          allowUnknownProperties: false,
           each: {
             type: 'literal',
             bail: true,
@@ -343,7 +313,6 @@ test.group('Array node', () => {
         propertyName: '',
         allowNull: false,
         isOptional: false,
-        allowUnknownProperties: false,
         each: {
           type: 'literal',
           bail: true,
@@ -423,7 +392,6 @@ test.group('Array node', () => {
         propertyName: '*',
         allowNull: false,
         isOptional: false,
-        allowUnknownProperties: false,
         each: {
           type: 'literal',
           bail: true,
@@ -499,7 +467,6 @@ test.group('Array node', () => {
         propertyName: '*',
         allowNull: false,
         isOptional: false,
-        allowUnknownProperties: false,
         each: {
           type: 'literal',
           bail: true,
@@ -580,7 +547,6 @@ test.group('Array node', () => {
         propertyName: 'contacts',
         allowNull: false,
         isOptional: false,
-        allowUnknownProperties: false,
         each: {
           type: 'literal',
           bail: true,
@@ -657,7 +623,6 @@ test.group('Array node', () => {
         propertyName: 'contacts',
         allowNull: false,
         isOptional: false,
-        allowUnknownProperties: false,
         each: {
           type: 'literal',
           bail: true,
@@ -730,341 +695,6 @@ test.group('Array node', () => {
   })
 })
 
-test.group('Array node | mode: tuple', () => {
-  test('process children nodes', async ({ assert }) => {
-    const compiler = new Compiler({
-      type: 'root',
-      schema: {
-        type: 'array',
-        bail: true,
-        fieldName: '*',
-        validations: [],
-        propertyName: '*',
-        allowNull: false,
-        isOptional: false,
-        allowUnknownProperties: false,
-        children: [
-          {
-            type: 'literal',
-            bail: true,
-            fieldName: '0',
-            allowNull: false,
-            isOptional: false,
-            propertyName: '0',
-            validations: [],
-          },
-          {
-            type: 'literal',
-            bail: true,
-            fieldName: '1',
-            allowNull: false,
-            isOptional: false,
-            propertyName: '1',
-            validations: [],
-          },
-        ],
-      },
-    })
-
-    const data = ['hello world', 'hi world']
-    const meta = {}
-    const refs = {}
-    const errorReporter = new ErrorReporterFactory().create()
-
-    const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, ['hello world', 'hi world'])
-
-    // Mutation test
-    data[0] = 'foo'
-    assert.deepEqual(output, ['hello world', 'hi world'])
-  })
-
-  test('ignore additional array items', async ({ assert }) => {
-    const compiler = new Compiler({
-      type: 'root',
-      schema: {
-        type: 'array',
-        bail: true,
-        fieldName: '',
-        validations: [],
-        propertyName: '',
-        allowNull: false,
-        isOptional: false,
-        allowUnknownProperties: false,
-        children: [
-          {
-            type: 'literal',
-            bail: true,
-            fieldName: '0',
-            allowNull: false,
-            isOptional: false,
-            propertyName: '0',
-            validations: [],
-          },
-        ],
-      },
-    })
-
-    const data = ['hello world', 'hi world']
-    const meta = {}
-    const refs = {}
-    const errorReporter = new ErrorReporterFactory().create()
-
-    const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, ['hello world'])
-
-    // Mutation test
-    data[0] = 'foo'
-    assert.deepEqual(output, ['hello world'])
-  })
-
-  test('keep additional array items when unknown properties are allowed', async ({ assert }) => {
-    const compiler = new Compiler({
-      type: 'root',
-      schema: {
-        type: 'array',
-        bail: true,
-        fieldName: 'contacts',
-        validations: [],
-        propertyName: 'contacts',
-        allowNull: false,
-        isOptional: false,
-        allowUnknownProperties: true,
-        children: [
-          {
-            type: 'literal',
-            bail: true,
-            fieldName: '0',
-            allowNull: false,
-            isOptional: false,
-            propertyName: '0',
-            validations: [],
-          },
-        ],
-      },
-    })
-
-    const data = ['hello world', 'hi world']
-    const meta = {}
-    const refs = {}
-    const errorReporter = new ErrorReporterFactory().create()
-
-    const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, ['hello world', 'hi world'])
-
-    // Mutation test
-    data[0] = 'foo'
-    assert.deepEqual(output, ['hello world', 'hi world'])
-  })
-
-  test('process nested children nodes', async ({ assert }) => {
-    const compiler = new Compiler({
-      type: 'root',
-      schema: {
-        type: 'array',
-        bail: true,
-        fieldName: '*',
-        validations: [],
-        propertyName: '*',
-        allowNull: false,
-        isOptional: false,
-        allowUnknownProperties: false,
-        children: [
-          {
-            type: 'array',
-            bail: true,
-            fieldName: '0',
-            validations: [],
-            propertyName: '0',
-            allowNull: false,
-            isOptional: false,
-            allowUnknownProperties: false,
-            children: [
-              {
-                type: 'literal',
-                bail: true,
-                fieldName: '0',
-                allowNull: false,
-                isOptional: false,
-                propertyName: '0',
-                validations: [],
-              },
-              {
-                type: 'literal',
-                bail: true,
-                fieldName: '1',
-                allowNull: false,
-                isOptional: false,
-                propertyName: '1',
-                validations: [],
-              },
-            ],
-          },
-          {
-            type: 'array',
-            bail: true,
-            fieldName: '1',
-            validations: [],
-            propertyName: '1',
-            allowNull: false,
-            isOptional: false,
-            allowUnknownProperties: false,
-            children: [
-              {
-                type: 'literal',
-                bail: true,
-                fieldName: '0',
-                allowNull: false,
-                isOptional: false,
-                propertyName: '0',
-                validations: [],
-              },
-              {
-                type: 'literal',
-                bail: true,
-                fieldName: '1',
-                allowNull: false,
-                isOptional: false,
-                propertyName: '1',
-                validations: [],
-              },
-            ],
-          },
-        ],
-      },
-    })
-
-    const data = [
-      ['hello world', 'hi world'],
-      ['hi world', 'hello world'],
-    ]
-    const meta = {}
-    const refs = {}
-    const errorReporter = new ErrorReporterFactory().create()
-
-    const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, [
-      ['hello world', 'hi world'],
-      ['hi world', 'hello world'],
-    ])
-
-    // Mutation test
-    data[0][0] = 'foo'
-    assert.deepEqual(output, [
-      ['hello world', 'hi world'],
-      ['hi world', 'hello world'],
-    ])
-  })
-
-  test('allow unknown properties in nested tuple', async ({ assert }) => {
-    const compiler = new Compiler({
-      type: 'root',
-      schema: {
-        type: 'array',
-        bail: true,
-        fieldName: '*',
-        validations: [],
-        propertyName: '*',
-        allowNull: false,
-        isOptional: false,
-        allowUnknownProperties: true,
-        children: [
-          {
-            type: 'array',
-            bail: true,
-            fieldName: '0',
-            validations: [],
-            propertyName: '0',
-            allowNull: false,
-            isOptional: false,
-            allowUnknownProperties: true,
-            children: [
-              {
-                type: 'literal',
-                bail: true,
-                fieldName: '0',
-                allowNull: false,
-                isOptional: false,
-                propertyName: '0',
-                validations: [],
-              },
-              {
-                type: 'literal',
-                bail: true,
-                fieldName: '1',
-                allowNull: false,
-                isOptional: false,
-                propertyName: '1',
-                validations: [],
-              },
-            ],
-          },
-          {
-            type: 'array',
-            bail: true,
-            fieldName: '1',
-            validations: [],
-            propertyName: '1',
-            allowNull: false,
-            isOptional: false,
-            allowUnknownProperties: true,
-            children: [
-              {
-                type: 'literal',
-                bail: true,
-                fieldName: '0',
-                allowNull: false,
-                isOptional: false,
-                propertyName: '0',
-                validations: [],
-              },
-              {
-                type: 'literal',
-                bail: true,
-                fieldName: '1',
-                allowNull: false,
-                isOptional: false,
-                propertyName: '1',
-                validations: [],
-              },
-            ],
-          },
-        ],
-      },
-    })
-
-    const data = [
-      ['hello world', 'hi world', 'foo bar'],
-      ['hi world', 'hello world', 'foo bar'],
-      ['hi world', 'hello world', 'foo bar'],
-    ]
-
-    const meta = {}
-    const refs = {}
-    const errorReporter = new ErrorReporterFactory().create()
-
-    const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, [
-      ['hello world', 'hi world', 'foo bar'],
-      ['hi world', 'hello world', 'foo bar'],
-      ['hi world', 'hello world', 'foo bar'],
-    ])
-
-    // Mutation test
-    data[0][0] = 'foo'
-    assert.deepEqual(output, [
-      ['hello world', 'hi world', 'foo bar'],
-      ['hi world', 'hello world', 'foo bar'],
-      ['hi world', 'hello world', 'foo bar'],
-    ])
-  })
-})
-
 test.group('Array node | optional: true', () => {
   test('process an array field', async ({ assert }) => {
     const compiler = new Compiler({
@@ -1077,7 +707,15 @@ test.group('Array node | optional: true', () => {
         propertyName: 'contacts',
         allowNull: false,
         isOptional: true,
-        allowUnknownProperties: false,
+        each: {
+          type: 'literal',
+          allowNull: false,
+          bail: true,
+          isOptional: false,
+          fieldName: '*',
+          propertyName: '*',
+          validations: [],
+        },
       },
     })
 
@@ -1106,7 +744,15 @@ test.group('Array node | optional: true', () => {
         propertyName: 'contacts',
         allowNull: false,
         isOptional: true,
-        allowUnknownProperties: false,
+        each: {
+          type: 'literal',
+          allowNull: false,
+          bail: true,
+          isOptional: false,
+          fieldName: '*',
+          propertyName: '*',
+          validations: [],
+        },
       },
     })
 
@@ -1131,7 +777,15 @@ test.group('Array node | optional: true', () => {
         propertyName: 'contacts',
         allowNull: false,
         isOptional: true,
-        allowUnknownProperties: false,
+        each: {
+          type: 'literal',
+          allowNull: false,
+          bail: true,
+          isOptional: false,
+          fieldName: '*',
+          propertyName: '*',
+          validations: [],
+        },
       },
     })
 
@@ -1158,7 +812,15 @@ test.group('Array node | optional: true', () => {
         propertyName: 'contacts',
         allowNull: false,
         isOptional: true,
-        allowUnknownProperties: false,
+        each: {
+          type: 'literal',
+          allowNull: false,
+          bail: true,
+          isOptional: false,
+          fieldName: '*',
+          propertyName: '*',
+          validations: [],
+        },
       },
     })
 
@@ -1189,7 +851,15 @@ test.group('Array node | allowNull: true', () => {
         propertyName: 'contacts',
         allowNull: true,
         isOptional: false,
-        allowUnknownProperties: false,
+        each: {
+          type: 'literal',
+          allowNull: false,
+          bail: true,
+          isOptional: false,
+          fieldName: '*',
+          propertyName: '*',
+          validations: [],
+        },
       },
     })
 
@@ -1214,7 +884,15 @@ test.group('Array node | allowNull: true', () => {
         propertyName: 'contacts',
         allowNull: true,
         isOptional: false,
-        allowUnknownProperties: false,
+        each: {
+          type: 'literal',
+          allowNull: false,
+          bail: true,
+          isOptional: false,
+          fieldName: '*',
+          propertyName: '*',
+          validations: [],
+        },
       },
     })
 
@@ -1243,7 +921,15 @@ test.group('Array node | allowNull: true', () => {
         propertyName: 'contacts',
         allowNull: true,
         isOptional: false,
-        allowUnknownProperties: false,
+        each: {
+          type: 'literal',
+          allowNull: false,
+          bail: true,
+          isOptional: false,
+          fieldName: '*',
+          propertyName: '*',
+          validations: [],
+        },
       },
     })
 
@@ -1270,7 +956,15 @@ test.group('Array node | allowNull: true', () => {
         propertyName: 'contacts',
         allowNull: true,
         isOptional: false,
-        allowUnknownProperties: false,
+        each: {
+          type: 'literal',
+          allowNull: false,
+          bail: true,
+          isOptional: false,
+          fieldName: '*',
+          propertyName: '*',
+          validations: [],
+        },
       },
     })
 

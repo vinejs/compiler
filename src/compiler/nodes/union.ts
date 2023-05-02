@@ -20,13 +20,13 @@ export class UnionNodeCompiler extends BaseNode {
   #compiler: Compiler
   #node: UnionNode
   #buffer: CompilerBuffer
-  #parent?: CompilerParent
+  #parent: CompilerParent
 
   constructor(
     node: UnionNode,
     buffer: CompilerBuffer,
     compiler: Compiler,
-    parent?: CompilerParent,
+    parent: CompilerParent,
     parentField?: CompilerField
   ) {
     super(node, compiler, parent, parentField)

@@ -27,7 +27,7 @@ export class LiteralNodeCompiler extends BaseNode {
     node: LiteralNode,
     buffer: CompilerBuffer,
     compiler: Compiler,
-    parent?: CompilerParent,
+    parent: CompilerParent,
     parentField?: CompilerField
   ) {
     super(node, compiler, parent, parentField)

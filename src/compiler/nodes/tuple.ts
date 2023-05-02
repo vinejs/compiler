@@ -10,25 +10,24 @@
 import { BaseNode } from './base.js'
 import type { Compiler } from '../main.js'
 import type { CompilerBuffer } from '../buffer.js'
-import { defineArrayLoop } from '../../scripts/array/loop.js'
 import { defineArrayGuard } from '../../scripts/array/guard.js'
 import { defineIsValidGuard } from '../../scripts/field/is_valid_guard.js'
 import { defineFieldNullOutput } from '../../scripts/field/null_output.js'
 import { defineFieldValidations } from '../../scripts/field/validations.js'
-import type { CompilerField, CompilerParent, ArrayNode } from '../../types.js'
+import type { CompilerField, CompilerParent, TupleNode } from '../../types.js'
 import { defineArrayInitialOutput } from '../../scripts/array/initial_output.js'
 import { defineFieldExistenceValidations } from '../../scripts/field/existence_validations.js'
 
 /**
- * Compiles an array schema node to JS string output.
+ * Compiles a tuple schema node to JS string output.
  */
-export class ArrayNodeCompiler extends BaseNode {
-  #node: ArrayNode
+export class TupleNodeCompiler extends BaseNode {
+  #node: TupleNode
   #buffer: CompilerBuffer
   #compiler: Compiler
 
   constructor(
-    node: ArrayNode,
+    node: TupleNode,
     buffer: CompilerBuffer,
     compiler: Compiler,
     parent: CompilerParent,
@@ -41,27 +40,20 @@ export class ArrayNodeCompiler extends BaseNode {
   }
 
   /**
-   * Compiles the array elements to a JS fragment
+   * Compiles the tuple children to a JS fragment
    */
-  #compileArrayElements() {
-    const arrayElementsBuffer = this.#buffer.child()
-    this.#compiler.compileNode(this.#node.each, arrayElementsBuffer, {
-      type: 'array',
-      fieldPathExpression: this.field.fieldPathExpression,
-      outputExpression: this.field.outputExpression,
-      variableName: this.field.variableName,
+  #compileTupleChildren() {
+    const buffer = this.#buffer.child()
+
+    this.#node.properties.forEach((child) => {
+      this.#compiler.compileNode(child, buffer, {
+        type: 'tuple',
+        fieldPathExpression: this.field.fieldPathExpression,
+        outputExpression: this.field.outputExpression,
+        variableName: this.field.variableName,
+      })
     })
 
-    const buffer = this.#buffer.child()
-    buffer.writeStatement(
-      defineArrayLoop({
-        variableName: this.field.variableName,
-        startingIndex: 0,
-        loopCodeSnippet: arrayElementsBuffer.toString(),
-      })
-    )
-
-    arrayElementsBuffer.flush()
     return buffer.toString()
   }
 
@@ -83,7 +75,7 @@ export class ArrayNodeCompiler extends BaseNode {
     )
 
     /**
-     * Wrapping initialization of output + array elements
+     * Wrapping initialization of output + tuple validation
      * validation inside `if array field is valid` block.
      *
      * Pre step: 3
@@ -93,8 +85,10 @@ export class ArrayNodeCompiler extends BaseNode {
       bail: this.#node.bail,
       guardedCodeSnippet: `${defineArrayInitialOutput({
         outputExpression: this.field.outputExpression,
-        outputValueExpression: `[]`,
-      })}${this.#buffer.newLine}${this.#compileArrayElements()}`,
+        outputValueExpression: this.#node.allowUnknownProperties
+          ? `copyProperties(${this.field.variableName}.value)`
+          : `[]`,
+      })}${this.#compileTupleChildren()}${this.#buffer.newLine}`,
     })
 
     /**

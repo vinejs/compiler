@@ -19,7 +19,7 @@ export abstract class BaseNode {
   constructor(
     node: CompilerNodes,
     compiler: Compiler,
-    parent?: CompilerParent,
+    parent: CompilerParent,
     parentField?: CompilerField
   ) {
     this.#parentField = parentField

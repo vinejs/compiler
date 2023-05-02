@@ -265,13 +265,33 @@ export type ObjectGroupNode = {
 }
 
 /**
+ * Shape of the tuple node accepted by the compiler
+ */
+export type TupleNode = FieldNode & {
+  type: 'tuple'
+
+  /**
+   * Whether or not to allow unknown properties. When disabled, the
+   * output array will have only validated properties.
+   *
+   * Default: false
+   */
+  allowUnknownProperties: boolean
+
+  /**
+   * Tuple known properties
+   */
+  properties: CompilerNodes[]
+}
+
+/**
  * Shape of the record node accepted by the compiler
  */
 export type RecordNode = FieldNode & {
   type: 'record'
 
   /**
-   * Captures all object elements
+   * Captures object elements
    */
   each: CompilerNodes
 }
@@ -283,24 +303,9 @@ export type ArrayNode = FieldNode & {
   type: 'array'
 
   /**
-   * Whether or not to allow unknown properties. When disabled, the
-   * array will trust all the children properties.
-   *
-   * This flag has no impact when the `each` property is defined.
-   *
-   * Default: false
+   * Captures array elements
    */
-  allowUnknownProperties: boolean
-
-  /**
-   * Captures all array elements
-   */
-  each?: CompilerNodes
-
-  /**
-   * Children are treated as positional tuples
-   */
-  children?: CompilerNodes[]
+  each: CompilerNodes
 }
 
 /**
@@ -353,7 +358,13 @@ export type RootNode = {
 /**
  * Known tree nodes accepted by the compiler
  */
-export type CompilerNodes = LiteralNode | ObjectNode | ArrayNode | UnionNode | RecordNode
+export type CompilerNodes =
+  | LiteralNode
+  | ObjectNode
+  | ArrayNode
+  | UnionNode
+  | RecordNode
+  | TupleNode
 
 /**
  * Properties of a parent node as the compiler loops through the
@@ -378,16 +389,6 @@ export type CompilerParent = {
    * The expression for the output value.
    */
   outputExpression: string
-}
-
-/**
- * Properties of a parent union node
- */
-export type CompilerUnionParent = {
-  /**
-   * Name of the variable defined on the union node at the top-level
-   */
-  variableName: string
 }
 
 /**

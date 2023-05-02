@@ -8,7 +8,6 @@
  */
 
 import { CompilerBuffer } from './buffer.js'
-import { createField } from './fields/field.js'
 import { ArrayNodeCompiler } from './nodes/array.js'
 import { UnionNodeCompiler } from './nodes/union.js'
 import { RecordNodeCompiler } from './nodes/record.js'
@@ -23,14 +22,14 @@ import { createRecordField } from './fields/record_field.js'
 import { defineInlineFunctions } from '../scripts/define_inline_functions.js'
 import { defineInlineErrorMessages } from '../scripts/define_error_messages.js'
 import type {
+  RootNode,
+  CompilerField,
   RefIdentifier,
   CompilerNodes,
   CompilerParent,
-  RootNode,
-  CompilerUnionParent,
   ErrorReporterContract,
-  CompilerField,
 } from '../types.js'
+import { TupleNodeCompiler } from './nodes/tuple.js'
 
 /**
  * Representation of an async function
@@ -107,11 +106,7 @@ export class Compiler {
    * Converts a node to a field. Optionally accepts a parent node to create
    * a field for a specific parent type.
    */
-  createFieldFor(node: CompilerNodes, parent?: CompilerParent) {
-    if (!parent) {
-      return createField(node, this.variablesCounter)
-    }
-
+  createFieldFor(node: CompilerNodes, parent: CompilerParent) {
     switch (parent.type) {
       case 'array':
         return createArrayField(parent)
@@ -132,18 +127,20 @@ export class Compiler {
   compileNode(
     node: CompilerNodes,
     buffer: CompilerBuffer,
-    parent?: CompilerParent,
+    parent: CompilerParent,
     parentField?: CompilerField
   ) {
     switch (node.type) {
       case 'literal':
         return new LiteralNodeCompiler(node, buffer, this, parent, parentField).compile()
-      case 'object':
-        return new ObjectNodeCompiler(node, buffer, this, parent, parentField).compile()
       case 'array':
         return new ArrayNodeCompiler(node, buffer, this, parent, parentField).compile()
       case 'record':
         return new RecordNodeCompiler(node, buffer, this, parent, parentField).compile()
+      case 'object':
+        return new ObjectNodeCompiler(node, buffer, this, parent, parentField).compile()
+      case 'tuple':
+        return new TupleNodeCompiler(node, buffer, this, parent, parentField).compile()
       case 'union':
         return new UnionNodeCompiler(node, buffer, this, parent, parentField).compile()
     }

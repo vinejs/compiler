@@ -174,7 +174,6 @@ test.group('Union node', () => {
               propertyName: '*',
               allowNull: false,
               isOptional: false,
-              allowUnknownProperties: false,
               each: {
                 type: 'object',
                 groups: [],
@@ -209,7 +208,6 @@ test.group('Union node', () => {
               propertyName: '*',
               allowNull: false,
               isOptional: false,
-              allowUnknownProperties: false,
               each: {
                 type: 'object',
                 groups: [],
@@ -479,5 +477,104 @@ test.group('Union node', () => {
       white: { r: 255, g: 255, b: 255 },
       black: { r: 0, g: 0, b: 0 },
     })
+  })
+
+  test('create a union of tuples', async ({ assert }) => {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
+        type: 'union',
+        fieldName: '*',
+        propertyName: '*',
+        conditions: [
+          {
+            conditionalFnRefId: 'ref://1',
+            schema: {
+              type: 'tuple',
+              bail: true,
+              fieldName: '*',
+              validations: [],
+              propertyName: '*',
+              allowNull: false,
+              isOptional: false,
+              allowUnknownProperties: false,
+              properties: [
+                {
+                  type: 'object',
+                  groups: [],
+                  allowNull: false,
+                  allowUnknownProperties: false,
+                  bail: false,
+                  fieldName: '0',
+                  isOptional: false,
+                  propertyName: '0',
+                  validations: [],
+                  properties: [
+                    {
+                      type: 'literal',
+                      bail: true,
+                      fieldName: 'email',
+                      allowNull: false,
+                      isOptional: false,
+                      propertyName: 'email',
+                      validations: [],
+                    },
+                  ],
+                },
+              ],
+            },
+          },
+          {
+            conditionalFnRefId: 'ref://2',
+            schema: {
+              type: 'tuple',
+              bail: true,
+              fieldName: '*',
+              validations: [],
+              propertyName: '*',
+              allowNull: false,
+              isOptional: false,
+              allowUnknownProperties: false,
+              properties: [
+                {
+                  type: 'object',
+                  groups: [],
+                  allowNull: false,
+                  allowUnknownProperties: false,
+                  bail: false,
+                  fieldName: '0',
+                  isOptional: false,
+                  propertyName: '0',
+                  validations: [],
+                  properties: [
+                    {
+                      type: 'literal',
+                      bail: true,
+                      fieldName: 'phone',
+                      allowNull: false,
+                      isOptional: false,
+                      propertyName: 'phone',
+                      validations: [],
+                    },
+                  ],
+                },
+              ],
+            },
+          },
+        ],
+      },
+    })
+
+    const data = [{ phone: '123456789' }]
+    const meta = {}
+
+    const refs = {
+      'ref://1': () => false,
+      'ref://2': () => true,
+    }
+
+    const errorReporter = new ErrorReporterFactory().create()
+    const fn = compiler.compile()
+    assert.deepEqual(await fn(data, meta, refs, errorReporter), [{ phone: '123456789' }])
   })
 })

@@ -32,7 +32,7 @@ export class ObjectNodeCompiler extends BaseNode {
     node: ObjectNode,
     buffer: CompilerBuffer,
     compiler: Compiler,
-    parent?: CompilerParent,
+    parent: CompilerParent,
     parentField?: CompilerField
   ) {
     super(node, compiler, parent, parentField)

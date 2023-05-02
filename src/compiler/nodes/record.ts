@@ -31,7 +31,7 @@ export class RecordNodeCompiler extends BaseNode {
     node: RecordNode,
     buffer: CompilerBuffer,
     compiler: Compiler,
-    parent?: CompilerParent,
+    parent: CompilerParent,
     parentField?: CompilerField
   ) {
     super(node, compiler, parent, parentField)
