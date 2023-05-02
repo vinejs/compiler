@@ -39,7 +39,7 @@ function ensureIsObject(ctx) {
   if (!ctx.isDefined) {
     return false;
   }
-  if (typeof ctx.value === 'object' && ctx.value.constructor.name === 'Object') {
+  if (typeof ctx.value == 'object' && !Array.isArray(ctx.value)) {
     return true;
   }
   ctx.report(NOT_AN_OBJECT, ctx);
@@ -60,14 +60,14 @@ function copyProperties(val) {
 
   if (Array.isArray(val)) {
     out = Array((k = val.length))
-    while (k--) out[k] = (tmp = val[k]) && typeof tmp === 'object' ? copyProperties(tmp) : tmp
+    while (k--) out[k] = (tmp = val[k]) && typeof tmp == 'object' ? copyProperties(tmp) : tmp
     return out
   }
 
   if (Object.prototype.toString.call(val) === '[object Object]') {
     out = {} // null
     for (k in val) {
-      out[k] = (tmp = val[k]) && typeof tmp === 'object' ? copyProperties(tmp) : tmp
+      out[k] = (tmp = val[k]) && typeof tmp == 'object' ? copyProperties(tmp) : tmp
     }
     return out
   }

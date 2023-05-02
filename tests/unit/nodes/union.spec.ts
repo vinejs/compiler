@@ -14,20 +14,21 @@ import { getClosingOutput, getInitialOutput } from '../../../factories/output.js
 
 test.group('Union node', () => {
   test('create JS output for a union node', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'union',
-        fieldName: 'username',
-        propertyName: 'userName',
+        fieldName: '*',
+        propertyName: '*',
         children: [
           {
             conditionalFnRefId: 'ref://1',
             schema: {
               type: 'literal',
-              fieldName: 'username',
+              fieldName: '*',
               allowNull: false,
               isOptional: false,
-              propertyName: 'userName',
+              propertyName: '*',
               bail: true,
               validations: [
                 {
@@ -42,10 +43,10 @@ test.group('Union node', () => {
             conditionalFnRefId: 'ref://3',
             schema: {
               type: 'literal',
-              fieldName: 'username',
+              fieldName: '*',
               allowNull: false,
               isOptional: false,
-              propertyName: 'userName',
+              propertyName: '*',
               bail: true,
               validations: [
                 {
@@ -58,40 +59,40 @@ test.group('Union node', () => {
           },
         ],
       },
-    ])
+    })
 
     const compiledOutput = compiler.compile().toString()
     validateCode(compiledOutput)
 
     assert.assertFormatted(compiledOutput, [
       ...getInitialOutput(),
-      `const userName_1 = defineValue(root['username'], {`,
+      `const root_item = defineValue(root, {`,
       `data: root,`,
       `meta: meta,`,
-      `fieldName: 'username',`,
-      `fieldPath: 'username',`,
+      `fieldName: '',`,
+      `fieldPath: '',`,
       `mutate: defineValue,`,
       `report: report,`,
       `isValid: true,`,
       `parent: root,`,
       `isArrayMember: false,`,
       '});',
-      `if(refs['ref://1'](userName_1.value, userName_1)) {`,
-      `ensureExists(userName_1);`,
-      `if (userName_1.isValid && userName_1.isDefined) {`,
-      `refs['ref://2'].validator(userName_1.value, refs['ref://2'].options, userName_1);`,
+      `if(refs['ref://1'](root_item.value, root_item)) {`,
+      `ensureExists(root_item);`,
+      `if (root_item.isValid && root_item.isDefined) {`,
+      `refs['ref://2'].validator(root_item.value, refs['ref://2'].options, root_item);`,
       `}`,
-      `if (userName_1.isDefined && userName_1.isValid) {`,
-      `out['userName'] = userName_1.value;`,
+      `if (root_item.isDefined && root_item.isValid) {`,
+      `out = root_item.value;`,
       `}`,
       `}`,
-      `else if(refs['ref://3'](userName_1.value, userName_1)) {`,
-      `ensureExists(userName_1);`,
-      `if (userName_1.isValid && userName_1.isDefined) {`,
-      `refs['ref://4'].validator(userName_1.value, refs['ref://4'].options, userName_1);`,
+      `else if(refs['ref://3'](root_item.value, root_item)) {`,
+      `ensureExists(root_item);`,
+      `if (root_item.isValid && root_item.isDefined) {`,
+      `refs['ref://4'].validator(root_item.value, refs['ref://4'].options, root_item);`,
       `}`,
-      `if (userName_1.isDefined && userName_1.isValid) {`,
-      `out['userName'] = userName_1.value;`,
+      `if (root_item.isDefined && root_item.isValid) {`,
+      `out = root_item.value;`,
       `}`,
       `}`,
       ...getClosingOutput(),

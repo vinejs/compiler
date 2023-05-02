@@ -14,13 +14,14 @@ import { ValidationRule } from '../../../src/types.js'
 
 test.group('Record node', () => {
   test('process a record field', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'record',
         bail: true,
-        fieldName: 'colors',
+        fieldName: '*',
         validations: [],
-        propertyName: 'colors',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         each: {
@@ -33,34 +34,33 @@ test.group('Record node', () => {
           validations: [],
         },
       },
-    ])
+    })
 
-    const data: any = {
-      colors: {},
-    }
+    const data: any = {}
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, { colors: {} })
+    assert.deepEqual(output, {})
 
     // Mutation test:
-    data.colors.white = '#fff'
-    assert.deepEqual(output, { colors: {} })
+    data.colors = { white: '#fff' }
+    assert.deepEqual(output, {})
   })
 
   test('dis-allow undefined value', async ({ assert }) => {
     assert.plan(2)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'record',
         bail: true,
-        fieldName: 'colors',
+        fieldName: '*',
         validations: [],
-        propertyName: 'colors',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         each: {
@@ -73,9 +73,9 @@ test.group('Record node', () => {
           validations: [],
         },
       },
-    ])
+    })
 
-    const data = {}
+    const data = undefined
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
@@ -92,13 +92,14 @@ test.group('Record node', () => {
   test('dis-allow null value', async ({ assert }) => {
     assert.plan(2)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'record',
         bail: true,
-        fieldName: 'colors',
+        fieldName: '*',
         validations: [],
-        propertyName: 'colors',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         each: {
@@ -111,11 +112,9 @@ test.group('Record node', () => {
           validations: [],
         },
       },
-    ])
+    })
 
-    const data = {
-      colors: null,
-    }
+    const data = null
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
@@ -132,13 +131,14 @@ test.group('Record node', () => {
   test('dis-allow non-object values', async ({ assert }) => {
     assert.plan(2)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'record',
         bail: true,
-        fieldName: 'colors',
+        fieldName: '*',
         validations: [],
-        propertyName: 'colors',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         each: {
@@ -151,11 +151,9 @@ test.group('Record node', () => {
           validations: [],
         },
       },
-    ])
+    })
 
-    const data = {
-      colors: 'hello world',
-    }
+    const data = 'hello world'
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
@@ -170,13 +168,14 @@ test.group('Record node', () => {
   })
 
   test('process each element', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'record',
         bail: true,
-        fieldName: 'colors',
+        fieldName: '*',
         validations: [],
-        propertyName: 'colors',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         each: {
@@ -189,38 +188,33 @@ test.group('Record node', () => {
           validations: [],
         },
       },
-    ])
+    })
 
-    const data = {
-      colors: { white: '#fff', black: '#000' },
-    }
+    const data = { white: '#fff', black: '#000' }
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, {
-      colors: { white: '#fff', black: '#000' },
-    })
+    assert.deepEqual(output, { white: '#fff', black: '#000' })
 
     // Mutation test:
-    data.colors.white = 'white'
-    assert.deepEqual(output, {
-      colors: { white: '#fff', black: '#000' },
-    })
+    data.white = 'white'
+    assert.deepEqual(output, { white: '#fff', black: '#000' })
   })
 
   test('validate nested each elements', async ({ assert }) => {
     assert.plan(2)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'record',
         bail: true,
-        fieldName: 'colors',
+        fieldName: '*',
         validations: [],
-        propertyName: 'colors',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         each: {
@@ -242,11 +236,9 @@ test.group('Record node', () => {
           },
         },
       },
-    ])
+    })
 
-    const data = {
-      colors: { white: '#fff', black: '#000' },
-    }
+    const data = { white: '#fff', black: '#000' }
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
@@ -264,13 +256,14 @@ test.group('Record node', () => {
   })
 
   test('process nested each elements', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'record',
         bail: true,
-        fieldName: 'colors',
+        fieldName: '*',
         validations: [],
-        propertyName: 'colors',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         each: {
@@ -292,10 +285,11 @@ test.group('Record node', () => {
           },
         },
       },
-    ])
+    })
 
     const data = {
-      colors: { white: { bg: '#f3f3f3', fg: '#fff' }, black: { bg: '#000', fg: '#000' } },
+      white: { bg: '#f3f3f3', fg: '#fff' },
+      black: { bg: '#000', fg: '#000' },
     }
     const meta = {}
     const refs = {}
@@ -304,24 +298,27 @@ test.group('Record node', () => {
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
     assert.deepEqual(output, {
-      colors: { white: { bg: '#f3f3f3', fg: '#fff' }, black: { bg: '#000', fg: '#000' } },
+      white: { bg: '#f3f3f3', fg: '#fff' },
+      black: { bg: '#000', fg: '#000' },
     })
 
     // Mutation test:
-    data.colors.white.bg = 'white'
+    data.white.bg = 'white'
     assert.deepEqual(output, {
-      colors: { white: { bg: '#f3f3f3', fg: '#fff' }, black: { bg: '#000', fg: '#000' } },
+      white: { bg: '#f3f3f3', fg: '#fff' },
+      black: { bg: '#000', fg: '#000' },
     })
   })
 
   test('run validations', async ({ assert }) => {
     assert.plan(7)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'record',
         bail: true,
-        fieldName: 'colors',
+        fieldName: '*',
         validations: [
           {
             ruleFnId: 'ref://2',
@@ -334,7 +331,7 @@ test.group('Record node', () => {
             isAsync: false,
           },
         ],
-        propertyName: 'colors',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         each: {
@@ -347,11 +344,9 @@ test.group('Record node', () => {
           validations: [],
         },
       },
-    ])
+    })
 
-    const data = {
-      colors: { white: '#fff', black: '#000' },
-    }
+    const data = { white: '#fff', black: '#000' }
     const meta = {}
 
     const refs: Record<string, ValidationRule> = {
@@ -360,8 +355,8 @@ test.group('Record node', () => {
           assert.deepEqual(value, { white: '#fff', black: '#000' })
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
-            fieldName: 'colors',
-            fieldPath: 'colors',
+            fieldName: '',
+            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -375,8 +370,8 @@ test.group('Record node', () => {
           assert.deepEqual(value, { white: '#fff', black: '#000' })
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
-            fieldName: 'colors',
-            fieldPath: 'colors',
+            fieldName: '',
+            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -391,19 +386,18 @@ test.group('Record node', () => {
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, {
-      colors: { white: '#fff', black: '#000' },
-    })
+    assert.deepEqual(output, { white: '#fff', black: '#000' })
   })
 
   test('stop validations after first error', async ({ assert }) => {
     assert.plan(5)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'record',
         bail: true,
-        fieldName: 'colors',
+        fieldName: '*',
         validations: [
           {
             ruleFnId: 'ref://2',
@@ -416,7 +410,7 @@ test.group('Record node', () => {
             isAsync: false,
           },
         ],
-        propertyName: 'colors',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         each: {
@@ -429,11 +423,9 @@ test.group('Record node', () => {
           validations: [],
         },
       },
-    ])
+    })
 
-    const data = {
-      colors: { white: '#fff', black: '#000' },
-    }
+    const data = { white: '#fff', black: '#000' }
     const meta = {}
 
     const refs: Record<string, ValidationRule> = {
@@ -442,8 +434,8 @@ test.group('Record node', () => {
           assert.deepEqual(value, { white: '#fff', black: '#000' })
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
-            fieldName: 'colors',
-            fieldPath: 'colors',
+            fieldName: '',
+            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -454,18 +446,8 @@ test.group('Record node', () => {
         },
       },
       'ref://3': {
-        validator(value, options, ctx) {
-          assert.deepEqual(value, { white: '#fff', black: '#000' })
-          assert.isUndefined(options)
-          assert.containsSubset(ctx, {
-            fieldName: 'colors',
-            fieldPath: 'colors',
-            isArrayMember: false,
-            isValid: true,
-            meta: {},
-            parent: data,
-            data,
-          })
+        validator() {
+          throw new Error('Never expected to reach here')
         },
       },
     }
@@ -485,11 +467,12 @@ test.group('Record node', () => {
   test('continue validations after error when bail mode is disabled', async ({ assert }) => {
     assert.plan(8)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'record',
         bail: false,
-        fieldName: 'colors',
+        fieldName: '*',
         validations: [
           {
             ruleFnId: 'ref://2',
@@ -502,7 +485,7 @@ test.group('Record node', () => {
             isAsync: false,
           },
         ],
-        propertyName: 'colors',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         each: {
@@ -515,11 +498,9 @@ test.group('Record node', () => {
           validations: [],
         },
       },
-    ])
+    })
 
-    const data = {
-      colors: { white: '#fff', black: '#000' },
-    }
+    const data = { white: '#fff', black: '#000' }
     const meta = {}
 
     const refs: Record<string, ValidationRule> = {
@@ -528,8 +509,8 @@ test.group('Record node', () => {
           assert.deepEqual(value, { white: '#fff', black: '#000' })
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
-            fieldName: 'colors',
-            fieldPath: 'colors',
+            fieldName: '',
+            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -544,8 +525,8 @@ test.group('Record node', () => {
           assert.deepEqual(value, { white: '#fff', black: '#000' })
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
-            fieldName: 'colors',
-            fieldPath: 'colors',
+            fieldName: '',
+            fieldPath: '',
             isArrayMember: false,
             isValid: false,
             meta: {},
@@ -571,11 +552,12 @@ test.group('Record node', () => {
   test('do not process children when record is invalid', async ({ assert }) => {
     assert.plan(5)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'record',
         bail: true,
-        fieldName: 'colors',
+        fieldName: '*',
         validations: [
           {
             ruleFnId: 'ref://2',
@@ -583,7 +565,7 @@ test.group('Record node', () => {
             isAsync: false,
           },
         ],
-        propertyName: 'colors',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         each: {
@@ -602,11 +584,9 @@ test.group('Record node', () => {
           ],
         },
       },
-    ])
+    })
 
-    const data = {
-      colors: { white: '#fff', black: '#000' },
-    }
+    const data = { white: '#fff', black: '#000' }
     const meta = {}
 
     const refs: Record<string, ValidationRule> = {
@@ -615,8 +595,8 @@ test.group('Record node', () => {
           assert.deepEqual(value, { white: '#fff', black: '#000' })
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
-            fieldName: 'colors',
-            fieldPath: 'colors',
+            fieldName: '',
+            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -648,11 +628,12 @@ test.group('Record node', () => {
   test('process children for invalid record when bail mode is disabled', async ({ assert }) => {
     assert.plan(15)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'record',
         bail: false,
-        fieldName: 'colors',
+        fieldName: '*',
         validations: [
           {
             ruleFnId: 'ref://2',
@@ -660,7 +641,7 @@ test.group('Record node', () => {
             isAsync: false,
           },
         ],
-        propertyName: 'colors',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         each: {
@@ -679,11 +660,9 @@ test.group('Record node', () => {
           ],
         },
       },
-    ])
+    })
 
-    const data = {
-      colors: { white: '#fff', black: '#000' },
-    }
+    const data = { white: '#fff', black: '#000' }
     const meta = {}
 
     const refs: Record<string, ValidationRule> = {
@@ -692,8 +671,8 @@ test.group('Record node', () => {
           assert.deepEqual(value, { white: '#fff', black: '#000' })
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
-            fieldName: 'colors',
-            fieldPath: 'colors',
+            fieldName: '',
+            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -706,7 +685,7 @@ test.group('Record node', () => {
       'ref://3': {
         validator(value, options, ctx) {
           assert.oneOf(ctx.fieldName, ['white', 'black'])
-          assert.oneOf(ctx.fieldPath, ['colors.white', 'colors.black'])
+          assert.oneOf(ctx.fieldPath, ['white', 'black'])
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             isArrayMember: false,
@@ -738,13 +717,14 @@ test.group('Record node', () => {
 
 test.group('Record node | optional: true', () => {
   test('process a record field', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'record',
         bail: true,
-        fieldName: 'colors',
+        fieldName: '*',
         validations: [],
-        propertyName: 'colors',
+        propertyName: '*',
         allowNull: false,
         isOptional: true,
         each: {
@@ -757,41 +737,7 @@ test.group('Record node | optional: true', () => {
           validations: [],
         },
       },
-    ])
-
-    const data = {
-      colors: {},
-    }
-    const meta = {}
-    const refs = {}
-    const errorReporter = new ErrorReporterFactory().create()
-
-    const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, { colors: {} })
-  })
-
-  test('allow undefined value', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
-        type: 'record',
-        bail: true,
-        fieldName: 'colors',
-        validations: [],
-        propertyName: 'colors',
-        allowNull: false,
-        isOptional: true,
-        each: {
-          type: 'literal',
-          bail: true,
-          allowNull: false,
-          isOptional: false,
-          fieldName: '*',
-          propertyName: '*',
-          validations: [],
-        },
-      },
-    ])
+    })
 
     const data = {}
     const meta = {}
@@ -803,14 +749,15 @@ test.group('Record node | optional: true', () => {
     assert.deepEqual(output, {})
   })
 
-  test('allow null value', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+  test('allow undefined value', async ({ assert }) => {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'record',
         bail: true,
-        fieldName: 'colors',
+        fieldName: '*',
         validations: [],
-        propertyName: 'colors',
+        propertyName: '*',
         allowNull: false,
         isOptional: true,
         each: {
@@ -823,30 +770,27 @@ test.group('Record node | optional: true', () => {
           validations: [],
         },
       },
-    ])
+    })
 
-    const data = {
-      colors: null,
-    }
+    const data = undefined
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, {})
+    assert.deepEqual(output, undefined)
   })
 
-  test('dis-allow non-object values', async ({ assert }) => {
-    assert.plan(2)
-
-    const compiler = new Compiler([
-      {
+  test('allow null value', async ({ assert }) => {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'record',
         bail: true,
-        fieldName: 'colors',
+        fieldName: '*',
         validations: [],
-        propertyName: 'colors',
+        propertyName: '*',
         allowNull: false,
         isOptional: true,
         each: {
@@ -859,11 +803,44 @@ test.group('Record node | optional: true', () => {
           validations: [],
         },
       },
-    ])
+    })
 
-    const data = {
-      colors: 'hello world',
-    }
+    const data = null
+    const meta = {}
+    const refs = {}
+    const errorReporter = new ErrorReporterFactory().create()
+
+    const fn = compiler.compile()
+    const output = await fn(data, meta, refs, errorReporter)
+    assert.deepEqual(output, undefined)
+  })
+
+  test('dis-allow non-object values', async ({ assert }) => {
+    assert.plan(2)
+
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
+        type: 'record',
+        bail: true,
+        fieldName: '*',
+        validations: [],
+        propertyName: '*',
+        allowNull: false,
+        isOptional: true,
+        each: {
+          type: 'literal',
+          bail: true,
+          allowNull: false,
+          isOptional: false,
+          fieldName: '*',
+          propertyName: '*',
+          validations: [],
+        },
+      },
+    })
+
+    const data = 'hello world'
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
@@ -880,13 +857,14 @@ test.group('Record node | optional: true', () => {
 
 test.group('Record node | allowNull: true', () => {
   test('process a record field', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'record',
         bail: true,
-        fieldName: 'colors',
+        fieldName: '*',
         validations: [],
-        propertyName: 'colors',
+        propertyName: '*',
         allowNull: true,
         isOptional: false,
         each: {
@@ -899,30 +877,29 @@ test.group('Record node | allowNull: true', () => {
           validations: [],
         },
       },
-    ])
+    })
 
-    const data = {
-      colors: {},
-    }
+    const data = {}
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, { colors: {} })
+    assert.deepEqual(output, {})
   })
 
   test('dis-allow undefined value', async ({ assert }) => {
     assert.plan(2)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'record',
         bail: true,
-        fieldName: 'colors',
+        fieldName: '*',
         validations: [],
-        propertyName: 'colors',
+        propertyName: '*',
         allowNull: true,
         isOptional: false,
         each: {
@@ -935,9 +912,9 @@ test.group('Record node | allowNull: true', () => {
           validations: [],
         },
       },
-    ])
+    })
 
-    const data = {}
+    const data = undefined
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
@@ -953,13 +930,14 @@ test.group('Record node | allowNull: true', () => {
   })
 
   test('allow null value', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'record',
         bail: true,
-        fieldName: 'colors',
+        fieldName: '*',
         validations: [],
-        propertyName: 'colors',
+        propertyName: '*',
         allowNull: true,
         isOptional: false,
         each: {
@@ -972,30 +950,29 @@ test.group('Record node | allowNull: true', () => {
           validations: [],
         },
       },
-    ])
+    })
 
-    const data = {
-      colors: null,
-    }
+    const data = null
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, { colors: null })
+    assert.deepEqual(output, null)
   })
 
   test('dis-allow non-object values', async ({ assert }) => {
     assert.plan(2)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'record',
         bail: true,
-        fieldName: 'colors',
+        fieldName: '*',
         validations: [],
-        propertyName: 'colors',
+        propertyName: '*',
         allowNull: true,
         isOptional: false,
         each: {
@@ -1008,11 +985,9 @@ test.group('Record node | allowNull: true', () => {
           validations: [],
         },
       },
-    ])
+    })
 
-    const data = {
-      colors: 'hello world',
-    }
+    const data = 'hello world'
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()

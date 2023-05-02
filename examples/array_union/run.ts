@@ -10,16 +10,14 @@ console.log('========= COMPILED OUTPUT =========')
 console.log(beautifyCode(fn.toString()).toString())
 console.log('========= END COMPILED OUTPUT =========')
 
-const data = {
-  contacts: [
-    {
-      phone: '1234',
-    },
-    {
-      phone: '5678',
-    },
-  ],
-}
+const data = [
+  {
+    phone: '1234',
+  },
+  {
+    phone: '5678',
+  },
+]
 const errorReporter = new ErrorReporterFactory().create()
 
 const output = await fn(data, {}, refs, errorReporter)

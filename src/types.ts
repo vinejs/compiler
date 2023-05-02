@@ -337,6 +337,14 @@ export type CompilerUnionNode = {
 }
 
 /**
+ * The root of the schema
+ */
+export type CompilerRootNode = {
+  type: 'root'
+  schema: CompilerNodes
+}
+
+/**
  * Known tree nodes accepted by the compiler
  */
 export type CompilerNodes =
@@ -351,7 +359,7 @@ export type CompilerNodes =
  * rules tree and constructs JS code.
  */
 export type CompilerParent = {
-  type: 'array' | 'object' | 'tuple' | 'record'
+  type: 'array' | 'object' | 'tuple' | 'record' | 'root'
 
   /**
    * Name of the variable for the parent property. The variable name

@@ -19,7 +19,7 @@ export function getInitialOutput() {
     `async function anonymous(root,meta,refs,errorReporter) {`,
     ...defineInlineErrorMessages().split(EOL),
     ...defineInlineFunctions().split(EOL),
-    'const out = {};',
+    'let out;',
   ]
 }
 

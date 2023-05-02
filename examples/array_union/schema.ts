@@ -1,16 +1,19 @@
-import { CompilerArrayNode } from '../../src/types.js'
+import { CompilerRootNode } from '../../src/types.js'
 
-export const schema: [CompilerArrayNode] = [
-  {
+export const schema: CompilerRootNode = {
+  type: 'root',
+  schema: {
     type: 'array',
-    fieldName: 'contacts',
-    propertyName: 'contacts',
+    fieldName: '*',
+    propertyName: '*',
     allowNull: false,
     isOptional: false,
     bail: true,
     validations: [],
     allowUnknownProperties: false,
     each: {
+      fieldName: '*',
+      propertyName: '*',
       type: 'union',
       children: [
         {
@@ -20,6 +23,7 @@ export const schema: [CompilerArrayNode] = [
             allowNull: false,
             allowUnknownProperties: false,
             bail: true,
+            groups: [],
             children: [
               {
                 type: 'literal',
@@ -44,6 +48,7 @@ export const schema: [CompilerArrayNode] = [
             allowNull: false,
             allowUnknownProperties: false,
             bail: true,
+            groups: [],
             children: [
               {
                 type: 'literal',
@@ -64,7 +69,7 @@ export const schema: [CompilerArrayNode] = [
       ],
     },
   },
-]
+}
 
 export const refs = {
   'ref://1': () => true,

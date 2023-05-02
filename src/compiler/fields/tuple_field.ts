@@ -13,10 +13,15 @@ export function createTupleField(
   node: Pick<CompilerFieldNode, 'fieldName' | 'propertyName'>,
   parent: CompilerParent
 ): CompilerField {
+  const fieldPathExpression =
+    parent.fieldPathExpression !== `''`
+      ? `${parent.fieldPathExpression} + '.' + '${node.fieldName}'`
+      : `'${node.fieldName}'`
+
   return {
     parentVariableName: `${parent.variableName}.value`,
     fieldNameExpression: `${node.fieldName}`,
-    fieldPathExpression: `${parent.fieldPathExpression} + '.' + ${node.fieldName}`,
+    fieldPathExpression: fieldPathExpression,
     variableName: `${parent.variableName}_item_${node.fieldName}`,
     valueExpression: `${parent.variableName}.value[${node.fieldName}]`,
     outputExpression: `${parent.outputExpression}[${node.propertyName}]`,

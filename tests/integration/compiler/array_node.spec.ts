@@ -14,52 +14,52 @@ import { ValidationRule } from '../../../src/types.js'
 
 test.group('Array node', () => {
   test('process an array field', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'array',
         bail: true,
-        fieldName: 'contacts',
+        fieldName: '*',
         validations: [],
-        propertyName: 'contacts',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
       },
-    ])
+    })
 
-    const data: any = {
-      contacts: [],
-    }
+    const data: any[] = []
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, { contacts: [] })
+    assert.deepEqual(output, [])
 
     // Mutation test
-    data.contacts[0] = 'foo'
-    assert.deepEqual(output, { contacts: [] })
+    data[0] = 'foo'
+    assert.deepEqual(output, [])
   })
 
   test('dis-allow undefined value', async ({ assert }) => {
     assert.plan(2)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'array',
         bail: true,
-        fieldName: 'contacts',
+        fieldName: '*',
         validations: [],
-        propertyName: 'contacts',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
       },
-    ])
+    })
 
-    const data = {}
+    const data = undefined
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
@@ -76,22 +76,21 @@ test.group('Array node', () => {
   test('dis-allow null value', async ({ assert }) => {
     assert.plan(2)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'array',
         bail: true,
-        fieldName: 'contacts',
+        fieldName: '*',
         validations: [],
-        propertyName: 'contacts',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
       },
-    ])
+    })
 
-    const data = {
-      contacts: null,
-    }
+    const data = null
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
@@ -108,22 +107,21 @@ test.group('Array node', () => {
   test('dis-allow non-array values', async ({ assert }) => {
     assert.plan(2)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'array',
         bail: true,
-        fieldName: 'contacts',
+        fieldName: '*',
         validations: [],
-        propertyName: 'contacts',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
       },
-    ])
+    })
 
-    const data = {
-      contacts: 'hello world',
-    }
+    const data = 'hello world'
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
@@ -138,79 +136,74 @@ test.group('Array node', () => {
   })
 
   test('ignore array elements when each node is not defined', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'array',
         bail: true,
-        fieldName: 'contacts',
+        fieldName: '*',
         validations: [],
-        propertyName: 'contacts',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
       },
-    ])
+    })
 
-    const data = {
-      contacts: ['hello world', 'hi world'],
-    }
+    const data = ['hello world', 'hi world']
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, { contacts: [] })
+    assert.deepEqual(output, [])
 
     // Mutation test
-    data.contacts[0] = 'foo'
-    assert.deepEqual(output, { contacts: [] })
+    data[0] = 'foo'
+    assert.deepEqual(output, [])
   })
 
   test('keep array items elements when unknown properties are allowed', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'array',
         bail: true,
-        fieldName: 'contacts',
+        fieldName: '*',
         validations: [],
-        propertyName: 'contacts',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: true,
       },
-    ])
+    })
 
-    const data = {
-      contacts: ['hello world', 'hi world'],
-    }
+    const data = ['hello world', 'hi world']
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, {
-      contacts: ['hello world', 'hi world'],
-    })
+    assert.deepEqual(output, ['hello world', 'hi world'])
 
     // Mutation test
-    data.contacts[0] = 'foo'
-    assert.deepEqual(output, {
-      contacts: ['hello world', 'hi world'],
-    })
+    data[0] = 'foo'
+    assert.deepEqual(output, ['hello world', 'hi world'])
   })
 
   test('validate each node', async ({ assert }) => {
     assert.plan(2)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'array',
         bail: true,
-        fieldName: 'contacts',
+        fieldName: '*',
         validations: [],
-        propertyName: 'contacts',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
@@ -224,11 +217,9 @@ test.group('Array node', () => {
           validations: [],
         },
       },
-    ])
+    })
 
-    const data = {
-      contacts: [undefined],
-    }
+    const data = [undefined]
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
@@ -243,13 +234,14 @@ test.group('Array node', () => {
   })
 
   test('process each node', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'array',
         bail: true,
-        fieldName: 'contacts',
+        fieldName: '*',
         validations: [],
-        propertyName: 'contacts',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
@@ -263,36 +255,31 @@ test.group('Array node', () => {
           validations: [],
         },
       },
-    ])
+    })
 
-    const data = {
-      contacts: ['hello world', 'hi world'],
-    }
+    const data = ['hello world', 'hi world']
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, {
-      contacts: ['hello world', 'hi world'],
-    })
+    assert.deepEqual(output, ['hello world', 'hi world'])
 
     // Mutation test
-    data.contacts[0] = 'foo'
-    assert.deepEqual(output, {
-      contacts: ['hello world', 'hi world'],
-    })
+    data[0] = 'foo'
+    assert.deepEqual(output, ['hello world', 'hi world'])
   })
 
   test('process nested array nodes', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'array',
         bail: true,
-        fieldName: 'contacts',
+        fieldName: '*',
         validations: [],
-        propertyName: 'contacts',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
@@ -316,36 +303,31 @@ test.group('Array node', () => {
           },
         },
       },
-    ])
+    })
 
-    const data: any = {
-      contacts: [['hello world'], ['hi world']],
-    }
+    const data: any = [['hello world'], ['hi world']]
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, {
-      contacts: [['hello world'], ['hi world']],
-    })
+    assert.deepEqual(output, [['hello world'], ['hi world']])
 
     // Mutation test
-    data.contacts[0][0] = 'foo'
-    assert.deepEqual(output, {
-      contacts: [['hello world'], ['hi world']],
-    })
+    data[0][0] = 'foo'
+    assert.deepEqual(output, [['hello world'], ['hi world']])
   })
 
   test('run validations', async ({ assert }) => {
     assert.plan(7)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'array',
         bail: true,
-        fieldName: 'contacts',
+        fieldName: '',
         validations: [
           {
             ruleFnId: 'ref://2',
@@ -358,7 +340,7 @@ test.group('Array node', () => {
             isAsync: false,
           },
         ],
-        propertyName: 'contacts',
+        propertyName: '',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
@@ -372,11 +354,9 @@ test.group('Array node', () => {
           validations: [],
         },
       },
-    ])
+    })
 
-    const data = {
-      contacts: ['hello world', 'hi world'],
-    }
+    const data = ['hello world', 'hi world']
     const meta = {}
 
     const refs: Record<string, ValidationRule> = {
@@ -385,8 +365,8 @@ test.group('Array node', () => {
           assert.deepEqual(value, ['hello world', 'hi world'])
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
-            fieldName: 'contacts',
-            fieldPath: 'contacts',
+            fieldName: '',
+            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -400,8 +380,8 @@ test.group('Array node', () => {
           assert.deepEqual(value, ['hello world', 'hi world'])
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
-            fieldName: 'contacts',
-            fieldPath: 'contacts',
+            fieldName: '',
+            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -416,19 +396,18 @@ test.group('Array node', () => {
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, {
-      contacts: ['hello world', 'hi world'],
-    })
+    assert.deepEqual(output, ['hello world', 'hi world'])
   })
 
   test('stop validations after first error', async ({ assert }) => {
     assert.plan(5)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'array',
         bail: true,
-        fieldName: 'contacts',
+        fieldName: '*',
         validations: [
           {
             ruleFnId: 'ref://2',
@@ -441,7 +420,7 @@ test.group('Array node', () => {
             isAsync: false,
           },
         ],
-        propertyName: 'contacts',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
@@ -455,11 +434,9 @@ test.group('Array node', () => {
           validations: [],
         },
       },
-    ])
+    })
 
-    const data = {
-      contacts: ['hello world', 'hi world'],
-    }
+    const data = ['hello world', 'hi world']
     const meta = {}
 
     const refs: Record<string, ValidationRule> = {
@@ -468,8 +445,8 @@ test.group('Array node', () => {
           assert.deepEqual(value, ['hello world', 'hi world'])
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
-            fieldName: 'contacts',
-            fieldPath: 'contacts',
+            fieldName: '',
+            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -501,11 +478,12 @@ test.group('Array node', () => {
   test('continue validations after error when bail mode is disabled', async ({ assert }) => {
     assert.plan(8)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'array',
         bail: false,
-        fieldName: 'contacts',
+        fieldName: '*',
         validations: [
           {
             ruleFnId: 'ref://2',
@@ -518,7 +496,7 @@ test.group('Array node', () => {
             isAsync: false,
           },
         ],
-        propertyName: 'contacts',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
@@ -532,11 +510,9 @@ test.group('Array node', () => {
           validations: [],
         },
       },
-    ])
+    })
 
-    const data = {
-      contacts: ['hello world', 'hi world'],
-    }
+    const data = ['hello world', 'hi world']
     const meta = {}
 
     const refs: Record<string, ValidationRule> = {
@@ -545,8 +521,8 @@ test.group('Array node', () => {
           assert.deepEqual(value, ['hello world', 'hi world'])
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
-            fieldName: 'contacts',
-            fieldPath: 'contacts',
+            fieldName: '',
+            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -561,8 +537,8 @@ test.group('Array node', () => {
           assert.deepEqual(value, ['hello world', 'hi world'])
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
-            fieldName: 'contacts',
-            fieldPath: 'contacts',
+            fieldName: '',
+            fieldPath: '',
             isArrayMember: false,
             isValid: false,
             meta: {},
@@ -588,8 +564,9 @@ test.group('Array node', () => {
   test('do not process children when array is invalid', async ({ assert }) => {
     assert.plan(5)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'array',
         bail: true,
         fieldName: 'contacts',
@@ -620,11 +597,9 @@ test.group('Array node', () => {
           ],
         },
       },
-    ])
+    })
 
-    const data = {
-      contacts: ['hello world', 'hi world'],
-    }
+    const data = ['hello world', 'hi world']
     const meta = {}
 
     const refs: Record<string, ValidationRule> = {
@@ -633,8 +608,8 @@ test.group('Array node', () => {
           assert.deepEqual(value, ['hello world', 'hi world'])
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
-            fieldName: 'contacts',
-            fieldPath: 'contacts',
+            fieldName: '',
+            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -666,8 +641,9 @@ test.group('Array node', () => {
   test('process children for invalid array when bail mode is disabled', async ({ assert }) => {
     assert.plan(17)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'array',
         bail: false,
         fieldName: 'contacts',
@@ -698,11 +674,9 @@ test.group('Array node', () => {
           ],
         },
       },
-    ])
+    })
 
-    const data = {
-      contacts: ['hello world', 'hi world'],
-    }
+    const data = ['hello world', 'hi world']
     const meta = {}
 
     const refs: Record<string, ValidationRule> = {
@@ -711,8 +685,8 @@ test.group('Array node', () => {
           assert.deepEqual(value, ['hello world', 'hi world'])
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
-            fieldName: 'contacts',
-            fieldPath: 'contacts',
+            fieldName: '',
+            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -734,7 +708,7 @@ test.group('Array node', () => {
             data,
           })
           assert.oneOf(ctx.fieldName, [0, 1])
-          assert.oneOf(ctx.fieldPath, ['contacts.0', 'contacts.1'])
+          assert.oneOf(ctx.fieldPath, [0, 1])
 
           if (ctx.isArrayMember) {
             assert.equal(ctx.parent[ctx.fieldName], value)
@@ -758,13 +732,14 @@ test.group('Array node', () => {
 
 test.group('Array node | mode: tuple', () => {
   test('process children nodes', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'array',
         bail: true,
-        fieldName: 'contacts',
+        fieldName: '*',
         validations: [],
-        propertyName: 'contacts',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
@@ -789,36 +764,31 @@ test.group('Array node | mode: tuple', () => {
           },
         ],
       },
-    ])
+    })
 
-    const data = {
-      contacts: ['hello world', 'hi world'],
-    }
+    const data = ['hello world', 'hi world']
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, {
-      contacts: ['hello world', 'hi world'],
-    })
+    assert.deepEqual(output, ['hello world', 'hi world'])
 
     // Mutation test
-    data.contacts[0] = 'foo'
-    assert.deepEqual(output, {
-      contacts: ['hello world', 'hi world'],
-    })
+    data[0] = 'foo'
+    assert.deepEqual(output, ['hello world', 'hi world'])
   })
 
   test('ignore additional array items', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'array',
         bail: true,
-        fieldName: 'contacts',
+        fieldName: '',
         validations: [],
-        propertyName: 'contacts',
+        propertyName: '',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
@@ -834,31 +804,26 @@ test.group('Array node | mode: tuple', () => {
           },
         ],
       },
-    ])
+    })
 
-    const data = {
-      contacts: ['hello world', 'hi world'],
-    }
+    const data = ['hello world', 'hi world']
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, {
-      contacts: ['hello world'],
-    })
+    assert.deepEqual(output, ['hello world'])
 
     // Mutation test
-    data.contacts[0] = 'foo'
-    assert.deepEqual(output, {
-      contacts: ['hello world'],
-    })
+    data[0] = 'foo'
+    assert.deepEqual(output, ['hello world'])
   })
 
   test('keep additional array items when unknown properties are allowed', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'array',
         bail: true,
         fieldName: 'contacts',
@@ -879,36 +844,31 @@ test.group('Array node | mode: tuple', () => {
           },
         ],
       },
-    ])
+    })
 
-    const data = {
-      contacts: ['hello world', 'hi world'],
-    }
+    const data = ['hello world', 'hi world']
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, {
-      contacts: ['hello world', 'hi world'],
-    })
+    assert.deepEqual(output, ['hello world', 'hi world'])
 
     // Mutation test
-    data.contacts[0] = 'foo'
-    assert.deepEqual(output, {
-      contacts: ['hello world', 'hi world'],
-    })
+    data[0] = 'foo'
+    assert.deepEqual(output, ['hello world', 'hi world'])
   })
 
   test('process nested children nodes', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'array',
         bail: true,
-        fieldName: 'contacts',
+        fieldName: '*',
         validations: [],
-        propertyName: 'contacts',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
@@ -975,45 +935,40 @@ test.group('Array node | mode: tuple', () => {
           },
         ],
       },
-    ])
+    })
 
-    const data = {
-      contacts: [
-        ['hello world', 'hi world'],
-        ['hi world', 'hello world'],
-      ],
-    }
+    const data = [
+      ['hello world', 'hi world'],
+      ['hi world', 'hello world'],
+    ]
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, {
-      contacts: [
-        ['hello world', 'hi world'],
-        ['hi world', 'hello world'],
-      ],
-    })
+    assert.deepEqual(output, [
+      ['hello world', 'hi world'],
+      ['hi world', 'hello world'],
+    ])
 
     // Mutation test
-    data.contacts[0][0] = 'foo'
-    assert.deepEqual(output, {
-      contacts: [
-        ['hello world', 'hi world'],
-        ['hi world', 'hello world'],
-      ],
-    })
+    data[0][0] = 'foo'
+    assert.deepEqual(output, [
+      ['hello world', 'hi world'],
+      ['hi world', 'hello world'],
+    ])
   })
 
   test('allow unknown properties in nested tuple', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'array',
         bail: true,
-        fieldName: 'contacts',
+        fieldName: '*',
         validations: [],
-        propertyName: 'contacts',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: true,
@@ -1080,45 +1035,41 @@ test.group('Array node | mode: tuple', () => {
           },
         ],
       },
-    ])
+    })
 
-    const data = {
-      contacts: [
-        ['hello world', 'hi world', 'foo bar'],
-        ['hi world', 'hello world', 'foo bar'],
-        ['hi world', 'hello world', 'foo bar'],
-      ],
-    }
+    const data = [
+      ['hello world', 'hi world', 'foo bar'],
+      ['hi world', 'hello world', 'foo bar'],
+      ['hi world', 'hello world', 'foo bar'],
+    ]
+
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, {
-      contacts: [
-        ['hello world', 'hi world', 'foo bar'],
-        ['hi world', 'hello world', 'foo bar'],
-        ['hi world', 'hello world', 'foo bar'],
-      ],
-    })
+    assert.deepEqual(output, [
+      ['hello world', 'hi world', 'foo bar'],
+      ['hi world', 'hello world', 'foo bar'],
+      ['hi world', 'hello world', 'foo bar'],
+    ])
 
     // Mutation test
-    data.contacts[0][0] = 'foo'
-    assert.deepEqual(output, {
-      contacts: [
-        ['hello world', 'hi world', 'foo bar'],
-        ['hi world', 'hello world', 'foo bar'],
-        ['hi world', 'hello world', 'foo bar'],
-      ],
-    })
+    data[0][0] = 'foo'
+    assert.deepEqual(output, [
+      ['hello world', 'hi world', 'foo bar'],
+      ['hi world', 'hello world', 'foo bar'],
+      ['hi world', 'hello world', 'foo bar'],
+    ])
   })
 })
 
 test.group('Array node | optional: true', () => {
   test('process an array field', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'array',
         bail: true,
         fieldName: 'contacts',
@@ -1128,27 +1079,26 @@ test.group('Array node | optional: true', () => {
         isOptional: true,
         allowUnknownProperties: false,
       },
-    ])
+    })
 
-    const data: any = {
-      contacts: [],
-    }
+    const data: any = []
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, { contacts: [] })
+    assert.deepEqual(output, [])
 
     // Mutation test
-    data.contacts[0] = 'foo'
-    assert.deepEqual(output, { contacts: [] })
+    data[0] = 'foo'
+    assert.deepEqual(output, [])
   })
 
   test('allow undefined value', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'array',
         bail: true,
         fieldName: 'contacts',
@@ -1158,25 +1108,22 @@ test.group('Array node | optional: true', () => {
         isOptional: true,
         allowUnknownProperties: false,
       },
-    ])
+    })
 
-    const data: any = {}
+    const data: any = undefined
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, {})
-
-    // Mutation test
-    data.contacts = []
-    assert.deepEqual(output, {})
+    assert.deepEqual(output, undefined)
   })
 
   test('allow null value', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'array',
         bail: true,
         fieldName: 'contacts',
@@ -1186,29 +1133,24 @@ test.group('Array node | optional: true', () => {
         isOptional: true,
         allowUnknownProperties: false,
       },
-    ])
+    })
 
-    const data: any = {
-      contacts: null,
-    }
+    const data = null
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, {})
-
-    // Mutation test
-    data.contacts = []
-    assert.deepEqual(output, {})
+    assert.deepEqual(output, undefined)
   })
 
   test('dis-allow non-array values', async ({ assert }) => {
     assert.plan(2)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'array',
         bail: true,
         fieldName: 'contacts',
@@ -1218,11 +1160,9 @@ test.group('Array node | optional: true', () => {
         isOptional: true,
         allowUnknownProperties: false,
       },
-    ])
+    })
 
-    const data = {
-      contacts: 'hello world',
-    }
+    const data = 'hello world'
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
@@ -1239,8 +1179,9 @@ test.group('Array node | optional: true', () => {
 
 test.group('Array node | allowNull: true', () => {
   test('process an array field', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'array',
         bail: true,
         fieldName: 'contacts',
@@ -1250,29 +1191,22 @@ test.group('Array node | allowNull: true', () => {
         isOptional: false,
         allowUnknownProperties: false,
       },
-    ])
+    })
 
-    const data: any = {
-      contacts: [],
-    }
+    const data: any = []
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, { contacts: [] })
-
-    // Mutation test
-    data.contacts[0] = 'foo'
-    assert.deepEqual(output, {
-      contacts: [],
-    })
+    assert.deepEqual(output, [])
   })
 
   test('dis-allow undefined value', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'array',
         bail: true,
         fieldName: 'contacts',
@@ -1282,9 +1216,9 @@ test.group('Array node | allowNull: true', () => {
         isOptional: false,
         allowUnknownProperties: false,
       },
-    ])
+    })
 
-    const data = {}
+    const data = undefined
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
@@ -1299,8 +1233,9 @@ test.group('Array node | allowNull: true', () => {
   })
 
   test('allow null value', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'array',
         bail: true,
         fieldName: 'contacts',
@@ -1310,31 +1245,24 @@ test.group('Array node | allowNull: true', () => {
         isOptional: false,
         allowUnknownProperties: false,
       },
-    ])
+    })
 
-    const data: any = {
-      contacts: null,
-    }
+    const data: any = null
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, { contacts: null })
-
-    // Mutation test
-    data.contacts = []
-    assert.deepEqual(output, {
-      contacts: null,
-    })
+    assert.deepEqual(output, null)
   })
 
   test('dis-allow non-array values', async ({ assert }) => {
     assert.plan(2)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'array',
         bail: true,
         fieldName: 'contacts',
@@ -1344,11 +1272,9 @@ test.group('Array node | allowNull: true', () => {
         isOptional: false,
         allowUnknownProperties: false,
       },
-    ])
+    })
 
-    const data = {
-      contacts: 'hello world',
-    }
+    const data = 'hello world'
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()

@@ -13,6 +13,7 @@ import { ArrayNodeCompiler } from './nodes/array.js'
 import { UnionNodeCompiler } from './nodes/union.js'
 import { RecordNodeCompiler } from './nodes/record.js'
 import { ObjectNodeCompiler } from './nodes/object.js'
+import { createRootField } from './fields/root_field.js'
 import { LiteralNodeCompiler } from './nodes/literal.js'
 import { createArrayField } from './fields/array_field.js'
 import { createTupleField } from './fields/tuple_field.js'
@@ -25,6 +26,7 @@ import type {
   RefIdentifier,
   CompilerNodes,
   CompilerParent,
+  CompilerRootNode,
   CompilerUnionParent,
   ErrorReporterContract,
 } from '../types.js'
@@ -48,15 +50,15 @@ export class Compiler {
   /**
    * An array of nodes to process
    */
-  #nodes: CompilerNodes[]
+  #rootNode: CompilerRootNode
 
   /**
    * Buffer for collection the JS output string
    */
   #buffer: CompilerBuffer = new CompilerBuffer()
 
-  constructor(nodes: CompilerNodes[]) {
-    this.#nodes = nodes
+  constructor(rootNode: CompilerRootNode) {
+    this.#rootNode = rootNode
   }
 
   /**
@@ -65,7 +67,7 @@ export class Compiler {
   #initiateJSOutput() {
     this.#buffer.writeStatement(defineInlineErrorMessages())
     this.#buffer.writeStatement(defineInlineFunctions())
-    this.#buffer.writeStatement('const out = {};')
+    this.#buffer.writeStatement('let out;')
   }
 
   /**
@@ -80,8 +82,11 @@ export class Compiler {
    * Compiles all the nodes
    */
   #compileNodes() {
-    this.#nodes.forEach((node) => {
-      this.compileNode(node, this.#buffer)
+    this.compileNode(this.#rootNode.schema, this.#buffer, {
+      type: 'root',
+      variableName: 'root',
+      outputExpression: 'out',
+      fieldPathExpression: 'out',
     })
   }
 
@@ -89,7 +94,7 @@ export class Compiler {
    * Returns compiled output as a function
    */
   #toAsyncFunction<T extends Record<string, any>>(): (
-    data: Record<string, any>,
+    data: any,
     meta: Record<string, any>,
     refs: Record<RefIdentifier, any>,
     errorReporter: ErrorReporterContract
@@ -109,6 +114,8 @@ export class Compiler {
     switch (parent.type) {
       case 'array':
         return createArrayField(parent)
+      case 'root':
+        return createRootField(parent)
       case 'object':
         return createObjectField(node, this.variablesCounter, parent)
       case 'tuple':

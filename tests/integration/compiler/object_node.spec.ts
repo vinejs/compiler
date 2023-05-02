@@ -14,56 +14,56 @@ import { ValidationRule } from '../../../src/types.js'
 
 test.group('Object node', () => {
   test('process an object field', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'object',
         groups: [],
         bail: true,
-        fieldName: 'profile',
+        fieldName: '',
         validations: [],
-        propertyName: 'profile',
+        propertyName: '',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
         children: [],
       },
-    ])
+    })
 
-    const data: any = {
-      profile: {},
-    }
+    const data: any = {}
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, { profile: {} })
+    assert.deepEqual(output, {})
 
     // Mutation test:
-    data.profile.age = 22
-    assert.deepEqual(output, { profile: {} })
+    data.profile = {}
+    assert.deepEqual(output, {})
   })
 
   test('dis-allow undefined value', async ({ assert }) => {
     assert.plan(2)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'object',
         groups: [],
         bail: true,
-        fieldName: 'profile',
+        fieldName: '*',
         validations: [],
-        propertyName: 'profile',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
         children: [],
       },
-    ])
+    })
 
-    const data = {}
+    const data = undefined
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
@@ -80,24 +80,23 @@ test.group('Object node', () => {
   test('dis-allow null value', async ({ assert }) => {
     assert.plan(2)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'object',
         groups: [],
         bail: true,
-        fieldName: 'profile',
+        fieldName: '*',
         validations: [],
-        propertyName: 'profile',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
         children: [],
       },
-    ])
+    })
 
-    const data = {
-      profile: null,
-    }
+    const data = null
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
@@ -114,14 +113,15 @@ test.group('Object node', () => {
   test('dis-allow non-object values', async ({ assert }) => {
     assert.plan(2)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'object',
         groups: [],
         bail: true,
-        fieldName: 'profile',
+        fieldName: '*',
         validations: [],
-        propertyName: 'profile',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
@@ -137,11 +137,9 @@ test.group('Object node', () => {
           },
         ],
       },
-    ])
+    })
 
-    const data = {
-      profile: 'hello world',
-    }
+    const data = 'hello world'
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
@@ -156,48 +154,48 @@ test.group('Object node', () => {
   })
 
   test('ignore object properties when children nodes are not defined', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'object',
         groups: [],
         bail: true,
-        fieldName: 'profile',
+        fieldName: '*',
         validations: [],
-        propertyName: 'profile',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
         children: [],
       },
-    ])
+    })
 
-    const data = {
-      profile: { username: 'virk', age: 34 },
-    }
+    const data = { username: 'virk', age: 34 }
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, { profile: {} })
+    assert.deepEqual(output, {})
 
     // Mutation test:
-    data.profile.age = 22
-    assert.deepEqual(output, { profile: {} })
+    data.age = 22
+    assert.deepEqual(output, {})
   })
 
   test('validate object children', async ({ assert }) => {
     assert.plan(2)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'object',
         groups: [],
         bail: true,
-        fieldName: 'profile',
+        fieldName: '*',
         validations: [],
-        propertyName: 'profile',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
@@ -222,11 +220,9 @@ test.group('Object node', () => {
           },
         ],
       },
-    ])
+    })
 
-    const data = {
-      profile: {},
-    }
+    const data = {}
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
@@ -241,14 +237,15 @@ test.group('Object node', () => {
   })
 
   test('process children nodes', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'object',
         groups: [],
         bail: true,
-        fieldName: 'profile',
+        fieldName: '*',
         validations: [],
-        propertyName: 'profile',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
@@ -273,37 +270,32 @@ test.group('Object node', () => {
           },
         ],
       },
-    ])
+    })
 
-    const data = {
-      profile: { username: 'virk', age: 34 },
-    }
+    const data = { username: 'virk', age: 34 }
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, {
-      profile: { userName: 'virk', age: 34 },
-    })
+    assert.deepEqual(output, { userName: 'virk', age: 34 })
 
     // Mutation test:
-    data.profile.age = 22
-    assert.deepEqual(output, {
-      profile: { userName: 'virk', age: 34 },
-    })
+    data.age = 22
+    assert.deepEqual(output, { userName: 'virk', age: 34 })
   })
 
   test('process nested object nodes', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'object',
         groups: [],
         bail: true,
-        fieldName: 'profile',
+        fieldName: '*',
         validations: [],
-        propertyName: 'profile',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
@@ -341,14 +333,12 @@ test.group('Object node', () => {
           },
         ],
       },
-    ])
+    })
 
     const data = {
-      profile: {
-        social: {
-          github_username: 'thetutlage',
-          twitter_handle: 'AmanVirk1',
-        },
+      social: {
+        github_username: 'thetutlage',
+        twitter_handle: 'AmanVirk1',
       },
     }
     const meta = {}
@@ -358,35 +348,32 @@ test.group('Object node', () => {
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
     assert.deepEqual(output, {
-      profile: {
-        social: {
-          githubUsername: 'thetutlage',
-          twitterHandle: 'AmanVirk1',
-        },
+      social: {
+        githubUsername: 'thetutlage',
+        twitterHandle: 'AmanVirk1',
       },
     })
 
     // Mutation test:
-    data.profile.social.github_username = 'foo'
+    data.social.github_username = 'foo'
     assert.deepEqual(output, {
-      profile: {
-        social: {
-          githubUsername: 'thetutlage',
-          twitterHandle: 'AmanVirk1',
-        },
+      social: {
+        githubUsername: 'thetutlage',
+        twitterHandle: 'AmanVirk1',
       },
     })
   })
 
-  test('run validations', async ({ assert }) => {
+  test('run object validations', async ({ assert }) => {
     assert.plan(7)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'object',
         groups: [],
         bail: true,
-        fieldName: 'profile',
+        fieldName: '*',
         validations: [
           {
             ruleFnId: 'ref://2',
@@ -399,15 +386,15 @@ test.group('Object node', () => {
             isAsync: false,
           },
         ],
-        propertyName: 'profile',
+        propertyName: '*',
         allowUnknownProperties: false,
         allowNull: false,
         isOptional: false,
         children: [],
       },
-    ])
+    })
 
-    const data = { profile: {} }
+    const data = {}
     const meta = {}
 
     const refs: Record<string, ValidationRule> = {
@@ -416,8 +403,8 @@ test.group('Object node', () => {
           assert.deepEqual(value, {})
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
-            fieldName: 'profile',
-            fieldPath: 'profile',
+            fieldName: '',
+            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -431,8 +418,8 @@ test.group('Object node', () => {
           assert.deepEqual(value, {})
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
-            fieldName: 'profile',
-            fieldPath: 'profile',
+            fieldName: '',
+            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -447,18 +434,19 @@ test.group('Object node', () => {
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, { profile: {} })
+    assert.deepEqual(output, {})
   })
 
   test('stop validations after first error', async ({ assert }) => {
     assert.plan(5)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'object',
         groups: [],
         bail: true,
-        fieldName: 'profile',
+        fieldName: '*',
         validations: [
           {
             ruleFnId: 'ref://2',
@@ -471,15 +459,15 @@ test.group('Object node', () => {
             isAsync: false,
           },
         ],
-        propertyName: 'profile',
+        propertyName: '*',
         allowUnknownProperties: false,
         allowNull: false,
         isOptional: false,
         children: [],
       },
-    ])
+    })
 
-    const data = { profile: {} }
+    const data = {}
     const meta = {}
 
     const refs: Record<string, ValidationRule> = {
@@ -488,8 +476,8 @@ test.group('Object node', () => {
           assert.deepEqual(value, {})
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
-            fieldName: 'profile',
-            fieldPath: 'profile',
+            fieldName: '',
+            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -520,12 +508,13 @@ test.group('Object node', () => {
   test('continue validations after error when bail mode is disabled', async ({ assert }) => {
     assert.plan(8)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'object',
         groups: [],
         bail: false,
-        fieldName: 'profile',
+        fieldName: '*',
         validations: [
           {
             ruleFnId: 'ref://2',
@@ -538,15 +527,15 @@ test.group('Object node', () => {
             isAsync: false,
           },
         ],
-        propertyName: 'profile',
+        propertyName: '*',
         allowUnknownProperties: false,
         allowNull: false,
         isOptional: false,
         children: [],
       },
-    ])
+    })
 
-    const data = { profile: {} }
+    const data = {}
     const meta = {}
 
     const refs: Record<string, ValidationRule> = {
@@ -555,8 +544,8 @@ test.group('Object node', () => {
           assert.deepEqual(value, {})
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
-            fieldName: 'profile',
-            fieldPath: 'profile',
+            fieldName: '',
+            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -571,8 +560,8 @@ test.group('Object node', () => {
           assert.deepEqual(value, {})
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
-            fieldName: 'profile',
-            fieldPath: 'profile',
+            fieldName: '',
+            fieldPath: '',
             isArrayMember: false,
             isValid: false,
             meta: {},
@@ -595,12 +584,13 @@ test.group('Object node', () => {
   })
 
   test('do not process children when object is invalid', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'object',
         groups: [],
         bail: true,
-        fieldName: 'profile',
+        fieldName: '*',
         validations: [
           {
             ruleFnId: 'ref://2',
@@ -608,7 +598,7 @@ test.group('Object node', () => {
             isAsync: false,
           },
         ],
-        propertyName: 'profile',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
@@ -645,11 +635,9 @@ test.group('Object node', () => {
           },
         ],
       },
-    ])
+    })
 
-    const data = {
-      profile: { username: 'virk', age: 34 },
-    }
+    const data = { username: 'virk', age: 34 }
     const meta = {}
 
     const refs: Record<string, ValidationRule> = {
@@ -658,8 +646,8 @@ test.group('Object node', () => {
           assert.deepEqual(value, { username: 'virk', age: 34 })
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
-            fieldName: 'profile',
-            fieldPath: 'profile',
+            fieldName: '',
+            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -690,12 +678,13 @@ test.group('Object node', () => {
   test('process children for invalid object when bail mode is disabled', async ({ assert }) => {
     assert.plan(11)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'object',
         groups: [],
         bail: false,
-        fieldName: 'profile',
+        fieldName: '*',
         validations: [
           {
             ruleFnId: 'ref://2',
@@ -703,7 +692,7 @@ test.group('Object node', () => {
             isAsync: false,
           },
         ],
-        propertyName: 'profile',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
@@ -740,11 +729,9 @@ test.group('Object node', () => {
           },
         ],
       },
-    ])
+    })
 
-    const data = {
-      profile: { username: 'virk', age: 34 },
-    }
+    const data = { username: 'virk', age: 34 }
     const meta = {}
 
     const refs: Record<string, ValidationRule> = {
@@ -753,8 +740,8 @@ test.group('Object node', () => {
           assert.deepEqual(value, { username: 'virk', age: 34 })
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
-            fieldName: 'profile',
-            fieldPath: 'profile',
+            fieldName: '',
+            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -771,7 +758,7 @@ test.group('Object node', () => {
             assert.isUndefined(options)
             assert.containsSubset(ctx, {
               fieldName: 'username',
-              fieldPath: 'profile.username',
+              fieldPath: 'username',
               isArrayMember: false,
               isValid: true,
               meta: {},
@@ -783,7 +770,7 @@ test.group('Object node', () => {
             assert.isUndefined(options)
             assert.containsSubset(ctx, {
               fieldName: 'age',
-              fieldPath: 'profile.age',
+              fieldPath: 'age',
               isArrayMember: false,
               isValid: true,
               meta: {},
@@ -807,8 +794,9 @@ test.group('Object node', () => {
   })
 
   test('process object groups', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'object',
         groups: [
           {
@@ -852,20 +840,18 @@ test.group('Object node', () => {
           },
         ],
         bail: true,
-        fieldName: 'login',
+        fieldName: '*',
         validations: [],
-        propertyName: 'login',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: false,
         children: [],
       },
-    ])
+    })
 
     const data: any = {
-      login: {
-        username: 'virk',
-      },
+      username: 'virk',
     }
     const meta = {}
     const refs = {
@@ -876,16 +862,17 @@ test.group('Object node', () => {
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, { login: { username: 'virk' } })
+    assert.deepEqual(output, { username: 'virk' })
 
     // Mutation test:
-    data.login.username = 'foo'
-    assert.deepEqual(output, { login: { username: 'virk' } })
+    data.username = 'foo'
+    assert.deepEqual(output, { username: 'virk' })
   })
 
   test('allow unknowProperties when object groups are defined', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'object',
         groups: [
           {
@@ -929,22 +916,20 @@ test.group('Object node', () => {
           },
         ],
         bail: true,
-        fieldName: 'login',
+        fieldName: '*',
         validations: [],
-        propertyName: 'login',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: true,
         children: [],
       },
-    ])
+    })
 
     const data: any = {
-      login: {
-        username: 'virk',
-        foo: 'bar',
-        baz: 'bam',
-      },
+      username: 'virk',
+      foo: 'bar',
+      baz: 'bam',
     }
     const meta = {}
     const refs = {
@@ -955,58 +940,31 @@ test.group('Object node', () => {
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, { login: { userName: 'virk', foo: 'bar', baz: 'bam' } })
+    assert.deepEqual(output, { userName: 'virk', foo: 'bar', baz: 'bam' })
 
     // Mutation test:
-    data.login.username = 'foo'
-    assert.deepEqual(output, { login: { userName: 'virk', foo: 'bar', baz: 'bam' } })
+    data.username = 'foo'
+    assert.deepEqual(output, { userName: 'virk', foo: 'bar', baz: 'bam' })
   })
 })
 
 test.group('Object node | optional: true', () => {
   test('process an object field', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'object',
         groups: [],
         bail: true,
-        fieldName: 'profile',
+        fieldName: '*',
         validations: [],
-        propertyName: 'profile',
+        propertyName: '*',
         allowNull: false,
         isOptional: true,
         allowUnknownProperties: false,
         children: [],
       },
-    ])
-
-    const data = {
-      profile: {},
-    }
-    const meta = {}
-    const refs = {}
-    const errorReporter = new ErrorReporterFactory().create()
-
-    const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, { profile: {} })
-  })
-
-  test('allow undefined value', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
-        type: 'object',
-        groups: [],
-        bail: true,
-        fieldName: 'profile',
-        validations: [],
-        propertyName: 'profile',
-        allowNull: false,
-        isOptional: true,
-        allowUnknownProperties: false,
-        children: [],
-      },
-    ])
+    })
 
     const data = {}
     const meta = {}
@@ -1018,55 +976,80 @@ test.group('Object node | optional: true', () => {
     assert.deepEqual(output, {})
   })
 
-  test('allow null value', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+  test('allow undefined value', async ({ assert }) => {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'object',
         groups: [],
         bail: true,
-        fieldName: 'profile',
+        fieldName: '*',
         validations: [],
-        propertyName: 'profile',
+        propertyName: '*',
         allowNull: false,
         isOptional: true,
         allowUnknownProperties: false,
         children: [],
       },
-    ])
+    })
 
-    const data = {
-      profile: null,
-    }
+    const data = undefined
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, {})
+    assert.deepEqual(output, undefined)
   })
 
-  test('dis-allow non-object values', async ({ assert }) => {
-    assert.plan(2)
-
-    const compiler = new Compiler([
-      {
+  test('allow null value', async ({ assert }) => {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'object',
         groups: [],
         bail: true,
-        fieldName: 'profile',
+        fieldName: '*',
         validations: [],
-        propertyName: 'profile',
+        propertyName: '*',
         allowNull: false,
         isOptional: true,
         allowUnknownProperties: false,
         children: [],
       },
-    ])
+    })
 
-    const data = {
-      profile: 'hello world',
-    }
+    const data = null
+    const meta = {}
+    const refs = {}
+    const errorReporter = new ErrorReporterFactory().create()
+
+    const fn = compiler.compile()
+    const output = await fn(data, meta, refs, errorReporter)
+    assert.deepEqual(output, undefined)
+  })
+
+  test('dis-allow non-object values', async ({ assert }) => {
+    assert.plan(2)
+
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
+        type: 'object',
+        groups: [],
+        bail: true,
+        fieldName: '*',
+        validations: [],
+        propertyName: '*',
+        allowNull: false,
+        isOptional: true,
+        allowUnknownProperties: false,
+        children: [],
+      },
+    })
+
+    const data = 'hello world'
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
@@ -1083,80 +1066,79 @@ test.group('Object node | optional: true', () => {
 
 test.group('Object node | allowNull: true', () => {
   test('process an object field', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'object',
         groups: [],
         bail: true,
-        fieldName: 'profile',
+        fieldName: '*',
         validations: [],
-        propertyName: 'profile',
+        propertyName: '*',
         allowNull: true,
         isOptional: false,
         allowUnknownProperties: false,
         children: [],
       },
-    ])
+    })
 
-    const data = {
-      profile: {},
-    }
+    const data = {}
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, { profile: {} })
+    assert.deepEqual(output, {})
   })
 
   test('allow null value', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'object',
         groups: [],
         bail: true,
-        fieldName: 'profile',
+        fieldName: '*',
         validations: [],
-        propertyName: 'profile',
+        propertyName: '*',
         allowNull: true,
         isOptional: false,
         allowUnknownProperties: false,
         children: [],
       },
-    ])
+    })
 
-    const data = {
-      profile: null,
-    }
+    const data = null
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, { profile: null })
+    assert.deepEqual(output, null)
   })
 
   test('dis-allow undefined value', async ({ assert }) => {
     assert.plan(2)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'object',
         groups: [],
         bail: true,
-        fieldName: 'profile',
+        fieldName: '*',
         validations: [],
-        propertyName: 'profile',
+        propertyName: '*',
         allowNull: true,
         isOptional: false,
         allowUnknownProperties: false,
         children: [],
       },
-    ])
+    })
 
-    const data = {}
+    const data = undefined
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
@@ -1173,24 +1155,23 @@ test.group('Object node | allowNull: true', () => {
   test('dis-allow non-object values', async ({ assert }) => {
     assert.plan(2)
 
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'object',
         groups: [],
         bail: true,
-        fieldName: 'profile',
+        fieldName: '*',
         validations: [],
-        propertyName: 'profile',
+        propertyName: '*',
         allowNull: true,
         isOptional: false,
         allowUnknownProperties: false,
         children: [],
       },
-    ])
+    })
 
-    const data = {
-      profile: 'hello world',
-    }
+    const data = 'hello world'
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
@@ -1207,50 +1188,46 @@ test.group('Object node | allowNull: true', () => {
 
 test.group('Object node | allowUnknownProperties', () => {
   test('keep object properties when unknown properties are allowed', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'object',
         groups: [],
         bail: true,
-        fieldName: 'profile',
+        fieldName: '*',
         validations: [],
-        propertyName: 'profile',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: true,
         children: [],
       },
-    ])
+    })
 
-    const data = {
-      profile: { username: 'virk', age: 34 },
-    }
+    const data = { username: 'virk', age: 34 }
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
-    assert.deepEqual(output, {
-      profile: { username: 'virk', age: 34 },
-    })
+    assert.deepEqual(output, { username: 'virk', age: 34 })
 
     // Mutation test:
-    data.profile.age = 22
-    assert.deepEqual(output, {
-      profile: { username: 'virk', age: 34 },
-    })
+    data.age = 22
+    assert.deepEqual(output, { username: 'virk', age: 34 })
   })
 
   test('validate known properties when unknown properties are allowed', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'object',
         groups: [],
         bail: true,
-        fieldName: 'profile',
+        fieldName: '*',
         validations: [],
-        propertyName: 'profile',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: true,
@@ -1266,11 +1243,9 @@ test.group('Object node | allowUnknownProperties', () => {
           },
         ],
       },
-    ])
+    })
 
-    const data = {
-      profile: { age: 34 },
-    }
+    const data = { age: 34 }
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
@@ -1285,14 +1260,15 @@ test.group('Object node | allowUnknownProperties', () => {
   })
 
   test('process known properties when unknown properties are allowed', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'object',
         groups: [],
         bail: true,
-        fieldName: 'profile',
+        fieldName: '*',
         validations: [],
-        propertyName: 'profile',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: true,
@@ -1308,11 +1284,9 @@ test.group('Object node | allowUnknownProperties', () => {
           },
         ],
       },
-    ])
+    })
 
-    const data = {
-      profile: { username: 'virk', age: 34 },
-    }
+    const data = { username: 'virk', age: 34 }
     const meta = {}
     const refs = {}
     const errorReporter = new ErrorReporterFactory().create()
@@ -1320,25 +1294,28 @@ test.group('Object node | allowUnknownProperties', () => {
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
     assert.deepEqual(output, {
-      profile: { userName: 'virk', age: 34 },
+      userName: 'virk',
+      age: 34,
     })
 
     // Mutation test:
-    data.profile.age = 22
+    data.age = 22
     assert.deepEqual(output, {
-      profile: { userName: 'virk', age: 34 },
+      userName: 'virk',
+      age: 34,
     })
   })
 
   test('allow unknown properties with nested object', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'object',
         groups: [],
         bail: true,
-        fieldName: 'profile',
+        fieldName: '*',
         validations: [],
-        propertyName: 'profile',
+        propertyName: '*',
         allowNull: false,
         isOptional: false,
         allowUnknownProperties: true,
@@ -1376,17 +1353,15 @@ test.group('Object node | allowUnknownProperties', () => {
           },
         ],
       },
-    ])
+    })
 
     const data = {
-      profile: {
-        social: {
-          github_username: 'thetutlage',
-          twitter_handle: 'AmanVirk1',
-          soundcloud_account: 'foobar',
-        },
-        username: 'foo',
+      social: {
+        github_username: 'thetutlage',
+        twitter_handle: 'AmanVirk1',
+        soundcloud_account: 'foobar',
       },
+      username: 'foo',
     }
     const meta = {}
     const refs = {}
@@ -1395,28 +1370,24 @@ test.group('Object node | allowUnknownProperties', () => {
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
     assert.deepEqual(output, {
-      profile: {
-        social: {
-          githubUsername: 'thetutlage',
-          soundcloud_account: 'foobar',
-          twitterHandle: 'AmanVirk1',
-        },
-        username: 'foo',
+      social: {
+        githubUsername: 'thetutlage',
+        soundcloud_account: 'foobar',
+        twitterHandle: 'AmanVirk1',
       },
+      username: 'foo',
     })
 
     // Mutation test:
-    data.profile.social.github_username = 'foo'
-    data.profile.username = 'bar'
+    data.social.github_username = 'foo'
+    data.username = 'bar'
     assert.deepEqual(output, {
-      profile: {
-        social: {
-          githubUsername: 'thetutlage',
-          soundcloud_account: 'foobar',
-          twitterHandle: 'AmanVirk1',
-        },
-        username: 'foo',
+      social: {
+        githubUsername: 'thetutlage',
+        soundcloud_account: 'foobar',
+        twitterHandle: 'AmanVirk1',
       },
+      username: 'foo',
     })
   })
 })

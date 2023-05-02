@@ -13,11 +13,12 @@ import { ErrorReporterFactory } from '../../../factories/error_reporter.js'
 
 test.group('Union node', () => {
   test('create a union of literal values', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'union',
-        fieldName: 'uid',
-        propertyName: 'uid',
+        fieldName: '*',
+        propertyName: '*',
         children: [
           {
             conditionalFnRefId: 'ref://1',
@@ -51,9 +52,9 @@ test.group('Union node', () => {
           },
         ],
       },
-    ])
+    })
 
-    const data = { uid: 'virk' }
+    const data = 'virk'
     const meta = {}
 
     const refs = {
@@ -68,15 +69,16 @@ test.group('Union node', () => {
 
     const errorReporter = new ErrorReporterFactory().create()
     const fn = compiler.compile()
-    assert.deepEqual(await fn(data, meta, refs, errorReporter), { uid: 'virk' })
+    assert.deepEqual(await fn(data, meta, refs, errorReporter), 'virk')
   })
 
   test('create a union of objects', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'union',
-        fieldName: 'profile',
-        propertyName: 'profile',
+        fieldName: '*',
+        propertyName: '*',
         children: [
           {
             conditionalFnRefId: 'ref://1',
@@ -139,9 +141,9 @@ test.group('Union node', () => {
           },
         ],
       },
-    ])
+    })
 
-    const data = { profile: { email: 'foo@bar.com' } }
+    const data = { email: 'foo@bar.com' }
     const meta = {}
 
     const refs = {
@@ -151,26 +153,25 @@ test.group('Union node', () => {
 
     const errorReporter = new ErrorReporterFactory().create()
     const fn = compiler.compile()
-    assert.deepEqual(await fn(data, meta, refs, errorReporter), {
-      profile: { email: 'foo@bar.com' },
-    })
+    assert.deepEqual(await fn(data, meta, refs, errorReporter), { email: 'foo@bar.com' })
   })
 
   test('create a union of arrays', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'union',
-        fieldName: 'contacts',
-        propertyName: 'contacts',
+        fieldName: '*',
+        propertyName: '*',
         children: [
           {
             conditionalFnRefId: 'ref://1',
             schema: {
               type: 'array',
               bail: true,
-              fieldName: 'contacts',
+              fieldName: '*',
               validations: [],
-              propertyName: 'contacts',
+              propertyName: '*',
               allowNull: false,
               isOptional: false,
               allowUnknownProperties: false,
@@ -180,9 +181,9 @@ test.group('Union node', () => {
                 allowNull: false,
                 allowUnknownProperties: false,
                 bail: false,
-                fieldName: 'contacts',
+                fieldName: '*',
                 isOptional: false,
-                propertyName: 'contacts',
+                propertyName: '*',
                 validations: [],
                 children: [
                   {
@@ -203,9 +204,9 @@ test.group('Union node', () => {
             schema: {
               type: 'array',
               bail: true,
-              fieldName: 'contacts',
+              fieldName: '*',
               validations: [],
-              propertyName: 'contacts',
+              propertyName: '*',
               allowNull: false,
               isOptional: false,
               allowUnknownProperties: false,
@@ -215,9 +216,9 @@ test.group('Union node', () => {
                 allowNull: false,
                 allowUnknownProperties: false,
                 bail: false,
-                fieldName: 'contacts',
+                fieldName: '*',
                 isOptional: false,
-                propertyName: 'contacts',
+                propertyName: '*',
                 validations: [],
                 children: [
                   {
@@ -235,9 +236,9 @@ test.group('Union node', () => {
           },
         ],
       },
-    ])
+    })
 
-    const data = { contacts: [{ phone: '123456789' }] }
+    const data = [{ phone: '123456789' }]
     const meta = {}
 
     const refs = {
@@ -247,24 +248,23 @@ test.group('Union node', () => {
 
     const errorReporter = new ErrorReporterFactory().create()
     const fn = compiler.compile()
-    assert.deepEqual(await fn(data, meta, refs, errorReporter), {
-      contacts: [{ phone: '123456789' }],
-    })
+    assert.deepEqual(await fn(data, meta, refs, errorReporter), [{ phone: '123456789' }])
   })
 
   test('create a union of unions', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'union',
-        fieldName: 'account',
-        propertyName: 'account',
+        fieldName: '*',
+        propertyName: '*',
         children: [
           {
             conditionalFnRefId: 'ref://1',
             schema: {
               type: 'union',
-              fieldName: 'account',
-              propertyName: 'account',
+              fieldName: '*',
+              propertyName: '*',
               children: [
                 {
                   conditionalFnRefId: 'ref://3',
@@ -275,8 +275,8 @@ test.group('Union node', () => {
                     allowUnknownProperties: false,
                     bail: true,
                     validations: [],
-                    fieldName: 'account',
-                    propertyName: 'account',
+                    fieldName: '*',
+                    propertyName: '*',
                     isOptional: false,
                     children: [
                       {
@@ -300,8 +300,8 @@ test.group('Union node', () => {
                     allowUnknownProperties: false,
                     bail: true,
                     validations: [],
-                    fieldName: 'account',
-                    propertyName: 'account',
+                    fieldName: '*',
+                    propertyName: '*',
                     isOptional: false,
                     children: [
                       {
@@ -323,8 +323,8 @@ test.group('Union node', () => {
             conditionalFnRefId: 'ref://2',
             schema: {
               type: 'union',
-              fieldName: 'account',
-              propertyName: 'account',
+              fieldName: '*',
+              propertyName: '*',
               children: [
                 {
                   conditionalFnRefId: 'ref://5',
@@ -335,8 +335,8 @@ test.group('Union node', () => {
                     allowUnknownProperties: false,
                     bail: true,
                     validations: [],
-                    fieldName: 'account',
-                    propertyName: 'account',
+                    fieldName: '*',
+                    propertyName: '*',
                     isOptional: false,
                     children: [
                       {
@@ -360,8 +360,8 @@ test.group('Union node', () => {
                     allowUnknownProperties: false,
                     bail: true,
                     validations: [],
-                    fieldName: 'account',
-                    propertyName: 'account',
+                    fieldName: '*',
+                    propertyName: '*',
                     isOptional: false,
                     children: [
                       {
@@ -381,12 +381,10 @@ test.group('Union node', () => {
           },
         ],
       },
-    ])
+    })
 
     const data = {
-      account: {
-        email: 'foo@bar.com',
-      },
+      email: 'foo@bar.com',
     }
     const meta = {}
 
@@ -402,27 +400,26 @@ test.group('Union node', () => {
     const errorReporter = new ErrorReporterFactory().create()
     const fn = compiler.compile()
     assert.deepEqual(await fn(data, meta, refs, errorReporter), {
-      account: {
-        email: 'foo@bar.com',
-      },
+      email: 'foo@bar.com',
     })
   })
 
   test('create a union of records', async ({ assert }) => {
-    const compiler = new Compiler([
-      {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
         type: 'union',
-        fieldName: 'colors',
-        propertyName: 'colors',
+        fieldName: '*',
+        propertyName: '*',
         children: [
           {
             conditionalFnRefId: 'ref://1',
             schema: {
               type: 'record',
               bail: true,
-              fieldName: 'colors',
+              fieldName: '*',
               validations: [],
-              propertyName: 'colors',
+              propertyName: '*',
               allowNull: false,
               isOptional: false,
               each: {
@@ -441,9 +438,9 @@ test.group('Union node', () => {
             schema: {
               type: 'record',
               bail: true,
-              fieldName: 'colors',
+              fieldName: '*',
               validations: [],
-              propertyName: 'colors',
+              propertyName: '*',
               allowNull: false,
               isOptional: false,
               each: {
@@ -460,9 +457,9 @@ test.group('Union node', () => {
           },
         ],
       },
-    ])
+    })
 
-    const data = { colors: { white: '#ffffff', black: '#000000' } }
+    const data = { white: '#ffffff', black: '#000000' }
     const meta = {}
 
     const refs = {
@@ -479,7 +476,8 @@ test.group('Union node', () => {
     const errorReporter = new ErrorReporterFactory().create()
     const fn = compiler.compile()
     assert.deepEqual(await fn(data, meta, refs, errorReporter), {
-      colors: { white: { r: 255, g: 255, b: 255 }, black: { r: 0, g: 0, b: 0 } },
+      white: { r: 255, g: 255, b: 255 },
+      black: { r: 0, g: 0, b: 0 },
     })
   })
 })

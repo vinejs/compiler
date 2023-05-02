@@ -12,6 +12,10 @@ console.log('========= END COMPILED OUTPUT =========')
 
 const data = {
   id: 1,
+  profile: {
+    twitter_handle: 'foo',
+    github_username: 'foo',
+  },
 }
 const errorReporter = new ErrorReporterFactory().create()
 

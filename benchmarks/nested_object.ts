@@ -7,7 +7,7 @@ import { ErrorReporterFactory } from '../factories/error_reporter.js'
 
 const suite = new Benchmark.Suite()
 
-const data = { username: 'virk' }
+const data = { profile: { username: 'virk' } }
 const meta = {}
 const refs = {
   'ref://1': {
@@ -22,7 +22,9 @@ const refs = {
 const errorReporter = new ErrorReporterFactory().create()
 
 const zodSchema = z.object({
-  username: z.string(),
+  profile: z.object({
+    username: z.string(),
+  }),
 })
 
 const compiler = new Compiler({
@@ -36,19 +38,32 @@ const compiler = new Compiler({
     bail: true,
     children: [
       {
-        type: 'literal',
-        bail: true,
+        type: 'object',
+        propertyName: 'profile',
         allowNull: false,
-        fieldName: 'username',
-        propertyName: 'userName',
+        allowUnknownProperties: false,
         isOptional: false,
-        validations: [
+        fieldName: 'profile',
+        bail: true,
+        groups: [],
+        children: [
           {
-            isAsync: false,
-            ruleFnId: 'ref://1',
-            implicit: false,
+            type: 'literal',
+            bail: true,
+            allowNull: false,
+            fieldName: 'username',
+            propertyName: 'userName',
+            isOptional: false,
+            validations: [
+              {
+                isAsync: false,
+                ruleFnId: 'ref://1',
+                implicit: false,
+              },
+            ],
           },
         ],
+        validations: [],
       },
     ],
     groups: [],
@@ -65,13 +80,21 @@ const ajvSchema = {
   $async: true,
   type: 'object',
   properties: {
-    username: { type: 'string' },
+    profile: {
+      type: 'object',
+      properties: {
+        username: { type: 'string' },
+      },
+      required: ['username'],
+    },
   },
-  required: ['username'],
+  required: ['profile'],
   additionalProperties: false,
 }
 
 const ajvValidate = ajv.compile(ajvSchema) as AsyncValidateFunction<any>
+
+console.log(fn.toString())
 
 suite
   .add('VineJS compiler', {
