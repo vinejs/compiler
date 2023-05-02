@@ -10,8 +10,9 @@
 import { BaseNode } from './base.js'
 import type { Compiler } from '../main.js'
 import type { CompilerBuffer } from '../buffer.js'
-import { defineConditionalGuard } from '../../scripts/union/conditional_guard.js'
+import { defineConditionalGuard } from '../../scripts/define_conditional_guard.js'
 import type { CompilerField, CompilerParent, UnionNode } from '../../types.js'
+import { defineElseCondition } from '../../scripts/define_else_conditon.js'
 
 /**
  * Compiles a union schema node to JS string output.
@@ -58,6 +59,18 @@ export class UnionNodeCompiler extends BaseNode {
 
       conditionalBuffer.flush()
     })
+
+    /**
+     * Define else block
+     */
+    if (this.#node.elseConditionalFnRefId && this.#node.conditions.length) {
+      childrenBuffer.writeStatement(
+        defineElseCondition({
+          variableName: this.field.variableName,
+          conditionalFnRefId: this.#node.elseConditionalFnRefId,
+        })
+      )
+    }
 
     return childrenBuffer.toString()
   }

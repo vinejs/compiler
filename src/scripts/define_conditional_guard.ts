@@ -15,13 +15,13 @@ type ConditionalGuardOptions = {
 }
 
 /**
- * Returns JS fragment to wrap code inside the union conditional guard
+ * Returns JS fragment to wrap code inside a conditional guard
  */
 export function defineConditionalGuard({
+  conditional,
   variableName,
   conditionalFnRefId,
   guardedCodeSnippet,
-  conditional,
 }: ConditionalGuardOptions) {
   return `${conditional}(refs['${conditionalFnRefId}'](${variableName}.value, ${variableName})) {
 ${guardedCodeSnippet}

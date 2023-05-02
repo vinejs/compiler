@@ -202,7 +202,7 @@ export type LiteralNode = FieldNode & {
   type: 'literal'
 
   /**
-   * Transform the output value of a field. The output of this method is created as the
+   * Transform the output value of a field. The output of this method is the
    * final source of truth. The function is executed at the time of writing the
    * value to the output.
    */
@@ -242,6 +242,12 @@ export type ObjectNode = FieldNode & {
  */
 export type ObjectGroupNode = {
   type: 'group'
+
+  /**
+   * An optional function to call when all of the conditions
+   * are false.
+   */
+  elseConditionalFnRefId?: RefIdentifier
 
   /**
    * Conditions to evaluate
@@ -326,6 +332,12 @@ export type UnionNode = {
    * storing its value with a different name.
    */
   propertyName: string
+
+  /**
+   * An optional function to call when all of the conditions
+   * are false.
+   */
+  elseConditionalFnRefId?: RefIdentifier
 
   /**
    * Conditions to evaluate

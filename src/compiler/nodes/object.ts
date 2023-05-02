@@ -11,10 +11,11 @@ import { BaseNode } from './base.js'
 import type { Compiler } from '../main.js'
 import type { CompilerBuffer } from '../buffer.js'
 import { defineObjectGuard } from '../../scripts/object/guard.js'
+import { defineElseCondition } from '../../scripts/define_else_conditon.js'
 import { defineIsValidGuard } from '../../scripts/field/is_valid_guard.js'
 import { defineFieldNullOutput } from '../../scripts/field/null_output.js'
 import { defineFieldValidations } from '../../scripts/field/validations.js'
-import { defineConditionalGuard } from '../../scripts/union/conditional_guard.js'
+import { defineConditionalGuard } from '../../scripts/define_conditional_guard.js'
 import { defineObjectInitialOutput } from '../../scripts/object/initial_output.js'
 import { defineMoveProperties } from '../../scripts/object/move_unknown_properties.js'
 import { defineFieldExistenceValidations } from '../../scripts/field/existence_validations.js'
@@ -123,6 +124,18 @@ export class ObjectNodeCompiler extends BaseNode {
         })
       )
     })
+
+    /**
+     * Define else block
+     */
+    if (group.elseConditionalFnRefId && group.conditions.length) {
+      buffer.writeStatement(
+        defineElseCondition({
+          variableName: field.variableName,
+          conditionalFnRefId: group.elseConditionalFnRefId,
+        })
+      )
+    }
   }
 
   compile() {
