@@ -29,6 +29,7 @@ import type {
   RootNode,
   CompilerUnionParent,
   ErrorReporterContract,
+  CompilerField,
 } from '../types.js'
 
 /**
@@ -132,19 +133,19 @@ export class Compiler {
     node: CompilerNodes,
     buffer: CompilerBuffer,
     parent?: CompilerParent,
-    union?: CompilerUnionParent
+    parentField?: CompilerField
   ) {
     switch (node.type) {
       case 'literal':
-        return new LiteralNodeCompiler(node, buffer, this, parent, union).compile()
+        return new LiteralNodeCompiler(node, buffer, this, parent, parentField).compile()
       case 'object':
-        return new ObjectNodeCompiler(node, buffer, this, parent, union).compile()
+        return new ObjectNodeCompiler(node, buffer, this, parent, parentField).compile()
       case 'array':
-        return new ArrayNodeCompiler(node, buffer, this, parent, union).compile()
+        return new ArrayNodeCompiler(node, buffer, this, parent, parentField).compile()
       case 'record':
-        return new RecordNodeCompiler(node, buffer, this, parent, union).compile()
+        return new RecordNodeCompiler(node, buffer, this, parent, parentField).compile()
       case 'union':
-        return new UnionNodeCompiler(node, buffer, this, parent, union).compile()
+        return new UnionNodeCompiler(node, buffer, this, parent, parentField).compile()
     }
   }
 

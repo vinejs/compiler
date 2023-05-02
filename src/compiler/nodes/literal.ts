@@ -7,79 +7,39 @@
  * file that was distributed with this source code.
  */
 
+import { BaseNode } from './base.js'
 import type { Compiler } from '../main.js'
 import type { CompilerBuffer } from '../buffer.js'
-import { defineFieldVariables } from '../../scripts/field/variables.js'
-import type { LiteralNode, CompilerParent, CompilerUnionParent } from '../../types.js'
 import { defineFieldValidations } from '../../scripts/field/validations.js'
 import { defineFieldNullOutput } from '../../scripts/field/null_output.js'
 import { defineFieldValueOutput } from '../../scripts/field/value_output.js'
+import type { LiteralNode, CompilerParent, CompilerField } from '../../types.js'
 import { defineFieldExistenceValidations } from '../../scripts/field/existence_validations.js'
 
 /**
  * Compiles a literal schema node to JS string output.
  */
-export class LiteralNodeCompiler {
+export class LiteralNodeCompiler extends BaseNode {
   #node: LiteralNode
   #buffer: CompilerBuffer
-  #compiler: Compiler
-  #parent?: CompilerParent
-  #union?: CompilerUnionParent
 
   constructor(
     node: LiteralNode,
     buffer: CompilerBuffer,
     compiler: Compiler,
     parent?: CompilerParent,
-    union?: CompilerUnionParent
+    parentField?: CompilerField
   ) {
+    super(node, compiler, parent, parentField)
     this.#node = node
     this.#buffer = buffer
-    this.#compiler = compiler
-    this.#parent = parent
-    this.#union = union
-  }
-
-  /**
-   * Creates field for the current node. Handles checks needed for union
-   * child.
-   */
-  #createField() {
-    /**
-     * Do not increment the variables counter when a direct
-     * child of a union.
-     */
-    if (!this.#union) {
-      this.#compiler.variablesCounter++
-    }
-
-    const field = this.#compiler.createFieldFor(this.#node, this.#parent)
-    if (this.#union) {
-      field.variableName = this.#union.variableName
-    }
-
-    return field
   }
 
   compile() {
-    const field = this.#createField()
-
     /**
-     * Step 1: Define the field variable when field is not a child
-     * of a union.
+     * Define 1: Define field variable
      */
-    if (!this.#union) {
-      this.#buffer.writeStatement(
-        defineFieldVariables({
-          variableName: field.variableName,
-          valueExpression: field.valueExpression,
-          fieldNameExpression: field.fieldNameExpression,
-          fieldPathExpression: field.fieldPathExpression,
-          parentValueExpression: field.parentVariableName,
-          isArrayMember: field.isArrayMember,
-        })
-      )
-    }
+    this.defineField(this.#buffer)
 
     /**
      * Step 2: Define block to validate the existence of field
@@ -88,7 +48,7 @@ export class LiteralNodeCompiler {
       defineFieldExistenceValidations({
         allowNull: this.#node.allowNull,
         isOptional: this.#node.isOptional,
-        variableName: field.variableName,
+        variableName: this.field.variableName,
       })
     )
 
@@ -97,7 +57,7 @@ export class LiteralNodeCompiler {
      */
     this.#buffer.writeStatement(
       defineFieldValidations({
-        variableName: field.variableName,
+        variableName: this.field.variableName,
         validations: this.#node.validations,
         bail: this.#node.bail,
         dropMissingCheck: false,
@@ -109,13 +69,13 @@ export class LiteralNodeCompiler {
      */
     this.#buffer.writeStatement(
       `${defineFieldValueOutput({
-        variableName: field.variableName,
-        outputExpression: field.outputExpression,
+        variableName: this.field.variableName,
+        outputExpression: this.field.outputExpression,
         transformFnRefId: this.#node.transformFnId,
       })}${this.#buffer.newLine}${defineFieldNullOutput({
-        variableName: field.variableName,
+        variableName: this.field.variableName,
         allowNull: this.#node.allowNull,
-        outputExpression: field.outputExpression,
+        outputExpression: this.field.outputExpression,
         transformFnRefId: this.#node.transformFnId,
         conditional: 'else if',
       })}`

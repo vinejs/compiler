@@ -7,76 +7,52 @@
  * file that was distributed with this source code.
  */
 
+import { BaseNode } from './base.js'
 import type { Compiler } from '../main.js'
 import type { CompilerBuffer } from '../buffer.js'
 import { defineArrayLoop } from '../../scripts/array/loop.js'
 import { defineArrayGuard } from '../../scripts/array/guard.js'
-import { defineFieldVariables } from '../../scripts/field/variables.js'
 import { defineIsValidGuard } from '../../scripts/field/is_valid_guard.js'
 import { defineFieldNullOutput } from '../../scripts/field/null_output.js'
 import { defineFieldValidations } from '../../scripts/field/validations.js'
+import type { CompilerField, CompilerParent, ArrayNode } from '../../types.js'
 import { defineArrayInitialOutput } from '../../scripts/array/initial_output.js'
 import { defineFieldExistenceValidations } from '../../scripts/field/existence_validations.js'
-import type { CompilerField, CompilerParent, ArrayNode, CompilerUnionParent } from '../../types.js'
 
 /**
  * Compiles an array schema node to JS string output.
  */
-export class ArrayNodeCompiler {
+export class ArrayNodeCompiler extends BaseNode {
   #node: ArrayNode
   #buffer: CompilerBuffer
   #compiler: Compiler
-  #parent?: CompilerParent
-  #union?: CompilerUnionParent
 
   constructor(
     node: ArrayNode,
     buffer: CompilerBuffer,
     compiler: Compiler,
     parent?: CompilerParent,
-    union?: CompilerUnionParent
+    parentField?: CompilerField
   ) {
+    super(node, compiler, parent, parentField)
     this.#node = node
     this.#buffer = buffer
     this.#compiler = compiler
-    this.#parent = parent
-    this.#union = union
-  }
-
-  /**
-   * Creates field for the current node. Handles checks needed for union
-   * child.
-   */
-  #createField() {
-    /**
-     * Do not increment the variables counter when a direct
-     * child of a union.
-     */
-    if (!this.#union) {
-      this.#compiler.variablesCounter++
-    }
-
-    const field = this.#compiler.createFieldFor(this.#node, this.#parent)
-    if (this.#union) {
-      field.variableName = this.#union.variableName
-    }
-
-    return field
   }
 
   /**
    * Compiles the tuple children to a JS fragment
    */
-  #compileTupleChildren(field: CompilerField) {
+  #compileTupleChildren() {
     if (this.#node.children) {
       const buffer = this.#buffer.child()
 
       this.#node.children.forEach((child) => {
         this.#compiler.compileNode(child, buffer, {
           type: 'tuple',
-          fieldPathExpression: field.fieldPathExpression,
-          outputExpression: field.outputExpression,
-          variableName: field.variableName,
+          fieldPathExpression: this.field.fieldPathExpression,
+          outputExpression: this.field.outputExpression,
+          variableName: this.field.variableName,
         })
       })
 
@@ -89,21 +65,21 @@ export class ArrayNodeCompiler {
   /**
    * Compiles the array elements to a JS fragment
    */
-  #compileArrayElements(field: CompilerField) {
+  #compileArrayElements() {
     if (this.#node.each) {
       const buffer = this.#buffer.child()
       const arrayElementsBuffer = this.#buffer.child()
 
       this.#compiler.compileNode(this.#node.each, arrayElementsBuffer, {
         type: 'array',
-        fieldPathExpression: field.fieldPathExpression,
-        outputExpression: field.outputExpression,
-        variableName: field.variableName,
+        fieldPathExpression: this.field.fieldPathExpression,
+        outputExpression: this.field.outputExpression,
+        variableName: this.field.variableName,
       })
 
       buffer.writeStatement(
         defineArrayLoop({
-          variableName: field.variableName,
+          variableName: this.field.variableName,
           startingIndex: this.#node.children?.length || 0,
           loopCodeSnippet: arrayElementsBuffer.toString(),
         })
@@ -117,24 +93,10 @@ export class ArrayNodeCompiler {
   }
 
   compile() {
-    const field = this.#createField()
-
     /**
-     * Step 1: Define the field variable when field is not a child
-     * of a union.
+     * Define 1: Define field variable
      */
-    if (!this.#union) {
-      this.#buffer.writeStatement(
-        defineFieldVariables({
-          variableName: field.variableName,
-          valueExpression: field.valueExpression,
-          fieldNameExpression: field.fieldNameExpression,
-          fieldPathExpression: field.fieldPathExpression,
-          parentValueExpression: field.parentVariableName,
-          isArrayMember: field.isArrayMember,
-        })
-      )
-    }
+    this.defineField(this.#buffer)
 
     /**
      * Step 2: Define code to validate the existence of field.
@@ -143,7 +105,7 @@ export class ArrayNodeCompiler {
       defineFieldExistenceValidations({
         allowNull: this.#node.allowNull,
         isOptional: this.#node.isOptional,
-        variableName: field.variableName,
+        variableName: this.field.variableName,
       })
     )
 
@@ -154,16 +116,14 @@ export class ArrayNodeCompiler {
      * Pre step: 3
      */
     const isArrayValidBlock = defineIsValidGuard({
-      variableName: field.variableName,
+      variableName: this.field.variableName,
       bail: this.#node.bail,
       guardedCodeSnippet: `${defineArrayInitialOutput({
-        outputExpression: field.outputExpression,
+        outputExpression: this.field.outputExpression,
         outputValueExpression: this.#node.allowUnknownProperties
-          ? `copyProperties(${field.variableName}.value)`
+          ? `copyProperties(${this.field.variableName}.value)`
           : `[]`,
-      })}${this.#compileTupleChildren(field)}${this.#buffer.newLine}${this.#compileArrayElements(
-        field
-      )}`,
+      })}${this.#compileTupleChildren()}${this.#buffer.newLine}${this.#compileArrayElements()}`,
     })
 
     /**
@@ -173,9 +133,9 @@ export class ArrayNodeCompiler {
      * Pre step: 3
      */
     const isValueAnArrayBlock = defineArrayGuard({
-      variableName: field.variableName,
+      variableName: this.field.variableName,
       guardedCodeSnippet: `${defineFieldValidations({
-        variableName: field.variableName,
+        variableName: this.field.variableName,
         validations: this.#node.validations,
         bail: this.#node.bail,
         dropMissingCheck: true,
@@ -189,8 +149,8 @@ export class ArrayNodeCompiler {
     this.#buffer.writeStatement(
       `${isValueAnArrayBlock}${this.#buffer.newLine}${defineFieldNullOutput({
         allowNull: this.#node.allowNull,
-        outputExpression: field.outputExpression,
-        variableName: field.variableName,
+        outputExpression: this.field.outputExpression,
+        variableName: this.field.variableName,
         conditional: 'else if',
       })}`
     )

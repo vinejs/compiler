@@ -7,81 +7,56 @@
  * file that was distributed with this source code.
  */
 
+import { BaseNode } from './base.js'
 import type { Compiler } from '../main.js'
 import type { CompilerBuffer } from '../buffer.js'
 import { defineRecordLoop } from '../../scripts/record/loop.js'
 import { defineObjectGuard } from '../../scripts/object/guard.js'
-import { defineFieldVariables } from '../../scripts/field/variables.js'
 import { defineFieldNullOutput } from '../../scripts/field/null_output.js'
 import { defineIsValidGuard } from '../../scripts/field/is_valid_guard.js'
 import { defineFieldValidations } from '../../scripts/field/validations.js'
+import type { CompilerField, CompilerParent, RecordNode } from '../../types.js'
 import { defineObjectInitialOutput } from '../../scripts/object/initial_output.js'
 import { defineFieldExistenceValidations } from '../../scripts/field/existence_validations.js'
-
-import type { CompilerField, CompilerParent, RecordNode, CompilerUnionParent } from '../../types.js'
 
 /**
  * Compiles a record schema node to JS string output.
  */
-export class RecordNodeCompiler {
+export class RecordNodeCompiler extends BaseNode {
   #node: RecordNode
   #buffer: CompilerBuffer
   #compiler: Compiler
-  #parent?: CompilerParent
-  #union?: CompilerUnionParent
 
   constructor(
     node: RecordNode,
     buffer: CompilerBuffer,
     compiler: Compiler,
     parent?: CompilerParent,
-    union?: CompilerUnionParent
+    parentField?: CompilerField
   ) {
+    super(node, compiler, parent, parentField)
     this.#node = node
     this.#buffer = buffer
     this.#compiler = compiler
-    this.#parent = parent
-    this.#union = union
-  }
-
-  /**
-   * Creates field for the current node. Handles checks needed for union
-   * child.
-   */
-  #createField() {
-    /**
-     * Do not increment the variables counter when a direct
-     * child of a union.
-     */
-    if (!this.#union) {
-      this.#compiler.variablesCounter++
-    }
-
-    const field = this.#compiler.createFieldFor(this.#node, this.#parent)
-    if (this.#union) {
-      field.variableName = this.#union.variableName
-    }
-
-    return field
   }
 
   /**
    * Compiles the record elements to a JS fragment
    */
-  #compileRecordElements(field: CompilerField) {
+  #compileRecordElements() {
     const buffer = this.#buffer.child()
     const recordElementsBuffer = this.#buffer.child()
 
     this.#compiler.compileNode(this.#node.each, recordElementsBuffer, {
       type: 'record',
-      fieldPathExpression: field.fieldPathExpression,
-      outputExpression: field.outputExpression,
-      variableName: field.variableName,
+      fieldPathExpression: this.field.fieldPathExpression,
+      outputExpression: this.field.outputExpression,
+      variableName: this.field.variableName,
     })
 
     buffer.writeStatement(
       defineRecordLoop({
-        variableName: field.variableName,
+        variableName: this.field.variableName,
         loopCodeSnippet: recordElementsBuffer.toString(),
       })
     )
@@ -91,24 +66,10 @@ export class RecordNodeCompiler {
   }
 
   compile() {
-    const field = this.#createField()
-
     /**
-     * Step 1: Define the field variable when field is not a child
-     * of a union.
+     * Define 1: Define field variable
      */
-    if (!this.#union) {
-      this.#buffer.writeStatement(
-        defineFieldVariables({
-          variableName: field.variableName,
-          valueExpression: field.valueExpression,
-          fieldNameExpression: field.fieldNameExpression,
-          fieldPathExpression: field.fieldPathExpression,
-          parentValueExpression: field.parentVariableName,
-          isArrayMember: field.isArrayMember,
-        })
-      )
-    }
+    this.defineField(this.#buffer)
 
     /**
      * Step 2: Define code to validate the existence of field.
@@ -117,7 +78,7 @@ export class RecordNodeCompiler {
       defineFieldExistenceValidations({
         allowNull: this.#node.allowNull,
         isOptional: this.#node.isOptional,
-        variableName: field.variableName,
+        variableName: this.field.variableName,
       })
     )
 
@@ -128,12 +89,12 @@ export class RecordNodeCompiler {
      * Pre step: 3
      */
     const isObjectValidBlock = defineIsValidGuard({
-      variableName: field.variableName,
+      variableName: this.field.variableName,
       bail: this.#node.bail,
       guardedCodeSnippet: `${defineObjectInitialOutput({
-        outputExpression: field.outputExpression,
+        outputExpression: this.field.outputExpression,
         outputValueExpression: `{}`,
-      })}${this.#compileRecordElements(field)}`,
+      })}${this.#compileRecordElements()}`,
     })
 
     /**
@@ -143,9 +104,9 @@ export class RecordNodeCompiler {
      * Pre step: 3
      */
     const isValueAnObjectBlock = defineObjectGuard({
-      variableName: field.variableName,
+      variableName: this.field.variableName,
       guardedCodeSnippet: `${defineFieldValidations({
-        variableName: field.variableName,
+        variableName: this.field.variableName,
         validations: this.#node.validations,
         bail: this.#node.bail,
         dropMissingCheck: true,
@@ -159,8 +120,8 @@ export class RecordNodeCompiler {
     this.#buffer.writeStatement(
       `${isValueAnObjectBlock}${this.#buffer.newLine}${defineFieldNullOutput({
         allowNull: this.#node.allowNull,
-        outputExpression: field.outputExpression,
-        variableName: field.variableName,
+        outputExpression: this.field.outputExpression,
+        variableName: this.field.variableName,
         conditional: 'else if',
       })}`
     )

@@ -7,74 +7,50 @@
  * file that was distributed with this source code.
  */
 
+import { BaseNode } from './base.js'
 import type { Compiler } from '../main.js'
 import type { CompilerBuffer } from '../buffer.js'
-import { defineFieldVariables } from '../../scripts/field/variables.js'
 import { defineConditionalGuard } from '../../scripts/union/conditional_guard.js'
-import type { CompilerField, CompilerParent, UnionNode, CompilerUnionParent } from '../../types.js'
+import type { CompilerField, CompilerParent, UnionNode } from '../../types.js'
 
 /**
  * Compiles a union schema node to JS string output.
  */
-export class UnionNodeCompiler {
+export class UnionNodeCompiler extends BaseNode {
   #compiler: Compiler
   #node: UnionNode
   #buffer: CompilerBuffer
   #parent?: CompilerParent
-  #union?: CompilerUnionParent
 
   constructor(
     node: UnionNode,
     buffer: CompilerBuffer,
     compiler: Compiler,
     parent?: CompilerParent,
-    union?: CompilerUnionParent
+    parentField?: CompilerField
   ) {
+    super(node, compiler, parent, parentField)
     this.#node = node
     this.#buffer = buffer
-    this.#compiler = compiler
     this.#parent = parent
-    this.#union = union
-  }
-
-  /**
-   * Creates field for the current node. Handles checks needed for union
-   * child.
-   */
-  #createField() {
-    /**
-     * Do not increment the variables counter when a direct
-     * child of a union.
-     */
-    if (!this.#union) {
-      this.#compiler.variablesCounter++
-    }
-
-    const field = this.#compiler.createFieldFor(this.#node, this.#parent)
-    if (this.#union) {
-      field.variableName = this.#union.variableName
-    }
-
-    return field
+    this.#compiler = compiler
   }
 
   /**
    * Compiles union children by wrapping each conditon inside a conditional
    * guard block
    */
-  #compileUnionChildren(field: CompilerField) {
+  #compileUnionChildren() {
     const childrenBuffer = this.#buffer.child()
 
     this.#node.conditions.forEach((child, index) => {
       const conditionalBuffer = this.#buffer.child()
-      this.#compiler.compileNode(child.schema, conditionalBuffer, this.#parent, {
-        variableName: field.variableName,
-      })
+      this.#compiler.compileNode(child.schema, conditionalBuffer, this.#parent, this.field)
 
       childrenBuffer.writeStatement(
         defineConditionalGuard({
           conditional: index === 0 ? 'if' : 'else if',
-          variableName: field.variableName,
+          variableName: this.field.variableName,
           conditionalFnRefId: child.conditionalFnRefId,
           guardedCodeSnippet: conditionalBuffer.toString(),
         })
@@ -87,29 +63,15 @@ export class UnionNodeCompiler {
   }
 
   compile() {
-    const field = this.#createField()
-
     /**
-     * Step 1: Define the field variable when field is not a child
-     * of a union.
+     * Define 1: Define field variable
      */
-    if (!this.#union) {
-      this.#buffer.writeStatement(
-        defineFieldVariables({
-          variableName: field.variableName,
-          valueExpression: field.valueExpression,
-          fieldNameExpression: field.fieldNameExpression,
-          fieldPathExpression: field.fieldPathExpression,
-          parentValueExpression: field.parentVariableName,
-          isArrayMember: field.isArrayMember,
-        })
-      )
-    }
+    this.defineField(this.#buffer)
 
     /**
      * Step 2: Compile union children wrapped inside predicate
      * condition.
      */
-    this.#buffer.writeStatement(this.#compileUnionChildren(field))
+    this.#buffer.writeStatement(this.#compileUnionChildren())
   }
 }
