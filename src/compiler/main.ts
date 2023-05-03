@@ -22,9 +22,9 @@ import { createRecordField } from './fields/record_field.js'
 import { defineInlineFunctions } from '../scripts/define_inline_functions.js'
 import { defineInlineErrorMessages } from '../scripts/define_error_messages.js'
 import type {
+  Refs,
   RootNode,
   CompilerField,
-  RefIdentifier,
   CompilerNodes,
   CompilerParent,
   ErrorReporterContract,
@@ -96,7 +96,7 @@ export class Compiler {
   #toAsyncFunction<T extends Record<string, any>>(): (
     data: any,
     meta: Record<string, any>,
-    refs: Record<RefIdentifier, any>,
+    refs: Refs,
     errorReporter: ErrorReporterContract
   ) => Promise<T> {
     return new AsyncFunction('root', 'meta', 'refs', 'errorReporter', this.#buffer.toString())

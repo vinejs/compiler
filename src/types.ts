@@ -11,6 +11,7 @@
  * Represenation of a ref id
  */
 export type RefIdentifier = `ref://${number}`
+export type Refs = Record<RefIdentifier, ValidationRule | TransformFn | ParseFn | ConditionalFn>
 
 /**
  * The context shared with the entire validation pipeline.

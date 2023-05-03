@@ -10,6 +10,7 @@
 import { test } from '@japa/runner'
 import { Compiler } from '../../../src/compiler/main.js'
 import { ErrorReporterFactory } from '../../../factories/error_reporter.js'
+import { Refs } from '../../../src/types.js'
 
 test.group('Union node', () => {
   test('create a union of literal values', async ({ assert }) => {
@@ -460,14 +461,16 @@ test.group('Union node', () => {
     const data = { white: '#ffffff', black: '#000000' }
     const meta = {}
 
-    const refs = {
+    const refs: Refs = {
       'ref://1': () => false,
       'ref://2': () => true,
-      'ref://3': (hex: string) => {
-        const r = Number.parseInt(hex.slice(1, 3), 16)
-        const g = Number.parseInt(hex.slice(3, 5), 16)
-        const b = Number.parseInt(hex.slice(5, 7), 16)
-        return { r, g, b }
+      'ref://3': (hex: unknown) => {
+        if (typeof hex === 'string') {
+          const r = Number.parseInt(hex.slice(1, 3), 16)
+          const g = Number.parseInt(hex.slice(3, 5), 16)
+          const b = Number.parseInt(hex.slice(5, 7), 16)
+          return { r, g, b }
+        }
       },
     }
 
