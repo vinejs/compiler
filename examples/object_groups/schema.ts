@@ -19,7 +19,8 @@ export const schema: RootNode = {
             conditionalFnRefId: 'ref://1',
             schema: {
               type: 'sub_object',
-              children: [
+              groups: [],
+              properties: [
                 {
                   type: 'literal',
                   fieldName: 'email',
@@ -36,7 +37,8 @@ export const schema: RootNode = {
             conditionalFnRefId: 'ref://2',
             schema: {
               type: 'sub_object',
-              children: [
+              groups: [],
+              properties: [
                 {
                   type: 'literal',
                   fieldName: 'username',

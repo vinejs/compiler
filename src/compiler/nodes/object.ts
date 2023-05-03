@@ -45,9 +45,9 @@ export class ObjectNodeCompiler extends BaseNode {
   /**
    * Returns known field names for the object
    */
-  #getFieldNames(): string[] {
-    let fieldNames = this.#node.properties.map((child) => child.fieldName)
-    const groupsFieldNames = this.#node.groups.flatMap((group) => this.#getGroupFieldNames(group))
+  #getFieldNames(node: Pick<ObjectNode, 'properties' | 'groups'>): string[] {
+    let fieldNames = node.properties.map((child) => child.fieldName)
+    const groupsFieldNames = node.groups.flatMap((group) => this.#getGroupFieldNames(group))
     return fieldNames.concat(groupsFieldNames)
   }
 
@@ -56,13 +56,7 @@ export class ObjectNodeCompiler extends BaseNode {
    */
   #getGroupFieldNames(group: ObjectGroupNode): string[] {
     return group.conditions.flatMap((condition) => {
-      if (condition.schema.type === 'sub_object') {
-        return condition.schema.children.map((child) => {
-          return child.fieldName
-        })
-      } else {
-        return this.#getGroupFieldNames(condition.schema)
-      }
+      return this.#getFieldNames(condition.schema)
     })
   }
 
@@ -104,13 +98,13 @@ export class ObjectNodeCompiler extends BaseNode {
     group.conditions.forEach((condition, index) => {
       const guardBuffer = buffer.child()
 
-      if (condition.schema.type === 'group') {
-        this.#compileObjectGroup(condition.schema, guardBuffer, parent)
-      } else {
-        condition.schema.children.forEach((child) => {
-          this.#compiler.compileNode(child, guardBuffer, parent)
-        })
-      }
+      condition.schema.properties.forEach((child) => {
+        this.#compiler.compileNode(child, guardBuffer, parent)
+      })
+
+      condition.schema.groups.forEach((child) => {
+        this.#compileObjectGroup(child, guardBuffer, parent)
+      })
 
       buffer.writeStatement(
         defineConditionalGuard({
@@ -170,7 +164,7 @@ export class ObjectNodeCompiler extends BaseNode {
         variableName: this.field.variableName,
         outputExpression: this.field.outputExpression,
         allowUnknownProperties: this.#node.allowUnknownProperties,
-        fieldsToIgnore: this.#node.allowUnknownProperties ? this.#getFieldNames() : [],
+        fieldsToIgnore: this.#node.allowUnknownProperties ? this.#getFieldNames(this.#node) : [],
       })}`,
     })
 

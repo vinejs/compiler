@@ -261,12 +261,21 @@ export type ObjectGroupNode = {
     /**
      * Schema to use when condition is true
      */
-    schema:
-      | {
-          type: 'sub_object'
-          children: CompilerNodes[]
-        }
-      | ObjectGroupNode
+    schema: {
+      type: 'sub_object'
+
+      /**
+       * Object known properties
+       */
+      properties: CompilerNodes[]
+
+      /**
+       * A collection of object groups to merge into the main object.
+       * Each group is a collection of conditionals with a sub-object
+       * inside them.
+       */
+      groups: ObjectGroupNode[]
+    }
   }[]
 }
 

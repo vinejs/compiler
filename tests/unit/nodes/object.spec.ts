@@ -380,7 +380,8 @@ test.group('Object node', () => {
                 conditionalFnRefId: 'ref://1',
                 schema: {
                   type: 'sub_object',
-                  children: [
+                  groups: [],
+                  properties: [
                     {
                       type: 'literal',
                       allowNull: false,
@@ -397,7 +398,8 @@ test.group('Object node', () => {
                 conditionalFnRefId: 'ref://2',
                 schema: {
                   type: 'sub_object',
-                  children: [
+                  groups: [],
+                  properties: [
                     {
                       type: 'literal',
                       allowNull: false,
@@ -525,7 +527,8 @@ test.group('Object node', () => {
                 conditionalFnRefId: 'ref://1',
                 schema: {
                   type: 'sub_object',
-                  children: [
+                  groups: [],
+                  properties: [
                     {
                       type: 'literal',
                       allowNull: false,
@@ -542,7 +545,8 @@ test.group('Object node', () => {
                 conditionalFnRefId: 'ref://2',
                 schema: {
                   type: 'sub_object',
-                  children: [
+                  groups: [],
+                  properties: [
                     {
                       type: 'literal',
                       allowNull: false,
@@ -564,7 +568,8 @@ test.group('Object node', () => {
                 conditionalFnRefId: 'ref://3',
                 schema: {
                   type: 'sub_object',
-                  children: [
+                  groups: [],
+                  properties: [
                     {
                       type: 'literal',
                       allowNull: false,
@@ -581,7 +586,8 @@ test.group('Object node', () => {
                 conditionalFnRefId: 'ref://4',
                 schema: {
                   type: 'sub_object',
-                  children: [
+                  groups: [],
+                  properties: [
                     {
                       type: 'literal',
                       allowNull: false,
@@ -743,7 +749,8 @@ test.group('Object node', () => {
                 conditionalFnRefId: 'ref://1',
                 schema: {
                   type: 'sub_object',
-                  children: [
+                  groups: [],
+                  properties: [
                     {
                       type: 'literal',
                       allowNull: false,
@@ -759,41 +766,49 @@ test.group('Object node', () => {
               {
                 conditionalFnRefId: 'ref://2',
                 schema: {
-                  type: 'group',
-                  conditions: [
+                  type: 'sub_object',
+                  properties: [],
+                  groups: [
                     {
-                      conditionalFnRefId: 'ref://3',
-                      schema: {
-                        type: 'sub_object',
-                        children: [
-                          {
-                            type: 'literal',
-                            allowNull: false,
-                            isOptional: false,
-                            bail: true,
-                            fieldName: 'hotmail',
-                            propertyName: 'hotmail',
-                            validations: [],
+                      type: 'group',
+                      conditions: [
+                        {
+                          conditionalFnRefId: 'ref://3',
+                          schema: {
+                            type: 'sub_object',
+                            groups: [],
+                            properties: [
+                              {
+                                type: 'literal',
+                                allowNull: false,
+                                isOptional: false,
+                                bail: true,
+                                fieldName: 'hotmail',
+                                propertyName: 'hotmail',
+                                validations: [],
+                              },
+                            ],
                           },
-                        ],
-                      },
-                    },
-                    {
-                      conditionalFnRefId: 'ref://4',
-                      schema: {
-                        type: 'sub_object',
-                        children: [
-                          {
-                            type: 'literal',
-                            allowNull: false,
-                            isOptional: false,
-                            bail: true,
-                            fieldName: 'email',
-                            propertyName: 'email',
-                            validations: [],
+                        },
+                        {
+                          conditionalFnRefId: 'ref://4',
+                          schema: {
+                            type: 'sub_object',
+                            groups: [],
+                            properties: [
+                              {
+                                type: 'literal',
+                                allowNull: false,
+                                isOptional: false,
+                                bail: true,
+                                fieldName: 'email',
+                                propertyName: 'email',
+                                validations: [],
+                              },
+                            ],
                           },
-                        ],
-                      },
+                        },
+                      ],
                     },
                   ],
                 },
@@ -933,7 +948,8 @@ test.group('Object node', () => {
                 conditionalFnRefId: 'ref://1',
                 schema: {
                   type: 'sub_object',
-                  children: [
+                  groups: [],
+                  properties: [
                     {
                       type: 'literal',
                       allowNull: false,
@@ -950,7 +966,8 @@ test.group('Object node', () => {
                 conditionalFnRefId: 'ref://2',
                 schema: {
                   type: 'sub_object',
-                  children: [
+                  groups: [],
+                  properties: [
                     {
                       type: 'literal',
                       allowNull: false,
@@ -973,7 +990,8 @@ test.group('Object node', () => {
                 conditionalFnRefId: 'ref://3',
                 schema: {
                   type: 'sub_object',
-                  children: [
+                  groups: [],
+                  properties: [
                     {
                       type: 'literal',
                       allowNull: false,
@@ -990,7 +1008,8 @@ test.group('Object node', () => {
                 conditionalFnRefId: 'ref://4',
                 schema: {
                   type: 'sub_object',
-                  children: [
+                  groups: [],
+                  properties: [
                     {
                       type: 'literal',
                       allowNull: false,

@@ -806,7 +806,8 @@ test.group('Object node', () => {
                 conditionalFnRefId: 'ref://1',
                 schema: {
                   type: 'sub_object',
-                  children: [
+                  groups: [],
+                  properties: [
                     {
                       type: 'literal',
                       allowNull: false,
@@ -823,7 +824,8 @@ test.group('Object node', () => {
                 conditionalFnRefId: 'ref://2',
                 schema: {
                   type: 'sub_object',
-                  children: [
+                  groups: [],
+                  properties: [
                     {
                       type: 'literal',
                       allowNull: false,
@@ -882,7 +884,8 @@ test.group('Object node', () => {
                 conditionalFnRefId: 'ref://1',
                 schema: {
                   type: 'sub_object',
-                  children: [
+                  groups: [],
+                  properties: [
                     {
                       type: 'literal',
                       allowNull: false,
@@ -899,7 +902,8 @@ test.group('Object node', () => {
                 conditionalFnRefId: 'ref://2',
                 schema: {
                   type: 'sub_object',
-                  children: [
+                  groups: [],
+                  properties: [
                     {
                       type: 'literal',
                       allowNull: false,
