@@ -42,6 +42,7 @@ export abstract class BaseNode {
           fieldPathExpression: this.field.fieldPathExpression,
           parentValueExpression: this.field.parentVariableName,
           isArrayMember: this.field.isArrayMember,
+          wildCardPath: this.field.wildCardPath,
         })
       )
     }

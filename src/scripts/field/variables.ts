@@ -12,6 +12,7 @@ type FieldOptions = {
   valueExpression: string
   fieldNameExpression: string
   fieldPathExpression: string
+  wildCardPath: string
   parentValueExpression: string
   isArrayMember: boolean
   parseFnRefId?: string
@@ -25,6 +26,7 @@ type FieldOptions = {
 export function defineFieldVariables({
   parseFnRefId,
   variableName,
+  wildCardPath,
   isArrayMember,
   valueExpression,
   fieldNameExpression,
@@ -40,6 +42,7 @@ export function defineFieldVariables({
   meta: meta,
   fieldName: ${fieldNameExpression},
   fieldPath: ${fieldPathExpression},
+  wildCardPath: '${wildCardPath}',
   mutate: defineValue,
   report: report,
   isValid: true,

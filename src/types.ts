@@ -97,6 +97,16 @@ export type FieldContext = {
    * Is this field has value defined.
    */
   isDefined: boolean
+
+  /**
+   * Wildcard path for the field. The value is same as the
+   * fieldPath when the field is not a direct or nested
+   * child of an array.
+   *
+   * However, in case of a child of an array, the value will
+   * use `*` in place of indexes.
+   */
+  wildCardPath: string
 } & (
   | {
       /**
@@ -433,6 +443,11 @@ export type CompilerParent = {
   type: 'array' | 'object' | 'tuple' | 'record' | 'root'
 
   /**
+   * Wildcard path to the field
+   */
+  wildCardPath: string
+
+  /**
    * Name of the variable for the parent property. The variable name
    * is used to lookup values from the parent
    */
@@ -459,6 +474,7 @@ export type CompilerField = {
   fieldNameExpression: string
   fieldPathExpression: string
   variableName: string
+  wildCardPath: string
   valueExpression: string
   outputExpression: string
   isArrayMember: boolean

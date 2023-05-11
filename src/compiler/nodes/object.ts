@@ -70,6 +70,7 @@ export class ObjectNodeCompiler extends BaseNode {
       fieldPathExpression: this.field.fieldPathExpression,
       outputExpression: this.field.outputExpression,
       variableName: this.field.variableName,
+      wildCardPath: this.field.wildCardPath,
     } as const
 
     this.#node.properties.forEach((child) => this.#compiler.compileNode(child, buffer, parent))
@@ -86,6 +87,7 @@ export class ObjectNodeCompiler extends BaseNode {
       fieldPathExpression: this.field.fieldPathExpression,
       outputExpression: this.field.outputExpression,
       variableName: this.field.variableName,
+      wildCardPath: this.field.wildCardPath,
     } as const
     this.#node.groups.forEach((group) => this.#compileObjectGroup(group, buffer, parent))
     return buffer.toString()

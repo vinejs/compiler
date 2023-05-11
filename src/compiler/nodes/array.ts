@@ -50,6 +50,7 @@ export class ArrayNodeCompiler extends BaseNode {
       fieldPathExpression: this.field.fieldPathExpression,
       outputExpression: this.field.outputExpression,
       variableName: this.field.variableName,
+      wildCardPath: this.field.wildCardPath,
     })
 
     const buffer = this.#buffer.child()

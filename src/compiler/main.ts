@@ -94,6 +94,7 @@ export class Compiler {
       variableName: 'root',
       outputExpression: 'out',
       fieldPathExpression: 'out',
+      wildCardPath: '',
     })
   }
 

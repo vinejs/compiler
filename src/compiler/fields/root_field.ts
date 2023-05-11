@@ -14,6 +14,7 @@ export function createRootField(parent: CompilerParent): CompilerField {
     parentVariableName: parent.variableName,
     fieldNameExpression: `''`,
     fieldPathExpression: `''`,
+    wildCardPath: '',
     variableName: `${parent.variableName}_item`,
     valueExpression: 'root',
     outputExpression: parent.outputExpression,

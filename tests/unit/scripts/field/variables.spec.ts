@@ -19,6 +19,7 @@ test.group('Scripts | define field variables', () => {
       fieldPathExpression: `'username'`,
       fieldNameExpression: `'username'`,
       parentValueExpression: 'root',
+      wildCardPath: 'username',
       isArrayMember: false,
     })
 
@@ -29,6 +30,7 @@ test.group('Scripts | define field variables', () => {
       `meta: meta,`,
       `fieldName: 'username',`,
       `fieldPath: 'username',`,
+      `wildCardPath: 'username',`,
       `mutate: defineValue,`,
       `report: report,`,
       `isValid: true,`,
@@ -45,6 +47,7 @@ test.group('Scripts | define field variables', () => {
       fieldPathExpression: `'username'`,
       fieldNameExpression: `'username'`,
       parentValueExpression: 'root',
+      wildCardPath: 'username',
       isArrayMember: false,
       parseFnRefId: 'ref://1',
     })
@@ -56,6 +59,7 @@ test.group('Scripts | define field variables', () => {
       `  meta: meta,`,
       `  fieldName: 'username',`,
       `  fieldPath: 'username',`,
+      `  wildCardPath: 'username',`,
       `  mutate: defineValue,`,
       `  report: report,`,
       `  isValid: true,`,

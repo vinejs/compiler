@@ -19,10 +19,14 @@ export function createObjectField(
       ? `${parent.fieldPathExpression} + '.' + '${node.fieldName}'`
       : `'${node.fieldName}'`
 
+  const wildCardPath =
+    parent.wildCardPath !== '' ? `${parent.wildCardPath}.${node.fieldName}` : node.fieldName
+
   return {
     parentVariableName: `${parent.variableName}.value`,
     fieldNameExpression: `'${node.fieldName}'`,
     fieldPathExpression: fieldPathExpression,
+    wildCardPath: wildCardPath,
     variableName: `${node.propertyName}_${variablesCounter}`,
     valueExpression: `${parent.variableName}.value['${node.fieldName}']`,
     outputExpression: `${parent.outputExpression}['${node.propertyName}']`,
