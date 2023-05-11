@@ -10,6 +10,7 @@
 import { BaseNode } from './base.js'
 import type { Compiler } from '../main.js'
 import type { CompilerBuffer } from '../buffer.js'
+import { callParseFunction } from '../../scripts/union/parse.js'
 import { defineElseCondition } from '../../scripts/define_else_conditon.js'
 import type { CompilerField, CompilerParent, UnionNode } from '../../types.js'
 import { defineConditionalGuard } from '../../scripts/define_conditional_guard.js'
@@ -46,6 +47,19 @@ export class UnionNodeCompiler extends BaseNode {
 
     this.#node.conditions.forEach((child, index) => {
       const conditionalBuffer = this.#buffer.child()
+
+      /**
+       * Parse the value once the condition is true
+       */
+      if ('parseFnId' in child.schema) {
+        conditionalBuffer.writeStatement(
+          callParseFunction({
+            parseFnRefId: child.schema.parseFnId,
+            variableName: this.field.variableName,
+          })
+        )
+      }
+
       this.#compiler.compileNode(child.schema, conditionalBuffer, this.#parent, this.field)
 
       childrenBuffer.writeStatement(

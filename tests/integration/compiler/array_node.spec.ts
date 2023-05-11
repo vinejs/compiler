@@ -8,6 +8,7 @@
  */
 
 import { test } from '@japa/runner'
+import { refsBuilder } from '../../../index.js'
 import { Compiler } from '../../../src/compiler/main.js'
 import type { ValidationRule } from '../../../src/types.js'
 import { ErrorReporterFactory } from '../../../factories/error_reporter.js'
@@ -727,6 +728,51 @@ test.group('Array node', () => {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['value is required'])
     }
+  })
+
+  test('call parse function', async ({ assert }) => {
+    assert.plan(3)
+
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
+        type: 'array',
+        bail: true,
+        fieldName: '*',
+        validations: [],
+        propertyName: '*',
+        allowNull: false,
+        isOptional: false,
+        parseFnId: 'ref://1',
+        each: {
+          type: 'literal',
+          allowNull: false,
+          bail: true,
+          isOptional: false,
+          fieldName: '*',
+          propertyName: '*',
+          validations: [],
+        },
+      },
+    })
+
+    const data: any[] = []
+    const meta = {}
+    const refs = refsBuilder()
+    refs.trackParser((value) => {
+      assert.deepEqual(value, [])
+      return value
+    })
+
+    const errorReporter = new ErrorReporterFactory().create()
+
+    const fn = compiler.compile()
+    const output = await fn(data, meta, refs.toJSON(), errorReporter)
+    assert.deepEqual(output, [])
+
+    // Mutation test
+    data[0] = 'foo'
+    assert.deepEqual(output, [])
   })
 })
 

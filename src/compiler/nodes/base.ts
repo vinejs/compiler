@@ -9,10 +9,11 @@
 
 import type { Compiler } from '../main.js'
 import type { CompilerBuffer } from '../buffer.js'
-import type { CompilerField, CompilerNodes, CompilerParent } from '../../types.js'
 import { defineFieldVariables } from '../../scripts/field/variables.js'
+import type { CompilerField, CompilerNodes, CompilerParent } from '../../types.js'
 
 export abstract class BaseNode {
+  #node: CompilerNodes
   #parentField?: CompilerField
   protected field: CompilerField
 
@@ -23,6 +24,7 @@ export abstract class BaseNode {
     parentField?: CompilerField
   ) {
     this.#parentField = parentField
+    this.#node = node
 
     if (this.#parentField) {
       this.field = this.#parentField
@@ -34,7 +36,17 @@ export abstract class BaseNode {
 
   protected defineField(buffer: CompilerBuffer) {
     if (!this.#parentField) {
-      buffer.writeStatement(defineFieldVariables(this.field))
+      buffer.writeStatement(
+        defineFieldVariables({
+          fieldNameExpression: this.field.fieldNameExpression,
+          isArrayMember: this.field.isArrayMember,
+          parentValueExpression: this.field.parentValueExpression,
+          valueExpression: this.field.valueExpression,
+          variableName: this.field.variableName,
+          wildCardPath: this.field.wildCardPath,
+          parseFnRefId: 'parseFnId' in this.#node ? this.#node.parseFnId : undefined,
+        })
+      )
     }
   }
 }

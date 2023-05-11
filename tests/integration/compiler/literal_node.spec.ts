@@ -8,9 +8,10 @@
  */
 
 import { test } from '@japa/runner'
+import { refsBuilder } from '../../../index.js'
 import { Compiler } from '../../../src/compiler/main.js'
-import { ErrorReporterFactory } from '../../../factories/error_reporter.js'
 import { TransformFn, ValidationRule } from '../../../src/types.js'
+import { ErrorReporterFactory } from '../../../factories/error_reporter.js'
 
 test.group('Literal node', () => {
   test('process value for a field', async ({ assert }) => {
@@ -484,6 +485,38 @@ test.group('Literal node', () => {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['value is required'])
     }
+  })
+
+  test('call parse function', async ({ assert }) => {
+    assert.plan(2)
+
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
+        type: 'literal',
+        bail: true,
+        fieldName: '*',
+        validations: [],
+        propertyName: '*',
+        allowNull: false,
+        isOptional: false,
+        parseFnId: 'ref://1',
+      },
+    })
+
+    const data = 'virk'
+    const meta = {}
+    const refs = refsBuilder()
+    refs.trackParser((value) => {
+      assert.equal(value, 'virk')
+      return value
+    })
+
+    const errorReporter = new ErrorReporterFactory().create()
+
+    const fn = compiler.compile()
+    const output = await fn(data, meta, refs.toJSON(), errorReporter)
+    assert.deepEqual(output, 'virk')
   })
 })
 

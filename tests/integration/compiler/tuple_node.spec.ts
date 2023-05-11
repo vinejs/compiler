@@ -8,9 +8,10 @@
  */
 
 import { test } from '@japa/runner'
+import { refsBuilder } from '../../../index.js'
+import { ValidationRule } from '../../../src/types.js'
 import { Compiler } from '../../../src/compiler/main.js'
 import { ErrorReporterFactory } from '../../../factories/error_reporter.js'
-import { ValidationRule } from '../../../src/types.js'
 
 test.group('Tuple node', () => {
   test('process children nodes', async ({ assert }) => {
@@ -964,6 +965,64 @@ test.group('Tuple node', () => {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['value is required'])
     }
+  })
+
+  test('call parse function', async ({ assert }) => {
+    assert.plan(3)
+
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
+        type: 'tuple',
+        bail: true,
+        fieldName: '*',
+        validations: [],
+        propertyName: '*',
+        allowNull: false,
+        isOptional: false,
+        allowUnknownProperties: false,
+        parseFnId: 'ref://1',
+        properties: [
+          {
+            type: 'literal',
+            bail: true,
+            fieldName: '0',
+            allowNull: false,
+            isOptional: false,
+            propertyName: '0',
+            validations: [],
+          },
+          {
+            type: 'literal',
+            bail: true,
+            fieldName: '1',
+            allowNull: false,
+            isOptional: false,
+            propertyName: '1',
+            validations: [],
+          },
+        ],
+      },
+    })
+
+    const data = ['hello world', 'hi world']
+    const meta = {}
+
+    const refs = refsBuilder()
+    refs.trackParser((value) => {
+      assert.deepEqual(value, data)
+      return value
+    })
+
+    const errorReporter = new ErrorReporterFactory().create()
+
+    const fn = compiler.compile()
+    const output = await fn(data, meta, refs.toJSON(), errorReporter)
+    assert.deepEqual(output, ['hello world', 'hi world'])
+
+    // Mutation test
+    data[0] = 'foo'
+    assert.deepEqual(output, ['hello world', 'hi world'])
   })
 })
 

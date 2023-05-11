@@ -8,9 +8,10 @@
  */
 
 import { test } from '@japa/runner'
+import { Refs } from '../../../src/types.js'
+import { refsBuilder } from '../../../index.js'
 import { Compiler } from '../../../src/compiler/main.js'
 import { ErrorReporterFactory } from '../../../factories/error_reporter.js'
-import { Refs } from '../../../src/types.js'
 
 test.group('Union node', () => {
   test('create a union of literal values', async ({ assert }) => {
@@ -579,5 +580,68 @@ test.group('Union node', () => {
     const errorReporter = new ErrorReporterFactory().create()
     const fn = compiler.compile()
     assert.deepEqual(await fn(data, meta, refs, errorReporter), [{ phone: '123456789' }])
+  })
+
+  test('call parse function', async ({ assert }) => {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
+        type: 'union',
+        fieldName: '*',
+        propertyName: '*',
+        conditions: [
+          {
+            conditionalFnRefId: 'ref://1',
+            schema: {
+              type: 'literal',
+              bail: true,
+              fieldName: 'uid',
+              propertyName: 'uid',
+              allowNull: false,
+              isOptional: false,
+              validations: [
+                {
+                  implicit: false,
+                  isAsync: false,
+                  ruleFnId: 'ref://4',
+                },
+              ],
+            },
+          },
+          {
+            conditionalFnRefId: 'ref://2',
+            schema: {
+              type: 'literal',
+              bail: true,
+              fieldName: 'uid',
+              propertyName: 'uid',
+              parseFnId: 'ref://3',
+              allowNull: false,
+              isOptional: false,
+              validations: [],
+            },
+          },
+        ],
+      },
+    })
+
+    const data = 'virk'
+    const meta = {}
+
+    const refs = refsBuilder()
+    refs.trackConditional(() => false)
+    refs.trackConditional(() => true)
+    refs.trackParser((value) => {
+      return typeof value === 'string' ? value.toUpperCase() : value
+    })
+    refs.trackValidation({
+      validator() {
+        throw new Error('Never expected to be called')
+      },
+    })
+
+    const errorReporter = new ErrorReporterFactory().create()
+    const fn = compiler.compile()
+    assert.deepEqual(await fn(data, meta, refs.toJSON(), errorReporter), 'VIRK')
   })
 })

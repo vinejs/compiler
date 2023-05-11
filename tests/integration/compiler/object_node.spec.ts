@@ -8,9 +8,10 @@
  */
 
 import { test } from '@japa/runner'
+import { refsBuilder } from '../../../index.js'
+import { ValidationRule } from '../../../src/types.js'
 import { Compiler } from '../../../src/compiler/main.js'
 import { ErrorReporterFactory } from '../../../factories/error_reporter.js'
-import { ValidationRule } from '../../../src/types.js'
 
 test.group('Object node', () => {
   test('process an object field', async ({ assert }) => {
@@ -978,6 +979,46 @@ test.group('Object node', () => {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['value is required'])
     }
+  })
+
+  test('call parse fn', async ({ assert }) => {
+    assert.plan(3)
+
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
+        type: 'object',
+        groups: [],
+        bail: true,
+        fieldName: '',
+        validations: [],
+        propertyName: '',
+        allowNull: false,
+        isOptional: false,
+        allowUnknownProperties: false,
+        parseFnId: 'ref://1',
+        properties: [],
+      },
+    })
+
+    const data: any = {}
+    const meta = {}
+
+    const refs = refsBuilder()
+    refs.trackParser((value) => {
+      assert.deepEqual(value, {})
+      return value
+    })
+
+    const errorReporter = new ErrorReporterFactory().create()
+
+    const fn = compiler.compile()
+    const output = await fn(data, meta, refs.toJSON(), errorReporter)
+    assert.deepEqual(output, {})
+
+    // Mutation test:
+    data.profile = {}
+    assert.deepEqual(output, {})
   })
 })
 

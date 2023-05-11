@@ -7,6 +7,8 @@
  * file that was distributed with this source code.
  */
 
+import { RefIdentifier } from '../../types.js'
+
 type FieldOptions = {
   variableName: string
   valueExpression: string
@@ -14,7 +16,7 @@ type FieldOptions = {
   wildCardPath: string
   parentValueExpression: string
   isArrayMember: boolean
-  parseFnRefId?: string
+  parseFnRefId?: RefIdentifier
 }
 
 /**
