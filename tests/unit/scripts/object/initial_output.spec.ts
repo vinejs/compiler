@@ -15,10 +15,11 @@ test.group('Scripts | define object initial output', () => {
   test('define initial object for object', ({ assert }) => {
     const jsOutput = defineObjectInitialOutput({
       outputExpression: `out['profile']`,
+      variableName: 'profile',
       outputValueExpression: `{}`,
     })
 
     assert.doesNotThrows(() => validateCode(jsOutput))
-    assert.assertFormatted(jsOutput, [`out['profile'] = {};`])
+    assert.assertFormatted(jsOutput, [`const profile_out = {};`, `out['profile'] = profile_out;`])
   })
 })

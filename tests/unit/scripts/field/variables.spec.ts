@@ -16,7 +16,6 @@ test.group('Scripts | define field variables', () => {
     const jsOutput = defineFieldVariables({
       variableName: 'username',
       valueExpression: `root['username']`,
-      fieldPathExpression: `'username'`,
       fieldNameExpression: `'username'`,
       parentValueExpression: 'root',
       wildCardPath: 'username',
@@ -29,7 +28,6 @@ test.group('Scripts | define field variables', () => {
       `data: root,`,
       `meta: meta,`,
       `fieldName: 'username',`,
-      `fieldPath: 'username',`,
       `wildCardPath: 'username',`,
       `mutate: defineValue,`,
       `report: report,`,
@@ -44,7 +42,6 @@ test.group('Scripts | define field variables', () => {
     const jsOutput = defineFieldVariables({
       variableName: 'username',
       valueExpression: `root['username']`,
-      fieldPathExpression: `'username'`,
       fieldNameExpression: `'username'`,
       parentValueExpression: 'root',
       wildCardPath: 'username',
@@ -58,7 +55,6 @@ test.group('Scripts | define field variables', () => {
       `  data: root,`,
       `  meta: meta,`,
       `  fieldName: 'username',`,
-      `  fieldPath: 'username',`,
       `  wildCardPath: 'username',`,
       `  mutate: defineValue,`,
       `  report: report,`,

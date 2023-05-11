@@ -11,6 +11,7 @@
  * Options accepts by the output script
  */
 type OutputOptions = {
+  variableName: string
   outputExpression: string
   outputValueExpression: string
 }
@@ -19,8 +20,10 @@ type OutputOptions = {
  * Returns JS fragment for writing the initial output for an array
  */
 export function defineArrayInitialOutput({
+  variableName,
   outputExpression,
   outputValueExpression,
 }: OutputOptions) {
-  return `${outputExpression} = ${outputValueExpression};`
+  return `const ${variableName}_out = ${outputValueExpression};
+${outputExpression} = ${variableName}_out;`
 }

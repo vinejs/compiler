@@ -158,13 +158,13 @@ export class ObjectNodeCompiler extends BaseNode {
       variableName: this.field.variableName,
       bail: this.#node.bail,
       guardedCodeSnippet: `${defineObjectInitialOutput({
+        variableName: this.field.variableName,
         outputExpression: this.field.outputExpression,
         outputValueExpression: '{}',
       })}${this.#buffer.newLine}${this.#compileObjectChildren()}${
         this.#buffer.newLine
       }${this.#compileObjectGroups()}${this.#buffer.newLine}${defineMoveProperties({
         variableName: this.field.variableName,
-        outputExpression: this.field.outputExpression,
         allowUnknownProperties: this.#node.allowUnknownProperties,
         fieldsToIgnore: this.#node.allowUnknownProperties ? this.#getFieldNames(this.#node) : [],
       })}`,

@@ -73,12 +73,6 @@ export type FieldContext = {
   meta: Record<string, any>
 
   /**
-   * Nested path to the field under validation (if the field is inside an
-   * object or an array)
-   */
-  fieldPath: string
-
-  /**
    * Mutate the value of field under validation.
    */
   mutate(newValue: any, ctx: FieldContext): void
@@ -99,12 +93,10 @@ export type FieldContext = {
   isDefined: boolean
 
   /**
-   * Wildcard path for the field. The value is same as the
-   * fieldPath when the field is not a direct or nested
-   * child of an array.
+   * Wildcard path for the field. The value is a nested
+   * pointer to the field under validation.
    *
-   * However, in case of a child of an array, the value will
-   * use `*` in place of indexes.
+   * In case of arrays, the `*` wildcard is used.
    */
   wildCardPath: string
 } & (

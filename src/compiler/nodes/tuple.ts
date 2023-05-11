@@ -86,11 +86,12 @@ export class TupleNodeCompiler extends BaseNode {
       variableName: this.field.variableName,
       bail: this.#node.bail,
       guardedCodeSnippet: `${defineArrayInitialOutput({
+        variableName: this.field.variableName,
         outputExpression: this.field.outputExpression,
         outputValueExpression: this.#node.allowUnknownProperties
           ? `copyProperties(${this.field.variableName}.value)`
           : `[]`,
-      })}${this.#compileTupleChildren()}${this.#buffer.newLine}`,
+      })}${this.#compileTupleChildren()}`,
     })
 
     /**

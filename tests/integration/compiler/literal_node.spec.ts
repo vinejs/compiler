@@ -160,7 +160,6 @@ test.group('Literal node', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -175,7 +174,6 @@ test.group('Literal node', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -230,7 +228,6 @@ test.group('Literal node', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -246,7 +243,6 @@ test.group('Literal node', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -305,7 +301,6 @@ test.group('Literal node', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -321,7 +316,6 @@ test.group('Literal node', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: false,
             meta: {},
@@ -379,7 +373,6 @@ test.group('Literal node', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -441,7 +434,6 @@ test.group('Literal node', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -629,7 +621,6 @@ test.group('Literal node | optional: true', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -644,7 +635,6 @@ test.group('Literal node | optional: true', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -754,7 +744,6 @@ test.group('Literal node | optional: true', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -941,7 +930,6 @@ test.group('Literal node | allowNull: true', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -956,7 +944,6 @@ test.group('Literal node | allowNull: true', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -1066,7 +1053,6 @@ test.group('Literal node | allowNull: true', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},

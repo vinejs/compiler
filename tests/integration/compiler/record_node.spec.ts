@@ -356,7 +356,6 @@ test.group('Record node', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -371,7 +370,6 @@ test.group('Record node', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -435,7 +433,6 @@ test.group('Record node', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -510,7 +507,6 @@ test.group('Record node', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -526,7 +522,6 @@ test.group('Record node', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: false,
             meta: {},
@@ -596,7 +591,6 @@ test.group('Record node', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -672,7 +666,6 @@ test.group('Record node', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -685,7 +678,7 @@ test.group('Record node', () => {
       'ref://3': {
         validator(value, options, ctx) {
           assert.oneOf(ctx.fieldName, ['white', 'black'])
-          assert.oneOf(ctx.fieldPath, ['white', 'black'])
+          assert.equal(ctx.wildCardPath, '*')
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             isArrayMember: false,

@@ -93,6 +93,7 @@ export class ArrayNodeCompiler extends BaseNode {
       variableName: this.field.variableName,
       bail: this.#node.bail,
       guardedCodeSnippet: `${defineArrayInitialOutput({
+        variableName: this.field.variableName,
         outputExpression: this.field.outputExpression,
         outputValueExpression: `[]`,
       })}${this.#buffer.newLine}${this.#compileArrayElements()}`,

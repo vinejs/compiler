@@ -335,7 +335,6 @@ test.group('Array node', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -350,7 +349,6 @@ test.group('Array node', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -414,7 +412,6 @@ test.group('Array node', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -489,7 +486,6 @@ test.group('Array node', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -505,7 +501,6 @@ test.group('Array node', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: false,
             meta: {},
@@ -575,7 +570,6 @@ test.group('Array node', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -651,7 +645,6 @@ test.group('Array node', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -673,7 +666,7 @@ test.group('Array node', () => {
             data,
           })
           assert.oneOf(ctx.fieldName, [0, 1])
-          assert.oneOf(ctx.fieldPath, [0, 1])
+          assert.equal(ctx.wildCardPath, '*')
 
           if (ctx.isArrayMember) {
             assert.equal(ctx.parent[ctx.fieldName], value)

@@ -532,7 +532,6 @@ test.group('Tuple node', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -547,7 +546,6 @@ test.group('Tuple node', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -604,7 +602,6 @@ test.group('Tuple node', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -671,7 +668,6 @@ test.group('Tuple node', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -687,7 +683,6 @@ test.group('Tuple node', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: false,
             meta: {},
@@ -774,7 +769,6 @@ test.group('Tuple node', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -867,7 +861,6 @@ test.group('Tuple node', () => {
           assert.isUndefined(options)
           assert.containsSubset(ctx, {
             fieldName: '',
-            fieldPath: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -884,7 +877,7 @@ test.group('Tuple node', () => {
             assert.isUndefined(options)
             assert.containsSubset(ctx, {
               fieldName: 0,
-              fieldPath: '0',
+              wildCardPath: '0',
               isArrayMember: true,
               isValid: true,
               meta: {},
@@ -896,7 +889,7 @@ test.group('Tuple node', () => {
             assert.isUndefined(options)
             assert.containsSubset(ctx, {
               fieldName: 1,
-              fieldPath: '1',
+              wildCardPath: '1',
               isArrayMember: true,
               isValid: true,
               meta: {},

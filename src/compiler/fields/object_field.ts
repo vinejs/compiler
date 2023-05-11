@@ -14,10 +14,13 @@ export function createObjectField(
   variablesCounter: number,
   parent: CompilerParent
 ): CompilerField {
-  const fieldPathExpression =
-    parent.fieldPathExpression !== `''`
-      ? `${parent.fieldPathExpression} + '.' + '${node.fieldName}'`
-      : `'${node.fieldName}'`
+  /**
+   * Commented to see if a use case arrives for using this.
+   */
+  // const fieldPathExpression =
+  //   parent.fieldPathExpression !== `''`
+  //     ? `${parent.fieldPathExpression} + '.' + '${node.fieldName}'`
+  //     : `'${node.fieldName}'`
 
   const wildCardPath =
     parent.wildCardPath !== '' ? `${parent.wildCardPath}.${node.fieldName}` : node.fieldName
@@ -25,11 +28,11 @@ export function createObjectField(
   return {
     parentValueExpression: `${parent.variableName}.value`,
     fieldNameExpression: `'${node.fieldName}'`,
-    fieldPathExpression: fieldPathExpression,
+    fieldPathExpression: wildCardPath,
     wildCardPath: wildCardPath,
     variableName: `${node.propertyName}_${variablesCounter}`,
     valueExpression: `${parent.variableName}.value['${node.fieldName}']`,
-    outputExpression: `${parent.outputExpression}['${node.propertyName}']`,
+    outputExpression: `${parent.variableName}_out['${node.propertyName}']`,
     isArrayMember: false,
   }
 }

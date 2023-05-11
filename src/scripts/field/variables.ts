@@ -11,7 +11,6 @@ type FieldOptions = {
   variableName: string
   valueExpression: string
   fieldNameExpression: string
-  fieldPathExpression: string
   wildCardPath: string
   parentValueExpression: string
   isArrayMember: boolean
@@ -30,7 +29,6 @@ export function defineFieldVariables({
   isArrayMember,
   valueExpression,
   fieldNameExpression,
-  fieldPathExpression,
   parentValueExpression,
 }: FieldOptions) {
   const inValueExpression = parseFnRefId
@@ -41,7 +39,6 @@ export function defineFieldVariables({
   data: root,
   meta: meta,
   fieldName: ${fieldNameExpression},
-  fieldPath: ${fieldPathExpression},
   wildCardPath: '${wildCardPath}',
   mutate: defineValue,
   report: report,

@@ -14,7 +14,6 @@ import { inspect } from 'node:util'
  */
 type MovePropertiesOptions = {
   variableName: string
-  outputExpression: string
   allowUnknownProperties: boolean
   fieldsToIgnore: string[]
 }
@@ -26,11 +25,10 @@ type MovePropertiesOptions = {
 export function defineMoveProperties({
   variableName,
   fieldsToIgnore,
-  outputExpression,
   allowUnknownProperties,
 }: MovePropertiesOptions) {
   if (!allowUnknownProperties) {
     return ''
   }
-  return `moveProperties(${variableName}.value, ${outputExpression}, ${inspect(fieldsToIgnore)});`
+  return `moveProperties(${variableName}.value, ${variableName}_out, ${inspect(fieldsToIgnore)});`
 }
