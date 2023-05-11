@@ -460,6 +460,39 @@ test.group('Literal node', () => {
     const fn = compiler.compile()
     assert.deepEqual(await fn(data, meta, refs, errorReporter), 'VIRK')
   })
+
+  test('convert empty string to null', async ({ assert }) => {
+    assert.plan(2)
+
+    const compiler = new Compiler(
+      {
+        type: 'root',
+        schema: {
+          type: 'literal',
+          bail: true,
+          fieldName: '*',
+          validations: [],
+          propertyName: '*',
+          allowNull: false,
+          isOptional: false,
+        },
+      },
+      { convertEmptyStringsToNull: true }
+    )
+
+    const data = ''
+    const meta = {}
+    const refs = {}
+    const errorReporter = new ErrorReporterFactory().create()
+
+    const fn = compiler.compile()
+    try {
+      await fn(data, meta, refs, errorReporter)
+    } catch (error) {
+      assert.equal(error.message, 'Validation failure')
+      assert.deepEqual(error.messages, ['value is required'])
+    }
+  })
 })
 
 test.group('Literal node | optional: true', () => {
@@ -737,6 +770,33 @@ test.group('Literal node | optional: true', () => {
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
     assert.deepEqual(output, undefined)
+  })
+
+  test('convert empty string to null', async ({ assert }) => {
+    const compiler = new Compiler(
+      {
+        type: 'root',
+        schema: {
+          type: 'literal',
+          bail: true,
+          fieldName: '*',
+          validations: [],
+          propertyName: '*',
+          allowNull: false,
+          isOptional: true,
+        },
+      },
+      { convertEmptyStringsToNull: true }
+    )
+
+    const data = ''
+    const meta = {}
+    const refs = {}
+    const errorReporter = new ErrorReporterFactory().create()
+
+    const fn = compiler.compile()
+    const output = await fn(data, meta, refs, errorReporter)
+    assert.isUndefined(output)
   })
 })
 
@@ -1022,5 +1082,32 @@ test.group('Literal node | allowNull: true', () => {
     const fn = compiler.compile()
     const output = await fn(data, meta, refs, errorReporter)
     assert.deepEqual(output, null)
+  })
+
+  test('convert empty string to null', async ({ assert }) => {
+    const compiler = new Compiler(
+      {
+        type: 'root',
+        schema: {
+          type: 'literal',
+          bail: true,
+          fieldName: '*',
+          validations: [],
+          propertyName: '*',
+          allowNull: true,
+          isOptional: false,
+        },
+      },
+      { convertEmptyStringsToNull: true }
+    )
+
+    const data = ''
+    const meta = {}
+    const refs = {}
+    const errorReporter = new ErrorReporterFactory().create()
+
+    const fn = compiler.compile()
+    const output = await fn(data, meta, refs, errorReporter)
+    assert.isNull(output)
   })
 })

@@ -485,3 +485,14 @@ export interface ErrorReporterContract {
    */
   report(message: string, ctx: FieldContext): any
 }
+
+/**
+ * Options accepted by the compiler
+ */
+export type CompilerOptions = {
+  /**
+   * Convert empty string values to null for sake of
+   * normalization
+   */
+  convertEmptyStringsToNull: boolean
+}

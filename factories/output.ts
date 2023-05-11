@@ -8,17 +8,18 @@
  */
 
 import { EOL } from 'node:os'
+import type { CompilerOptions } from '../src/types.js'
 import { defineInlineErrorMessages } from '../src/scripts/define_error_messages.js'
 import { defineInlineFunctions } from '../src/scripts/define_inline_functions.js'
 
 /**
  * Returns code for the initial output
  */
-export function getInitialOutput() {
+export function getInitialOutput(options?: CompilerOptions) {
   return [
     `async function anonymous(root,meta,refs,errorReporter) {`,
     ...defineInlineErrorMessages().split(EOL),
-    ...defineInlineFunctions().split(EOL),
+    ...defineInlineFunctions(options || { convertEmptyStringsToNull: false }).split(EOL),
     'let out;',
   ]
 }

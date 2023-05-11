@@ -950,6 +950,42 @@ test.group('Object node', () => {
     data.username = 'foo'
     assert.deepEqual(output, { userName: 'virk', foo: 'bar', baz: 'bam' })
   })
+
+  test('convert empty string to null', async ({ assert }) => {
+    assert.plan(2)
+
+    const compiler = new Compiler(
+      {
+        type: 'root',
+        schema: {
+          type: 'object',
+          groups: [],
+          bail: true,
+          fieldName: '',
+          validations: [],
+          propertyName: '',
+          allowNull: false,
+          isOptional: false,
+          allowUnknownProperties: false,
+          properties: [],
+        },
+      },
+      { convertEmptyStringsToNull: true }
+    )
+
+    const data: any = ''
+    const meta = {}
+    const refs = {}
+    const errorReporter = new ErrorReporterFactory().create()
+
+    const fn = compiler.compile()
+    try {
+      await fn(data, meta, refs, errorReporter)
+    } catch (error) {
+      assert.equal(error.message, 'Validation failure')
+      assert.deepEqual(error.messages, ['value is required'])
+    }
+  })
 })
 
 test.group('Object node | optional: true', () => {
@@ -1065,6 +1101,36 @@ test.group('Object node | optional: true', () => {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['value is not a valid object'])
     }
+  })
+
+  test('convert empty string to null', async ({ assert }) => {
+    const compiler = new Compiler(
+      {
+        type: 'root',
+        schema: {
+          type: 'object',
+          groups: [],
+          bail: true,
+          fieldName: '',
+          validations: [],
+          propertyName: '',
+          allowNull: false,
+          isOptional: true,
+          allowUnknownProperties: false,
+          properties: [],
+        },
+      },
+      { convertEmptyStringsToNull: true }
+    )
+
+    const data: any = ''
+    const meta = {}
+    const refs = {}
+    const errorReporter = new ErrorReporterFactory().create()
+
+    const fn = compiler.compile()
+    const output = await fn(data, meta, refs, errorReporter)
+    assert.isUndefined(output)
   })
 })
 
@@ -1187,6 +1253,36 @@ test.group('Object node | allowNull: true', () => {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['value is not a valid object'])
     }
+  })
+
+  test('convert empty string to null', async ({ assert }) => {
+    const compiler = new Compiler(
+      {
+        type: 'root',
+        schema: {
+          type: 'object',
+          groups: [],
+          bail: true,
+          fieldName: '',
+          validations: [],
+          propertyName: '',
+          allowNull: true,
+          isOptional: false,
+          allowUnknownProperties: false,
+          properties: [],
+        },
+      },
+      { convertEmptyStringsToNull: true }
+    )
+
+    const data: any = ''
+    const meta = {}
+    const refs = {}
+    const errorReporter = new ErrorReporterFactory().create()
+
+    const fn = compiler.compile()
+    const output = await fn(data, meta, refs, errorReporter)
+    assert.isNull(output)
   })
 })
 

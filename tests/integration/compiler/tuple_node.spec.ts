@@ -918,6 +918,60 @@ test.group('Tuple node', () => {
       assert.deepEqual(error.messages, ['ref://2 validation failed'])
     }
   })
+
+  test('convert empty string to null', async ({ assert }) => {
+    assert.plan(2)
+
+    const compiler = new Compiler(
+      {
+        type: 'root',
+        schema: {
+          type: 'tuple',
+          bail: true,
+          fieldName: '*',
+          validations: [],
+          propertyName: '*',
+          allowNull: false,
+          isOptional: false,
+          allowUnknownProperties: false,
+          properties: [
+            {
+              type: 'literal',
+              bail: true,
+              fieldName: '0',
+              allowNull: false,
+              isOptional: false,
+              propertyName: '0',
+              validations: [],
+            },
+            {
+              type: 'literal',
+              bail: true,
+              fieldName: '1',
+              allowNull: false,
+              isOptional: false,
+              propertyName: '1',
+              validations: [],
+            },
+          ],
+        },
+      },
+      { convertEmptyStringsToNull: true }
+    )
+
+    const data = ''
+    const meta = {}
+    const refs = {}
+    const errorReporter = new ErrorReporterFactory().create()
+
+    const fn = compiler.compile()
+    try {
+      await fn(data, meta, refs, errorReporter)
+    } catch (error) {
+      assert.equal(error.message, 'Validation failure')
+      assert.deepEqual(error.messages, ['value is required'])
+    }
+  })
 })
 
 test.group('Tuple node | optional: true', () => {
@@ -1107,6 +1161,54 @@ test.group('Tuple node | optional: true', () => {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['value is not a valid array'])
     }
+  })
+
+  test('convert empty string to null', async ({ assert }) => {
+    const compiler = new Compiler(
+      {
+        type: 'root',
+        schema: {
+          type: 'tuple',
+          bail: true,
+          fieldName: '*',
+          validations: [],
+          propertyName: '*',
+          allowNull: false,
+          isOptional: true,
+          allowUnknownProperties: false,
+          properties: [
+            {
+              type: 'literal',
+              bail: true,
+              fieldName: '0',
+              allowNull: false,
+              isOptional: false,
+              propertyName: '0',
+              validations: [],
+            },
+            {
+              type: 'literal',
+              bail: true,
+              fieldName: '1',
+              allowNull: false,
+              isOptional: false,
+              propertyName: '1',
+              validations: [],
+            },
+          ],
+        },
+      },
+      { convertEmptyStringsToNull: true }
+    )
+
+    const data = ''
+    const meta = {}
+    const refs = {}
+    const errorReporter = new ErrorReporterFactory().create()
+
+    const fn = compiler.compile()
+    const output = await fn(data, meta, refs, errorReporter)
+    assert.isUndefined(output)
   })
 })
 
@@ -1301,5 +1403,53 @@ test.group('Tuple node | allowNull: true', () => {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['value is not a valid array'])
     }
+  })
+
+  test('convert empty string to null', async ({ assert }) => {
+    const compiler = new Compiler(
+      {
+        type: 'root',
+        schema: {
+          type: 'tuple',
+          bail: true,
+          fieldName: '*',
+          validations: [],
+          propertyName: '*',
+          allowNull: true,
+          isOptional: false,
+          allowUnknownProperties: false,
+          properties: [
+            {
+              type: 'literal',
+              bail: true,
+              fieldName: '0',
+              allowNull: false,
+              isOptional: false,
+              propertyName: '0',
+              validations: [],
+            },
+            {
+              type: 'literal',
+              bail: true,
+              fieldName: '1',
+              allowNull: false,
+              isOptional: false,
+              propertyName: '1',
+              validations: [],
+            },
+          ],
+        },
+      },
+      { convertEmptyStringsToNull: true }
+    )
+
+    const data = ''
+    const meta = {}
+    const refs = {}
+    const errorReporter = new ErrorReporterFactory().create()
+
+    const fn = compiler.compile()
+    const output = await fn(data, meta, refs, errorReporter)
+    assert.isNull(output)
   })
 })

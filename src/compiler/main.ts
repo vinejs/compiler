@@ -27,6 +27,7 @@ import type {
   CompilerField,
   CompilerNodes,
   CompilerParent,
+  CompilerOptions,
   ErrorReporterContract,
 } from '../types.js'
 import { TupleNodeCompiler } from './nodes/tuple.js'
@@ -53,12 +54,18 @@ export class Compiler {
   #rootNode: RootNode
 
   /**
+   * Options to configure the compiler behavior
+   */
+  #options: CompilerOptions
+
+  /**
    * Buffer for collection the JS output string
    */
   #buffer: CompilerBuffer = new CompilerBuffer()
 
-  constructor(rootNode: RootNode) {
+  constructor(rootNode: RootNode, options?: CompilerOptions) {
     this.#rootNode = rootNode
+    this.#options = options || { convertEmptyStringsToNull: false }
   }
 
   /**
@@ -66,7 +73,7 @@ export class Compiler {
    */
   #initiateJSOutput() {
     this.#buffer.writeStatement(defineInlineErrorMessages())
-    this.#buffer.writeStatement(defineInlineFunctions())
+    this.#buffer.writeStatement(defineInlineFunctions(this.#options))
     this.#buffer.writeStatement('let out;')
   }
 

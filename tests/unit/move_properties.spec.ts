@@ -15,7 +15,7 @@ const fn = new Function(
   'output',
   'ignoreProperties',
   `
-  ${defineInlineFunctions()}
+  ${defineInlineFunctions({ convertEmptyStringsToNull: false })}
   moveProperties(data, output, ignoreProperties)
   `
 )

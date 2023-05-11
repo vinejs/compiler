@@ -11,12 +11,13 @@
  * Returns JS fragment for inline function needed by the
  * validation runtime code.
  */
-export function defineInlineFunctions() {
+export function defineInlineFunctions(options: { convertEmptyStringsToNull: boolean }) {
   return `function report(message, ctx) {
   ctx.isValid = false;
   errorReporter.report(message, ctx.fieldPath);
 };
 function defineValue(value, ctx) {
+  ${options.convertEmptyStringsToNull ? `if (value === '') { value = null; }` : ''}
   ctx.value = value;
   ctx.isDefined = value !== undefined && value !== null;
   return ctx;
