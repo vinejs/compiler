@@ -11,7 +11,44 @@
  * Represenation of a ref id
  */
 export type RefIdentifier = `ref://${number}`
+
+/**
+ * Allowed values for refs
+ */
 export type Refs = Record<RefIdentifier, ValidationRule | TransformFn | ParseFn | ConditionalFn>
+
+/**
+ * Refs store to track runtime values as refs with
+ * type safety
+ */
+export type RefsStore = {
+  toJSON(): Refs
+
+  /**
+   * Track a value inside refs
+   */
+  track(value: ValidationRule | TransformFn | ParseFn | ConditionalFn): RefIdentifier
+
+  /**
+   * Track a validation inside refs
+   */
+  trackValidation(validation: ValidationRule): RefIdentifier
+
+  /**
+   * Track input value parser inside refs
+   */
+  trackParser(fn: ParseFn): RefIdentifier
+
+  /**
+   * Track output value transformer inside refs
+   */
+  trackTransformer(fn: TransformFn): RefIdentifier
+
+  /**
+   * Track a conditional inside refs
+   */
+  trackConditional(fn: ConditionalFn): RefIdentifier
+}
 
 /**
  * The context shared with the entire validation pipeline.

@@ -10,6 +10,7 @@
 import type {
   Refs,
   ParseFn,
+  RefsStore,
   TransformFn,
   ConditionalFn,
   RefIdentifier,
@@ -17,9 +18,9 @@ import type {
 } from './types.js'
 
 /**
- * Creates a refs stores for parsing the schema
+ * Creates a refs store for parsing the schema
  */
-export function refsBuilder() {
+export function refsBuilder(): RefsStore {
   let counter = 0
   const refs: Refs = {}
 
