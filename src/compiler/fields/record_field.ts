@@ -18,7 +18,7 @@ export function createRecordField(parent: CompilerParent): CompilerField {
   const wildCardPath = parent.wildCardPath !== '' ? `${parent.wildCardPath}.*` : `*`
 
   return {
-    parentVariableName: `${parent.variableName}.value`,
+    parentValueExpression: `${parent.variableName}.value`,
     fieldNameExpression: `${parent.variableName}_i`,
     fieldPathExpression: fieldPathExpression,
     wildCardPath: wildCardPath,

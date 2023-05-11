@@ -34,17 +34,7 @@ export abstract class BaseNode {
 
   protected defineField(buffer: CompilerBuffer) {
     if (!this.#parentField) {
-      buffer.writeStatement(
-        defineFieldVariables({
-          variableName: this.field.variableName,
-          valueExpression: this.field.valueExpression,
-          fieldNameExpression: this.field.fieldNameExpression,
-          fieldPathExpression: this.field.fieldPathExpression,
-          parentValueExpression: this.field.parentVariableName,
-          isArrayMember: this.field.isArrayMember,
-          wildCardPath: this.field.wildCardPath,
-        })
-      )
+      buffer.writeStatement(defineFieldVariables(this.field))
     }
   }
 }

@@ -470,7 +470,7 @@ export type CompilerParent = {
  * names for the JS output.
  */
 export type CompilerField = {
-  parentVariableName: string
+  parentValueExpression: string
   fieldNameExpression: string
   fieldPathExpression: string
   variableName: string

@@ -23,7 +23,7 @@ export function createObjectField(
     parent.wildCardPath !== '' ? `${parent.wildCardPath}.${node.fieldName}` : node.fieldName
 
   return {
-    parentVariableName: `${parent.variableName}.value`,
+    parentValueExpression: `${parent.variableName}.value`,
     fieldNameExpression: `'${node.fieldName}'`,
     fieldPathExpression: fieldPathExpression,
     wildCardPath: wildCardPath,

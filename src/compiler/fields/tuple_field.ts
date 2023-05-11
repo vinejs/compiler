@@ -21,7 +21,7 @@ export function createTupleField(
   const wildCardPath = parent.wildCardPath !== '' ? `${parent.wildCardPath}.*` : `*`
 
   return {
-    parentVariableName: `${parent.variableName}.value`,
+    parentValueExpression: `${parent.variableName}.value`,
     fieldNameExpression: `${node.fieldName}`,
     fieldPathExpression: fieldPathExpression,
     wildCardPath: wildCardPath,
