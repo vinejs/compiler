@@ -32,7 +32,7 @@ export function refsBuilder(): RefsStore {
     /**
      * Track a value inside refs
      */
-    track(value: ValidationRule | TransformFn | ParseFn | ConditionalFn): RefIdentifier {
+    track(value: Refs[keyof Refs]): RefIdentifier {
       counter++
       const ref = `ref://${counter}` as const
       refs[ref] = value
@@ -56,14 +56,14 @@ export function refsBuilder(): RefsStore {
     /**
      * Track output value transformer inside refs
      */
-    trackTransformer(fn: TransformFn): RefIdentifier {
+    trackTransformer(fn: TransformFn<any, any>): RefIdentifier {
       return this.track(fn)
     },
 
     /**
      * Track a conditional inside refs
      */
-    trackConditional(fn: ConditionalFn): RefIdentifier {
+    trackConditional(fn: ConditionalFn<any>): RefIdentifier {
       return this.track(fn)
     },
   }

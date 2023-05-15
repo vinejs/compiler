@@ -10,7 +10,7 @@
 import { test } from '@japa/runner'
 import { refsBuilder } from '../../../index.js'
 import { Compiler } from '../../../src/compiler/main.js'
-import { TransformFn, ValidationRule } from '../../../src/types.js'
+import type { ValidationRule } from '../../../src/types.js'
 import { ErrorReporterFactory } from '../../../factories/error_reporter.js'
 
 test.group('Literal node', () => {
@@ -347,7 +347,7 @@ test.group('Literal node', () => {
         type: 'literal',
         bail: true,
         fieldName: 'username',
-        transformFnId: 'ref://3',
+        transformFnId: 'ref://1',
         validations: [
           {
             ruleFnId: 'ref://2',
@@ -364,35 +364,31 @@ test.group('Literal node', () => {
     const data = 'virk'
     const meta = {}
 
-    const refs: {
-      'ref://2': ValidationRule
-      'ref://3': TransformFn
-    } = {
-      'ref://2': {
-        validator(value, options, ctx) {
-          assert.equal(value, 'virk')
-          assert.isUndefined(options)
-          assert.containsSubset(ctx, {
-            fieldName: '',
-            isArrayMember: false,
-            isValid: true,
-            meta: {},
-            parent: data,
-            data,
-          })
-          ctx.report('ref://2 failed', ctx)
-        },
+    const refs = refsBuilder()
+    refs.trackTransformer(() => {
+      throw new Error('Never expected to reach here')
+    })
+    refs.trackValidation({
+      validator(value, options, ctx) {
+        assert.equal(value, 'virk')
+        assert.isUndefined(options)
+        assert.containsSubset(ctx, {
+          fieldName: '',
+          isArrayMember: false,
+          isValid: true,
+          meta: {},
+          parent: data,
+          data,
+        })
+        ctx.report('ref://2 failed', ctx)
       },
-      'ref://3': () => {
-        throw new Error('Never expected to reach here')
-      },
-    }
+    })
 
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs.toJSON(), errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['ref://2 failed'])
@@ -408,7 +404,7 @@ test.group('Literal node', () => {
         type: 'literal',
         bail: true,
         fieldName: '*',
-        transformFnId: 'ref://3',
+        transformFnId: 'ref://1',
         validations: [
           {
             ruleFnId: 'ref://2',
@@ -424,29 +420,25 @@ test.group('Literal node', () => {
 
     const data = 'virk'
     const meta = {}
+    const refs = refsBuilder()
 
-    const refs: {
-      'ref://2': ValidationRule
-      'ref://3': TransformFn
-    } = {
-      'ref://2': {
-        validator(value, options, ctx) {
-          assert.equal(value, 'virk')
-          assert.isUndefined(options)
-          assert.containsSubset(ctx, {
-            fieldName: '',
-            isArrayMember: false,
-            isValid: true,
-            meta: {},
-            parent: data,
-            data,
-          })
-        },
+    refs.trackTransformer((value: string) => {
+      return value.toUpperCase()
+    })
+    refs.trackValidation({
+      validator(value, options, ctx) {
+        assert.equal(value, 'virk')
+        assert.isUndefined(options)
+        assert.containsSubset(ctx, {
+          fieldName: '',
+          isArrayMember: false,
+          isValid: true,
+          meta: {},
+          parent: data,
+          data,
+        })
       },
-      'ref://3': (value) => {
-        return (value as string).toUpperCase()
-      },
-    }
+    })
 
     const errorReporter = new ErrorReporterFactory().create()
 

@@ -15,7 +15,10 @@ export type RefIdentifier = `ref://${number}`
 /**
  * Allowed values for refs
  */
-export type Refs = Record<RefIdentifier, ValidationRule | TransformFn | ParseFn | ConditionalFn>
+export type Refs = Record<
+  RefIdentifier,
+  ValidationRule | TransformFn<any, any> | ParseFn | ConditionalFn<any>
+>
 
 /**
  * Refs store to track runtime values as refs with
@@ -27,7 +30,7 @@ export type RefsStore = {
   /**
    * Track a value inside refs
    */
-  track(value: ValidationRule | TransformFn | ParseFn | ConditionalFn): RefIdentifier
+  track(value: Refs[keyof Refs]): RefIdentifier
 
   /**
    * Track a validation inside refs
@@ -42,12 +45,12 @@ export type RefsStore = {
   /**
    * Track output value transformer inside refs
    */
-  trackTransformer(fn: TransformFn): RefIdentifier
+  trackTransformer(fn: TransformFn<any, any>): RefIdentifier
 
   /**
    * Track a conditional inside refs
    */
-  trackConditional(fn: ConditionalFn): RefIdentifier
+  trackConditional(fn: ConditionalFn<any>): RefIdentifier
 }
 
 /**
@@ -160,12 +163,12 @@ export type ParseFn = (value: unknown) => any
 /**
  * The shape of transform function picked from the refs
  */
-export type TransformFn = (value: unknown, ctx: FieldContext) => any
+export type TransformFn<Input, Output> = (value: Input, ctx: FieldContext) => Output
 
 /**
  * The shape of conditional function used for narrowing down unions.
  */
-export type ConditionalFn = (value: unknown, ctx: FieldContext) => any
+export type ConditionalFn<Input> = (value: Input, ctx: FieldContext) => boolean
 
 /**
  * Shape of a validation rule accepted by the compiler
