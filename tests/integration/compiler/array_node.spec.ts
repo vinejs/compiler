@@ -419,7 +419,7 @@ test.group('Array node', () => {
             parent: data,
             data,
           })
-          ctx.report('ref://2 validation failed', ctx)
+          ctx.report('ref://2 validation failed', 'ref', ctx)
         },
       },
       'ref://3': {
@@ -493,7 +493,7 @@ test.group('Array node', () => {
             parent: data,
             data,
           })
-          ctx.report('ref://2 validation failed', ctx)
+          ctx.report('ref://2 validation failed', 'ref', ctx)
         },
       },
       'ref://3': {
@@ -577,7 +577,7 @@ test.group('Array node', () => {
             parent: data,
             data,
           })
-          ctx.report('ref://2 validation failed', ctx)
+          ctx.report('ref://2 validation failed', 'ref', ctx)
         },
       },
       'ref://3': {
@@ -652,7 +652,7 @@ test.group('Array node', () => {
             parent: data,
             data,
           })
-          ctx.report('ref://2 validation failed', ctx)
+          ctx.report('ref://2 validation failed', 'ref', ctx)
         },
       },
       'ref://3': {

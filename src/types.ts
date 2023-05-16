@@ -83,7 +83,7 @@ export type FieldContext = {
   /**
    * Report error to the error reporter
    */
-  report(message: string, ctx: FieldContext): void
+  report: ErrorReporterContract['report']
 
   /**
    * Is this field valid. Default: true
@@ -494,7 +494,7 @@ export interface ErrorReporterContract {
   /**
    * Report error for a field
    */
-  report(message: string, ctx: FieldContext): any
+  report(message: string, rule: string, ctx: FieldContext, args?: Record<string, any>): any
 }
 
 /**

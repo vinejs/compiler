@@ -235,7 +235,7 @@ test.group('Literal node', () => {
             parent: data,
             data,
           })
-          ctx.report('ref://2 validation failed', ctx)
+          ctx.report('ref://2 validation failed', 'ref://2', ctx)
         },
       },
       'ref://3': {
@@ -308,7 +308,7 @@ test.group('Literal node', () => {
             parent: data,
             data,
           })
-          ctx.report('ref://2 validation failed', ctx)
+          ctx.report('ref://2 validation failed', 'ref://2', ctx)
         },
       },
       'ref://3': {
@@ -380,7 +380,7 @@ test.group('Literal node', () => {
           parent: data,
           data,
         })
-        ctx.report('ref://2 failed', ctx)
+        ctx.report('ref://2 failed', 'ref', ctx)
       },
     })
 
@@ -443,7 +443,7 @@ test.group('Literal node', () => {
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    assert.deepEqual(await fn(data, meta, refs, errorReporter), 'VIRK')
+    assert.deepEqual(await fn(data, meta, refs.toJSON(), errorReporter), 'VIRK')
   })
 
   test('convert empty string to null', async ({ assert }) => {

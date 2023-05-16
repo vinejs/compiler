@@ -12,9 +12,9 @@
  * validation runtime code.
  */
 export function defineInlineFunctions(options: { convertEmptyStringsToNull: boolean }) {
-  return `function report(message, ctx) {
+  return `function report(message, rule, ctx, args) {
   ctx.isValid = false;
-  errorReporter.report(message, ctx.fieldPath);
+  errorReporter.report(message, rule, ctx, args);
 };
 function defineValue(value, ctx) {
   ${options.convertEmptyStringsToNull ? `if (value === '') { value = null; }` : ''}
@@ -24,14 +24,14 @@ function defineValue(value, ctx) {
 };
 function ensureExists(ctx) {
   if (ctx.value === undefined || ctx.value === null) {
-    ctx.report(REQUIRED, ctx);
+    ctx.report(REQUIRED, 'required', ctx);
     return false;
   }
   return true;
 };
 function ensureIsDefined(ctx) {
   if (ctx.value === undefined) {
-    ctx.report(REQUIRED, ctx);
+    ctx.report(REQUIRED, 'required', ctx);
     return false;
   }
   return true;
@@ -43,7 +43,7 @@ function ensureIsObject(ctx) {
   if (typeof ctx.value == 'object' && !Array.isArray(ctx.value)) {
     return true;
   }
-  ctx.report(NOT_AN_OBJECT, ctx);
+  ctx.report(NOT_AN_OBJECT, 'object', ctx);
   return false;
 };
 function ensureIsArray(ctx) {
@@ -53,7 +53,7 @@ function ensureIsArray(ctx) {
   if (Array.isArray(ctx.value)) {
     return true;
   }
-  ctx.report(NOT_AN_ARRAY, ctx);
+  ctx.report(NOT_AN_ARRAY, 'array', ctx);
   return false;
 };
 function copyProperties(val) {
