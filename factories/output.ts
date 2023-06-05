@@ -18,7 +18,11 @@ import { defineInlineFunctions } from '../src/scripts/define_inline_functions.js
 export function getInitialOutput(options?: CompilerOptions) {
   return [
     `async function anonymous(root,meta,refs,messagesProvider,errorReporter) {`,
-    ...defineInlineErrorMessages().split(EOL),
+    ...defineInlineErrorMessages({
+      required: 'value is required',
+      object: 'value is not a valid object',
+      array: 'value is not a valid array',
+    }).split(EOL),
     ...defineInlineFunctions(options || { convertEmptyStringsToNull: false }).split(EOL),
     'let out;',
   ]

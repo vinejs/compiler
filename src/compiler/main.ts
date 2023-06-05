@@ -73,7 +73,14 @@ export class Compiler {
    * Initiates the JS output
    */
   #initiateJSOutput() {
-    this.#buffer.writeStatement(defineInlineErrorMessages())
+    this.#buffer.writeStatement(
+      defineInlineErrorMessages({
+        required: 'value is required',
+        object: 'value is not a valid object',
+        array: 'value is not a valid array',
+        ...this.#options.messages,
+      })
+    )
     this.#buffer.writeStatement(defineInlineFunctions(this.#options))
     this.#buffer.writeStatement('let out;')
   }

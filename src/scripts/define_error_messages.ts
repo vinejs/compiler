@@ -7,12 +7,16 @@
  * file that was distributed with this source code.
  */
 
+import { CompilerOptions } from '../types.js'
+
 /**
  * Returns JS fragment for inline error messages for errors raised
  * by the compiler.
  */
-export function defineInlineErrorMessages() {
-  return `const REQUIRED = 'value is required';
-const NOT_AN_OBJECT = 'value is not a valid object';
-const NOT_AN_ARRAY = 'value is not a valid array';`
+export function defineInlineErrorMessages(
+  messages: Required<Exclude<CompilerOptions['messages'], undefined>>
+) {
+  return `const REQUIRED = '${messages.required}';
+const NOT_AN_OBJECT = '${messages.object}';
+const NOT_AN_ARRAY = '${messages.array}';`
 }

@@ -523,4 +523,14 @@ export type CompilerOptions = {
    * normalization
    */
   convertEmptyStringsToNull: boolean
+
+  /**
+   * Provide messages to use for required, object and
+   * array validations.
+   */
+  messages?: Partial<{
+    required: string
+    object: string
+    array: string
+  }>
 }
