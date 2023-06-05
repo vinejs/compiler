@@ -4,6 +4,7 @@ import Benchmark from 'benchmark'
 import Ajv, { AsyncValidateFunction } from 'ajv'
 import { Compiler } from '../src/compiler/main.js'
 import { ErrorReporterFactory } from '../factories/error_reporter.js'
+import { MessagesProviderFactory } from '../factories/messages_provider.js'
 
 const suite = new Benchmark.Suite()
 
@@ -19,6 +20,7 @@ const refs = {
     options: {},
   },
 }
+const messagesProvider = new MessagesProviderFactory().create()
 const errorReporter = new ErrorReporterFactory().create()
 
 const zodSchema = z.object({
@@ -113,7 +115,7 @@ suite
 
     // benchmark test function
     fn: function (deferred: any) {
-      fn(data, meta, refs, errorReporter).then(() => deferred.resolve())
+      fn(data, meta, refs, messagesProvider, errorReporter).then(() => deferred.resolve())
     },
   })
   .add('Ajv', {
