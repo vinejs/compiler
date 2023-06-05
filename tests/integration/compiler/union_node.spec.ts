@@ -12,6 +12,7 @@ import { Refs } from '../../../src/types.js'
 import { refsBuilder } from '../../../index.js'
 import { Compiler } from '../../../src/compiler/main.js'
 import { ErrorReporterFactory } from '../../../factories/error_reporter.js'
+import { MessagesProviderFactory } from '../../../factories/messages_provider.js'
 
 test.group('Union node', () => {
   test('create a union of literal values', async ({ assert }) => {
@@ -69,9 +70,11 @@ test.group('Union node', () => {
       },
     }
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
+
     const fn = compiler.compile()
-    assert.deepEqual(await fn(data, meta, refs, errorReporter), 'virk')
+    assert.deepEqual(await fn(data, meta, refs, messagesProvider, errorReporter), 'virk')
   })
 
   test('create a union of objects', async ({ assert }) => {
@@ -153,9 +156,13 @@ test.group('Union node', () => {
       'ref://2': () => true,
     }
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
+
     const fn = compiler.compile()
-    assert.deepEqual(await fn(data, meta, refs, errorReporter), { email: 'foo@bar.com' })
+    assert.deepEqual(await fn(data, meta, refs, messagesProvider, errorReporter), {
+      email: 'foo@bar.com',
+    })
   })
 
   test('create a union of arrays', async ({ assert }) => {
@@ -246,9 +253,13 @@ test.group('Union node', () => {
       'ref://2': () => true,
     }
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
+
     const fn = compiler.compile()
-    assert.deepEqual(await fn(data, meta, refs, errorReporter), [{ phone: '123456789' }])
+    assert.deepEqual(await fn(data, meta, refs, messagesProvider, errorReporter), [
+      { phone: '123456789' },
+    ])
   })
 
   test('create a union of unions', async ({ assert }) => {
@@ -397,9 +408,11 @@ test.group('Union node', () => {
       'ref://6': () => false,
     }
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
+
     const fn = compiler.compile()
-    assert.deepEqual(await fn(data, meta, refs, errorReporter), {
+    assert.deepEqual(await fn(data, meta, refs, messagesProvider, errorReporter), {
       email: 'foo@bar.com',
     })
   })
@@ -475,9 +488,11 @@ test.group('Union node', () => {
       },
     }
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
+
     const fn = compiler.compile()
-    assert.deepEqual(await fn(data, meta, refs, errorReporter), {
+    assert.deepEqual(await fn(data, meta, refs, messagesProvider, errorReporter), {
       white: { r: 255, g: 255, b: 255 },
       black: { r: 0, g: 0, b: 0 },
     })
@@ -577,9 +592,13 @@ test.group('Union node', () => {
       'ref://2': () => true,
     }
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
+
     const fn = compiler.compile()
-    assert.deepEqual(await fn(data, meta, refs, errorReporter), [{ phone: '123456789' }])
+    assert.deepEqual(await fn(data, meta, refs, messagesProvider, errorReporter), [
+      { phone: '123456789' },
+    ])
   })
 
   test('call parse function', async ({ assert }) => {
@@ -640,8 +659,10 @@ test.group('Union node', () => {
       },
     })
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
+
     const fn = compiler.compile()
-    assert.deepEqual(await fn(data, meta, refs.toJSON(), errorReporter), 'VIRK')
+    assert.deepEqual(await fn(data, meta, refs.toJSON(), messagesProvider, errorReporter), 'VIRK')
   })
 })

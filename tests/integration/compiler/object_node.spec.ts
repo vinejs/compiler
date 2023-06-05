@@ -12,6 +12,7 @@ import { refsBuilder } from '../../../index.js'
 import { ValidationRule } from '../../../src/types.js'
 import { Compiler } from '../../../src/compiler/main.js'
 import { ErrorReporterFactory } from '../../../factories/error_reporter.js'
+import { MessagesProviderFactory } from '../../../factories/messages_provider.js'
 
 test.group('Object node', () => {
   test('process an object field', async ({ assert }) => {
@@ -34,10 +35,11 @@ test.group('Object node', () => {
     const data: any = {}
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, {})
 
     // Mutation test:
@@ -67,11 +69,12 @@ test.group('Object node', () => {
     const data = undefined
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['value is required'])
@@ -100,11 +103,12 @@ test.group('Object node', () => {
     const data = null
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['value is required'])
@@ -143,11 +147,12 @@ test.group('Object node', () => {
     const data = 'hello world'
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['value is not a valid object'])
@@ -174,10 +179,11 @@ test.group('Object node', () => {
     const data = { username: 'virk', age: 34 }
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, {})
 
     // Mutation test:
@@ -226,11 +232,12 @@ test.group('Object node', () => {
     const data = {}
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['value is required', 'value is required'])
@@ -276,10 +283,11 @@ test.group('Object node', () => {
     const data = { username: 'virk', age: 34 }
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, { userName: 'virk', age: 34 })
 
     // Mutation test:
@@ -344,10 +352,11 @@ test.group('Object node', () => {
     }
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, {
       social: {
         githubUsername: 'thetutlage',
@@ -429,10 +438,11 @@ test.group('Object node', () => {
       },
     }
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, {})
   })
 
@@ -492,11 +502,12 @@ test.group('Object node', () => {
       },
     }
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['ref://2 validation failed'])
@@ -568,11 +579,12 @@ test.group('Object node', () => {
       },
     }
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['ref://2 validation failed'])
@@ -659,11 +671,12 @@ test.group('Object node', () => {
       },
     }
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['ref://2 validation failed'])
@@ -776,11 +789,12 @@ test.group('Object node', () => {
       },
     }
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['ref://2 validation failed'])
@@ -854,10 +868,11 @@ test.group('Object node', () => {
       'ref://1': () => true,
       'ref://2': () => false,
     }
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, { username: 'virk' })
 
     // Mutation test:
@@ -934,10 +949,11 @@ test.group('Object node', () => {
       'ref://1': () => true,
       'ref://2': () => false,
     }
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, { userName: 'virk', foo: 'bar', baz: 'bam' })
 
     // Mutation test:
@@ -970,11 +986,12 @@ test.group('Object node', () => {
     const data: any = ''
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['value is required'])
@@ -1010,10 +1027,11 @@ test.group('Object node', () => {
       return value
     })
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs.toJSON(), errorReporter)
+    const output = await fn(data, meta, refs.toJSON(), messagesProvider, errorReporter)
     assert.deepEqual(output, {})
 
     // Mutation test:
@@ -1043,10 +1061,11 @@ test.group('Object node | optional: true', () => {
     const data = {}
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, {})
   })
 
@@ -1070,10 +1089,11 @@ test.group('Object node | optional: true', () => {
     const data = undefined
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, undefined)
   })
 
@@ -1097,10 +1117,11 @@ test.group('Object node | optional: true', () => {
     const data = null
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, undefined)
   })
 
@@ -1126,11 +1147,12 @@ test.group('Object node | optional: true', () => {
     const data = 'hello world'
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['value is not a valid object'])
@@ -1160,10 +1182,11 @@ test.group('Object node | optional: true', () => {
     const data: any = ''
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.isUndefined(output)
   })
 })
@@ -1189,10 +1212,11 @@ test.group('Object node | allowNull: true', () => {
     const data = {}
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, {})
   })
 
@@ -1216,10 +1240,11 @@ test.group('Object node | allowNull: true', () => {
     const data = null
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, null)
   })
 
@@ -1245,11 +1270,12 @@ test.group('Object node | allowNull: true', () => {
     const data = undefined
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['value is required'])
@@ -1278,11 +1304,12 @@ test.group('Object node | allowNull: true', () => {
     const data = 'hello world'
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['value is not a valid object'])
@@ -1312,10 +1339,11 @@ test.group('Object node | allowNull: true', () => {
     const data: any = ''
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.isNull(output)
   })
 })
@@ -1341,10 +1369,11 @@ test.group('Object node | allowUnknownProperties', () => {
     const data = { username: 'virk', age: 34 }
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, { username: 'virk', age: 34 })
 
     // Mutation test:
@@ -1382,11 +1411,12 @@ test.group('Object node | allowUnknownProperties', () => {
     const data = { age: 34 }
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['value is required'])
@@ -1423,10 +1453,11 @@ test.group('Object node | allowUnknownProperties', () => {
     const data = { username: 'virk', age: 34 }
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, {
       userName: 'virk',
       age: 34,
@@ -1499,10 +1530,11 @@ test.group('Object node | allowUnknownProperties', () => {
     }
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, {
       social: {
         githubUsername: 'thetutlage',

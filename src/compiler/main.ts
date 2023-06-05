@@ -8,6 +8,7 @@
  */
 
 import { CompilerBuffer } from './buffer.js'
+import { TupleNodeCompiler } from './nodes/tuple.js'
 import { ArrayNodeCompiler } from './nodes/array.js'
 import { UnionNodeCompiler } from './nodes/union.js'
 import { RecordNodeCompiler } from './nodes/record.js'
@@ -29,8 +30,8 @@ import type {
   CompilerParent,
   CompilerOptions,
   ErrorReporterContract,
+  MessagesProviderContact,
 } from '../types.js'
-import { TupleNodeCompiler } from './nodes/tuple.js'
 
 /**
  * Representation of an async function
@@ -105,9 +106,17 @@ export class Compiler {
     data: any,
     meta: Record<string, any>,
     refs: Refs,
+    messagesProvider: MessagesProviderContact,
     errorReporter: ErrorReporterContract
   ) => Promise<T> {
-    return new AsyncFunction('root', 'meta', 'refs', 'errorReporter', this.#buffer.toString())
+    return new AsyncFunction(
+      'root',
+      'meta',
+      'refs',
+      'messagesProvider',
+      'errorReporter',
+      this.#buffer.toString()
+    )
   }
 
   /**

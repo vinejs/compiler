@@ -12,6 +12,7 @@ import { refsBuilder } from '../../../index.js'
 import { Compiler } from '../../../src/compiler/main.js'
 import type { ValidationRule } from '../../../src/types.js'
 import { ErrorReporterFactory } from '../../../factories/error_reporter.js'
+import { MessagesProviderFactory } from '../../../factories/messages_provider.js'
 
 test.group('Literal node', () => {
   test('process value for a field', async ({ assert }) => {
@@ -31,10 +32,11 @@ test.group('Literal node', () => {
     const data = 'virk'
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, 'virk')
   })
 
@@ -55,10 +57,11 @@ test.group('Literal node', () => {
     const data = ''
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, '')
   })
 
@@ -81,12 +84,13 @@ test.group('Literal node', () => {
     const data = undefined
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
 
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['value is required'])
@@ -112,12 +116,13 @@ test.group('Literal node', () => {
     const data = null
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
 
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['value is required'])
@@ -185,10 +190,11 @@ test.group('Literal node', () => {
       },
     }
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, 'virk')
   })
 
@@ -254,11 +260,12 @@ test.group('Literal node', () => {
       },
     }
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['ref://2 validation failed'])
@@ -327,11 +334,12 @@ test.group('Literal node', () => {
       },
     }
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['ref://2 validation failed'])
@@ -384,11 +392,12 @@ test.group('Literal node', () => {
       },
     })
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     try {
-      await fn(data, meta, refs.toJSON(), errorReporter)
+      await fn(data, meta, refs.toJSON(), messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['ref://2 failed'])
@@ -440,10 +449,11 @@ test.group('Literal node', () => {
       },
     })
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    assert.deepEqual(await fn(data, meta, refs.toJSON(), errorReporter), 'VIRK')
+    assert.deepEqual(await fn(data, meta, refs.toJSON(), messagesProvider, errorReporter), 'VIRK')
   })
 
   test('convert empty string to null', async ({ assert }) => {
@@ -468,11 +478,12 @@ test.group('Literal node', () => {
     const data = ''
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['value is required'])
@@ -504,10 +515,11 @@ test.group('Literal node', () => {
       return value
     })
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs.toJSON(), errorReporter)
+    const output = await fn(data, meta, refs.toJSON(), messagesProvider, errorReporter)
     assert.deepEqual(output, 'virk')
   })
 })
@@ -530,10 +542,11 @@ test.group('Literal node | optional: true', () => {
     const data = 'virk'
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, 'virk')
   })
 
@@ -554,10 +567,11 @@ test.group('Literal node | optional: true', () => {
     const data = ''
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, '')
   })
 
@@ -578,10 +592,11 @@ test.group('Literal node | optional: true', () => {
     const data = undefined
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, undefined)
   })
 
@@ -602,10 +617,11 @@ test.group('Literal node | optional: true', () => {
     const data = null
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, undefined)
   })
 
@@ -670,10 +686,11 @@ test.group('Literal node | optional: true', () => {
       },
     }
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, 'virk')
   })
 
@@ -720,10 +737,11 @@ test.group('Literal node | optional: true', () => {
       },
     }
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, undefined)
   })
 
@@ -779,10 +797,11 @@ test.group('Literal node | optional: true', () => {
       },
     }
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, undefined)
   })
 
@@ -806,10 +825,11 @@ test.group('Literal node | optional: true', () => {
     const data = ''
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.isUndefined(output)
   })
 })
@@ -832,10 +852,11 @@ test.group('Literal node | allowNull: true', () => {
     const data = 'virk'
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, 'virk')
   })
 
@@ -856,10 +877,11 @@ test.group('Literal node | allowNull: true', () => {
     const data = ''
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, '')
   })
 
@@ -880,10 +902,11 @@ test.group('Literal node | allowNull: true', () => {
     const data = null
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, null)
   })
 
@@ -906,12 +929,13 @@ test.group('Literal node | allowNull: true', () => {
     const data = undefined
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
 
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['value is required'])
@@ -979,10 +1003,11 @@ test.group('Literal node | allowNull: true', () => {
       },
     }
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, 'virk')
   })
 
@@ -1029,10 +1054,11 @@ test.group('Literal node | allowNull: true', () => {
       },
     }
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, null)
   })
 
@@ -1088,10 +1114,11 @@ test.group('Literal node | allowNull: true', () => {
       },
     }
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, null)
   })
 
@@ -1115,10 +1142,11 @@ test.group('Literal node | allowNull: true', () => {
     const data = ''
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.isNull(output)
   })
 })

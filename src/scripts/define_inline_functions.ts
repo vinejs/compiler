@@ -14,7 +14,7 @@
 export function defineInlineFunctions(options: { convertEmptyStringsToNull: boolean }) {
   return `function report(message, rule, ctx, args) {
   ctx.isValid = false;
-  errorReporter.report(message, rule, ctx, args);
+  errorReporter.report(messagesProvider.getMessage(message, rule, ctx, args), rule, ctx, args);
 };
 function defineValue(value, ctx) {
   ${options.convertEmptyStringsToNull ? `if (value === '') { value = null; }` : ''}

@@ -17,7 +17,7 @@ import { defineInlineFunctions } from '../src/scripts/define_inline_functions.js
  */
 export function getInitialOutput(options?: CompilerOptions) {
   return [
-    `async function anonymous(root,meta,refs,errorReporter) {`,
+    `async function anonymous(root,meta,refs,messagesProvider,errorReporter) {`,
     ...defineInlineErrorMessages().split(EOL),
     ...defineInlineFunctions(options || { convertEmptyStringsToNull: false }).split(EOL),
     'let out;',

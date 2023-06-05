@@ -498,6 +498,23 @@ export interface ErrorReporterContract {
 }
 
 /**
+ * Messages provider is used to resolve validation error messages
+ * during validation.
+ */
+export interface MessagesProviderContact {
+  /**
+   * Returns a validation message for a given field + rule. The args
+   * may get passed by a validation rule to share additional context.
+   */
+  getMessage(
+    defaultMessage: string,
+    rule: string,
+    ctx: FieldContext,
+    args?: Record<string, any>
+  ): string
+}
+
+/**
  * Options accepted by the compiler
  */
 export type CompilerOptions = {

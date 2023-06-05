@@ -12,6 +12,7 @@ import { refsBuilder } from '../../../index.js'
 import { ValidationRule } from '../../../src/types.js'
 import { Compiler } from '../../../src/compiler/main.js'
 import { ErrorReporterFactory } from '../../../factories/error_reporter.js'
+import { MessagesProviderFactory } from '../../../factories/messages_provider.js'
 
 test.group('Record node', () => {
   test('process a record field', async ({ assert }) => {
@@ -40,10 +41,11 @@ test.group('Record node', () => {
     const data: any = {}
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, {})
 
     // Mutation test:
@@ -79,11 +81,12 @@ test.group('Record node', () => {
     const data = undefined
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['value is required'])
@@ -118,11 +121,12 @@ test.group('Record node', () => {
     const data = null
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['value is required'])
@@ -157,11 +161,12 @@ test.group('Record node', () => {
     const data = 'hello world'
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['value is not a valid object'])
@@ -194,10 +199,11 @@ test.group('Record node', () => {
     const data = { white: '#fff', black: '#000' }
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, { white: '#fff', black: '#000' })
 
     // Mutation test:
@@ -242,11 +248,12 @@ test.group('Record node', () => {
     const data = { white: '#fff', black: '#000' }
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, [
@@ -294,10 +301,11 @@ test.group('Record node', () => {
     }
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, {
       white: { bg: '#f3f3f3', fg: '#fff' },
       black: { bg: '#000', fg: '#000' },
@@ -381,10 +389,11 @@ test.group('Record node', () => {
       },
     }
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, { white: '#fff', black: '#000' })
   })
 
@@ -450,12 +459,13 @@ test.group('Record node', () => {
       },
     }
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
 
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['ref://2 validation failed'])
@@ -533,12 +543,13 @@ test.group('Record node', () => {
       },
     }
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
 
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['ref://2 validation failed'])
@@ -608,12 +619,13 @@ test.group('Record node', () => {
       },
     }
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
 
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['ref://2 validation failed'])
@@ -696,12 +708,13 @@ test.group('Record node', () => {
       },
     }
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
 
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['ref://2 validation failed'])
@@ -739,11 +752,12 @@ test.group('Record node', () => {
     const data: any = ''
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['value is required'])
@@ -785,10 +799,11 @@ test.group('Record node', () => {
       return value
     })
 
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs.toJSON(), errorReporter)
+    const output = await fn(data, meta, refs.toJSON(), messagesProvider, errorReporter)
     assert.deepEqual(output, {})
 
     // Mutation test:
@@ -824,10 +839,11 @@ test.group('Record node | optional: true', () => {
     const data = {}
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, {})
   })
 
@@ -857,10 +873,11 @@ test.group('Record node | optional: true', () => {
     const data = undefined
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, undefined)
   })
 
@@ -890,10 +907,11 @@ test.group('Record node | optional: true', () => {
     const data = null
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, undefined)
   })
 
@@ -925,11 +943,12 @@ test.group('Record node | optional: true', () => {
     const data = 'hello world'
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['value is not a valid object'])
@@ -965,10 +984,11 @@ test.group('Record node | optional: true', () => {
     const data: any = ''
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.isUndefined(output)
   })
 })
@@ -1000,10 +1020,11 @@ test.group('Record node | allowNull: true', () => {
     const data = {}
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, {})
   })
 
@@ -1035,12 +1056,13 @@ test.group('Record node | allowNull: true', () => {
     const data = undefined
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
 
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['value is required'])
@@ -1073,10 +1095,11 @@ test.group('Record node | allowNull: true', () => {
     const data = null
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.deepEqual(output, null)
   })
 
@@ -1108,11 +1131,12 @@ test.group('Record node | allowNull: true', () => {
     const data = 'hello world'
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
     try {
-      await fn(data, meta, refs, errorReporter)
+      await fn(data, meta, refs, messagesProvider, errorReporter)
     } catch (error) {
       assert.equal(error.message, 'Validation failure')
       assert.deepEqual(error.messages, ['value is not a valid object'])
@@ -1148,10 +1172,11 @@ test.group('Record node | allowNull: true', () => {
     const data: any = ''
     const meta = {}
     const refs = {}
+    const messagesProvider = new MessagesProviderFactory().create()
     const errorReporter = new ErrorReporterFactory().create()
 
     const fn = compiler.compile()
-    const output = await fn(data, meta, refs, errorReporter)
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
     assert.isNull(output)
   })
 })
