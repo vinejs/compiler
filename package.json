@@ -72,6 +72,9 @@
     "url": "https://github.com/vinejs/compiler/issues"
   },
   "homepage": "https://github.com/vinejs/compiler#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "eslintConfig": {
     "extends": [
       "plugin:adonis/typescriptPackage",
