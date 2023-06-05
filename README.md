@@ -4,6 +4,11 @@
 
 The compiler is used to convert an array of schema nodes to a function with imperative JavaScript code that can be executed to validate a data object. The compiler operates at the low-level and does not offer any JavaScript API for creating the schema (see vinejs for user-land APIs).
 
+## Benchmarks
+Ajv performs better in some instances because Ajv holds a reference to the input data object and does not create a new output object. Though Ajv behavior results in slightly better performance, it comes at the cost of sharing the same pointers between the input and output objects, and hence mutating one will mutate the other as well.
+
+![](./vine_benchmarks.png)
+
 ## Schema
 
 Schema refers to an object or an array of objects that the compiler takes as an input to generate JavaScript output. Following is an example of an `object` schema node with `username` property.
