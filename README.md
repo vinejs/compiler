@@ -5,6 +5,7 @@
 The compiler is used to convert an array of schema nodes to a function with imperative JavaScript code that can be executed to validate a data object. The compiler operates at the low-level and does not offer any JavaScript API for creating the schema (see vinejs for user-land APIs).
 
 ## Benchmarks
+
 Ajv performs better in some instances because Ajv holds a reference to the input data object and does not create a new output object. Though Ajv behavior results in slightly better performance, it comes at the cost of sharing the same pointers between the input and output objects, and hence mutating one will mutate the other as well.
 
 ![](./vine_benchmarks.png)
@@ -115,7 +116,6 @@ The validation rules are not executed by default when the field's value is `null
 ## Writing value to the output
 
 If the value of a field is `null` or `undefined` it will not be written to the output. However, the `null` values are written to the output when `allowNull` flag is enabled.
-
 
 [gh-workflow-image]: https://img.shields.io/github/actions/workflow/status/vinejs/compiler/test.yml?style=for-the-badge
 [gh-workflow-url]: https://github.com/vinejs/compiler/actions/workflows/test.yml 'Github action'

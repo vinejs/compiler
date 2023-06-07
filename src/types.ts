@@ -67,7 +67,7 @@ export type FieldContext = {
    * The data property is the top-level object under validation.
    * It is always an object with string based keys
    */
-  data: Record<string, any>
+  data: any
 
   /**
    * Shared metadata across the entire validation lifecycle. It can be
@@ -102,42 +102,24 @@ export type FieldContext = {
    * In case of arrays, the `*` wildcard is used.
    */
   wildCardPath: string
-} & (
-  | {
-      /**
-       * The parent property is the parent of the field. It could be an
-       * array or an object.
-       */
-      parent: Record<string, any>
 
-      /**
-       * Name of the field under validation
-       */
-      fieldName: string
+  /**
+   * The parent property is the parent of the field. It could be an
+   * array or an object.
+   */
+  parent: any
 
-      /**
-       * Is this field an array member
-       */
-      isArrayMember: false
-    }
-  | {
-      /**
-       * The parent property is the parent of the field. It could be an
-       * array or an object.
-       */
-      parent: any[]
+  /**
+   * Name of the field under validation. In case of an array, the field
+   * name will be a number
+   */
+  fieldName: string | number
 
-      /**
-       * Name of the field under validation
-       */
-      fieldName: number
-
-      /**
-       * Is this field an array member
-       */
-      isArrayMember: true
-    }
-)
+  /**
+   * Is this field an array member
+   */
+  isArrayMember: boolean
+}
 
 /**
  * The shape of validation rule picked from the
