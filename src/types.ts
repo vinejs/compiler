@@ -65,7 +65,6 @@ export type FieldContext = {
 
   /**
    * The data property is the top-level object under validation.
-   * It is always an object with string based keys
    */
   data: any
 
