@@ -113,7 +113,7 @@ export type FieldContext = {
    * Name of the field under validation. In case of an array, the field
    * name will be a number
    */
-  fieldName: string | number
+  name: string | number
 
   /**
    * Is this field an array member
