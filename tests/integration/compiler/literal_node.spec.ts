@@ -161,10 +161,10 @@ test.group('Literal node', () => {
 
     const refs: Record<string, ValidationRule> = {
       'ref://2': {
-        validator(value, options, ctx) {
+        validator(value, options, field) {
           assert.equal(value, 'virk')
           assert.isUndefined(options)
-          assert.containsSubset(ctx, {
+          assert.containsSubset(field, {
             fieldName: '',
             isArrayMember: false,
             isValid: true,
@@ -175,10 +175,10 @@ test.group('Literal node', () => {
         },
       },
       'ref://3': {
-        validator(value, options, ctx) {
+        validator(value, options, field) {
           assert.equal(value, 'virk')
           assert.isUndefined(options)
-          assert.containsSubset(ctx, {
+          assert.containsSubset(field, {
             fieldName: '',
             isArrayMember: false,
             isValid: true,
@@ -230,10 +230,10 @@ test.group('Literal node', () => {
 
     const refs: Record<string, ValidationRule> = {
       'ref://2': {
-        validator(value, options, ctx) {
+        validator(value, options, field) {
           assert.equal(value, 'virk')
           assert.isUndefined(options)
-          assert.containsSubset(ctx, {
+          assert.containsSubset(field, {
             fieldName: '',
             isArrayMember: false,
             isValid: true,
@@ -241,14 +241,14 @@ test.group('Literal node', () => {
             parent: data,
             data,
           })
-          ctx.report('ref://2 validation failed', 'ref://2', ctx)
+          field.report('ref://2 validation failed', 'ref://2', field)
         },
       },
       'ref://3': {
-        validator(value, options, ctx) {
+        validator(value, options, field) {
           assert.equal(value, 'virk')
           assert.isUndefined(options)
-          assert.containsSubset(ctx, {
+          assert.containsSubset(field, {
             fieldName: '',
             isArrayMember: false,
             isValid: true,
@@ -304,10 +304,10 @@ test.group('Literal node', () => {
 
     const refs: Record<string, ValidationRule> = {
       'ref://2': {
-        validator(value, options, ctx) {
+        validator(value, options, field) {
           assert.equal(value, 'virk')
           assert.isUndefined(options)
-          assert.containsSubset(ctx, {
+          assert.containsSubset(field, {
             fieldName: '',
             isArrayMember: false,
             isValid: true,
@@ -315,14 +315,14 @@ test.group('Literal node', () => {
             parent: data,
             data,
           })
-          ctx.report('ref://2 validation failed', 'ref://2', ctx)
+          field.report('ref://2 validation failed', 'ref://2', field)
         },
       },
       'ref://3': {
-        validator(value, options, ctx) {
+        validator(value, options, field) {
           assert.equal(value, 'virk')
           assert.isUndefined(options)
-          assert.containsSubset(ctx, {
+          assert.containsSubset(field, {
             fieldName: '',
             isArrayMember: false,
             isValid: false,
@@ -377,10 +377,10 @@ test.group('Literal node', () => {
       throw new Error('Never expected to reach here')
     })
     refs.trackValidation({
-      validator(value, options, ctx) {
+      validator(value, options, field) {
         assert.equal(value, 'virk')
         assert.isUndefined(options)
-        assert.containsSubset(ctx, {
+        assert.containsSubset(field, {
           fieldName: '',
           isArrayMember: false,
           isValid: true,
@@ -388,7 +388,7 @@ test.group('Literal node', () => {
           parent: data,
           data,
         })
-        ctx.report('ref://2 failed', 'ref', ctx)
+        field.report('ref://2 failed', 'ref', field)
       },
     })
 
@@ -435,10 +435,10 @@ test.group('Literal node', () => {
       return value.toUpperCase()
     })
     refs.trackValidation({
-      validator(value, options, ctx) {
+      validator(value, options, field) {
         assert.equal(value, 'virk')
         assert.isUndefined(options)
-        assert.containsSubset(ctx, {
+        assert.containsSubset(field, {
           fieldName: '',
           isArrayMember: false,
           isValid: true,
@@ -657,10 +657,10 @@ test.group('Literal node | optional: true', () => {
 
     const refs: Record<string, ValidationRule> = {
       'ref://2': {
-        validator(value, options, ctx) {
+        validator(value, options, field) {
           assert.equal(value, 'virk')
           assert.isUndefined(options)
-          assert.containsSubset(ctx, {
+          assert.containsSubset(field, {
             fieldName: '',
             isArrayMember: false,
             isValid: true,
@@ -671,10 +671,10 @@ test.group('Literal node | optional: true', () => {
         },
       },
       'ref://3': {
-        validator(value, options, ctx) {
+        validator(value, options, field) {
           assert.equal(value, 'virk')
           assert.isUndefined(options)
-          assert.containsSubset(ctx, {
+          assert.containsSubset(field, {
             fieldName: '',
             isArrayMember: false,
             isValid: true,
@@ -782,10 +782,10 @@ test.group('Literal node | optional: true', () => {
         },
       },
       'ref://3': {
-        validator(value, options, ctx) {
+        validator(value, options, field) {
           assert.equal(value, undefined)
           assert.isUndefined(options)
-          assert.containsSubset(ctx, {
+          assert.containsSubset(field, {
             fieldName: '',
             isArrayMember: false,
             isValid: true,
@@ -974,10 +974,10 @@ test.group('Literal node | allowNull: true', () => {
 
     const refs: Record<string, ValidationRule> = {
       'ref://2': {
-        validator(value, options, ctx) {
+        validator(value, options, field) {
           assert.equal(value, 'virk')
           assert.isUndefined(options)
-          assert.containsSubset(ctx, {
+          assert.containsSubset(field, {
             fieldName: '',
             isArrayMember: false,
             isValid: true,
@@ -988,10 +988,10 @@ test.group('Literal node | allowNull: true', () => {
         },
       },
       'ref://3': {
-        validator(value, options, ctx) {
+        validator(value, options, field) {
           assert.equal(value, 'virk')
           assert.isUndefined(options)
-          assert.containsSubset(ctx, {
+          assert.containsSubset(field, {
             fieldName: '',
             isArrayMember: false,
             isValid: true,
@@ -1099,10 +1099,10 @@ test.group('Literal node | allowNull: true', () => {
         },
       },
       'ref://3': {
-        validator(value, options, ctx) {
+        validator(value, options, field) {
           assert.isNull(value)
           assert.isUndefined(options)
-          assert.containsSubset(ctx, {
+          assert.containsSubset(field, {
             fieldName: '',
             isArrayMember: false,
             isValid: true,

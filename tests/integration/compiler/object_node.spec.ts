@@ -409,10 +409,10 @@ test.group('Object node', () => {
 
     const refs: Record<string, ValidationRule> = {
       'ref://2': {
-        validator(value, options, ctx) {
+        validator(value, options, field) {
           assert.deepEqual(value, {})
           assert.isUndefined(options)
-          assert.containsSubset(ctx, {
+          assert.containsSubset(field, {
             fieldName: '',
             isArrayMember: false,
             isValid: true,
@@ -423,10 +423,10 @@ test.group('Object node', () => {
         },
       },
       'ref://3': {
-        validator(value, options, ctx) {
+        validator(value, options, field) {
           assert.deepEqual(value, {})
           assert.isUndefined(options)
-          assert.containsSubset(ctx, {
+          assert.containsSubset(field, {
             fieldName: '',
             isArrayMember: false,
             isValid: true,
@@ -481,10 +481,10 @@ test.group('Object node', () => {
 
     const refs: Record<string, ValidationRule> = {
       'ref://2': {
-        validator(value, options, ctx) {
+        validator(value, options, field) {
           assert.deepEqual(value, {})
           assert.isUndefined(options)
-          assert.containsSubset(ctx, {
+          assert.containsSubset(field, {
             fieldName: '',
             isArrayMember: false,
             isValid: true,
@@ -492,7 +492,7 @@ test.group('Object node', () => {
             parent: data,
             data,
           })
-          ctx.report('ref://2 validation failed', 'ref', ctx)
+          field.report('ref://2 validation failed', 'ref', field)
         },
       },
       'ref://3': {
@@ -549,10 +549,10 @@ test.group('Object node', () => {
 
     const refs: Record<string, ValidationRule> = {
       'ref://2': {
-        validator(value, options, ctx) {
+        validator(value, options, field) {
           assert.deepEqual(value, {})
           assert.isUndefined(options)
-          assert.containsSubset(ctx, {
+          assert.containsSubset(field, {
             fieldName: '',
             isArrayMember: false,
             isValid: true,
@@ -560,14 +560,14 @@ test.group('Object node', () => {
             parent: data,
             data,
           })
-          ctx.report('ref://2 validation failed', 'ref', ctx)
+          field.report('ref://2 validation failed', 'ref', field)
         },
       },
       'ref://3': {
-        validator(value, options, ctx) {
+        validator(value, options, field) {
           assert.deepEqual(value, {})
           assert.isUndefined(options)
-          assert.containsSubset(ctx, {
+          assert.containsSubset(field, {
             fieldName: '',
             isArrayMember: false,
             isValid: false,
@@ -650,10 +650,10 @@ test.group('Object node', () => {
 
     const refs: Record<string, ValidationRule> = {
       'ref://2': {
-        validator(value, options, ctx) {
+        validator(value, options, field) {
           assert.deepEqual(value, { username: 'virk', age: 34 })
           assert.isUndefined(options)
-          assert.containsSubset(ctx, {
+          assert.containsSubset(field, {
             fieldName: '',
             isArrayMember: false,
             isValid: true,
@@ -661,7 +661,7 @@ test.group('Object node', () => {
             parent: data,
             data,
           })
-          ctx.report('ref://2 validation failed', 'ref', ctx)
+          field.report('ref://2 validation failed', 'ref', field)
         },
       },
       'ref://3': {
@@ -744,10 +744,10 @@ test.group('Object node', () => {
 
     const refs: Record<string, ValidationRule> = {
       'ref://2': {
-        validator(value, options, ctx) {
+        validator(value, options, field) {
           assert.deepEqual(value, { username: 'virk', age: 34 })
           assert.isUndefined(options)
-          assert.containsSubset(ctx, {
+          assert.containsSubset(field, {
             fieldName: '',
             isArrayMember: false,
             isValid: true,
@@ -755,15 +755,15 @@ test.group('Object node', () => {
             parent: data,
             data,
           })
-          ctx.report('ref://2 validation failed', 'ref', ctx)
+          field.report('ref://2 validation failed', 'ref', field)
         },
       },
       'ref://3': {
-        validator(value, options, ctx) {
-          if (ctx.fieldName === 'username') {
+        validator(value, options, field) {
+          if (field.name === 'username') {
             assert.equal(value, 'virk')
             assert.isUndefined(options)
-            assert.containsSubset(ctx, {
+            assert.containsSubset(field, {
               fieldName: 'username',
               wildCardPath: 'username',
               isArrayMember: false,
@@ -775,7 +775,7 @@ test.group('Object node', () => {
           } else {
             assert.equal(value, 34)
             assert.isUndefined(options)
-            assert.containsSubset(ctx, {
+            assert.containsSubset(field, {
               fieldName: 'age',
               wildCardPath: 'age',
               isArrayMember: false,

@@ -537,10 +537,10 @@ test.group('Tuple node', () => {
 
     const refs: Record<string, ValidationRule> = {
       'ref://2': {
-        validator(value, options, ctx) {
+        validator(value, options, field) {
           assert.deepEqual(value, [])
           assert.isUndefined(options)
-          assert.containsSubset(ctx, {
+          assert.containsSubset(field, {
             fieldName: '',
             isArrayMember: false,
             isValid: true,
@@ -551,10 +551,10 @@ test.group('Tuple node', () => {
         },
       },
       'ref://3': {
-        validator(value, options, ctx) {
+        validator(value, options, field) {
           assert.deepEqual(value, [])
           assert.isUndefined(options)
-          assert.containsSubset(ctx, {
+          assert.containsSubset(field, {
             fieldName: '',
             isArrayMember: false,
             isValid: true,
@@ -608,10 +608,10 @@ test.group('Tuple node', () => {
 
     const refs: Record<string, ValidationRule> = {
       'ref://2': {
-        validator(value, options, ctx) {
+        validator(value, options, field) {
           assert.deepEqual(value, [])
           assert.isUndefined(options)
-          assert.containsSubset(ctx, {
+          assert.containsSubset(field, {
             fieldName: '',
             isArrayMember: false,
             isValid: true,
@@ -619,7 +619,7 @@ test.group('Tuple node', () => {
             parent: data,
             data,
           })
-          ctx.report('ref://2 validation failed', 'ref', ctx)
+          field.report('ref://2 validation failed', 'ref', field)
         },
       },
       'ref://3': {
@@ -675,10 +675,10 @@ test.group('Tuple node', () => {
 
     const refs: Record<string, ValidationRule> = {
       'ref://2': {
-        validator(value, options, ctx) {
+        validator(value, options, field) {
           assert.deepEqual(value, [])
           assert.isUndefined(options)
-          assert.containsSubset(ctx, {
+          assert.containsSubset(field, {
             fieldName: '',
             isArrayMember: false,
             isValid: true,
@@ -686,14 +686,14 @@ test.group('Tuple node', () => {
             parent: data,
             data,
           })
-          ctx.report('ref://2 validation failed', 'ref', ctx)
+          field.report('ref://2 validation failed', 'ref', field)
         },
       },
       'ref://3': {
-        validator(value, options, ctx) {
+        validator(value, options, field) {
           assert.deepEqual(value, [])
           assert.isUndefined(options)
-          assert.containsSubset(ctx, {
+          assert.containsSubset(field, {
             fieldName: '',
             isArrayMember: false,
             isValid: false,
@@ -777,10 +777,10 @@ test.group('Tuple node', () => {
 
     const refs: Record<string, ValidationRule> = {
       'ref://2': {
-        validator(value, options, ctx) {
+        validator(value, options, field) {
           assert.deepEqual(value, ['hello world', 'hi world'])
           assert.isUndefined(options)
-          assert.containsSubset(ctx, {
+          assert.containsSubset(field, {
             fieldName: '',
             isArrayMember: false,
             isValid: true,
@@ -788,7 +788,7 @@ test.group('Tuple node', () => {
             parent: data,
             data,
           })
-          ctx.report('ref://2 validation failed', 'ref', ctx)
+          field.report('ref://2 validation failed', 'ref', field)
         },
       },
       'ref://3': {
@@ -870,10 +870,10 @@ test.group('Tuple node', () => {
 
     const refs: Record<string, ValidationRule> = {
       'ref://2': {
-        validator(value, options, ctx) {
+        validator(value, options, field) {
           assert.deepEqual(value, ['hello world', 'hi world'])
           assert.isUndefined(options)
-          assert.containsSubset(ctx, {
+          assert.containsSubset(field, {
             fieldName: '',
             isArrayMember: false,
             isValid: true,
@@ -881,15 +881,15 @@ test.group('Tuple node', () => {
             parent: data,
             data,
           })
-          ctx.report('ref://2 validation failed', 'ref', ctx)
+          field.report('ref://2 validation failed', 'ref', field)
         },
       },
       'ref://3': {
-        validator(value, options, ctx) {
-          if (ctx.fieldName === 0) {
+        validator(value, options, field) {
+          if (field.name === 0) {
             assert.equal(value, 'hello world')
             assert.isUndefined(options)
-            assert.containsSubset(ctx, {
+            assert.containsSubset(field, {
               fieldName: 0,
               wildCardPath: '0',
               isArrayMember: true,
@@ -901,7 +901,7 @@ test.group('Tuple node', () => {
           } else {
             assert.equal(value, 'hi world')
             assert.isUndefined(options)
-            assert.containsSubset(ctx, {
+            assert.containsSubset(field, {
               fieldName: 1,
               wildCardPath: '1',
               isArrayMember: true,
