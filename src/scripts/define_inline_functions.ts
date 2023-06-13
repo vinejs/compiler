@@ -12,48 +12,48 @@
  * validation runtime code.
  */
 export function defineInlineFunctions(options: { convertEmptyStringsToNull: boolean }) {
-  return `function report(message, rule, ctx, args) {
-  ctx.isValid = false;
-  errorReporter.report(messagesProvider.getMessage(message, rule, ctx, args), rule, ctx, args);
+  return `function report(message, rule, field, args) {
+  field.isValid = false;
+  errorReporter.report(messagesProvider.getMessage(message, rule, field, args), rule, field, args);
 };
-function defineValue(value, ctx) {
+function defineValue(value, field) {
   ${options.convertEmptyStringsToNull ? `if (value === '') { value = null; }` : ''}
-  ctx.value = value;
-  ctx.isDefined = value !== undefined && value !== null;
-  return ctx;
+  field.value = value;
+  field.isDefined = value !== undefined && value !== null;
+  return field;
 };
-function ensureExists(ctx) {
-  if (ctx.value === undefined || ctx.value === null) {
-    ctx.report(REQUIRED, 'required', ctx);
+function ensureExists(field) {
+  if (field.value === undefined || field.value === null) {
+    field.report(REQUIRED, 'required', field);
     return false;
   }
   return true;
 };
-function ensureIsDefined(ctx) {
-  if (ctx.value === undefined) {
-    ctx.report(REQUIRED, 'required', ctx);
+function ensureIsDefined(field) {
+  if (field.value === undefined) {
+    field.report(REQUIRED, 'required', field);
     return false;
   }
   return true;
 };
-function ensureIsObject(ctx) {
-  if (!ctx.isDefined) {
+function ensureIsObject(field) {
+  if (!field.isDefined) {
     return false;
   }
-  if (typeof ctx.value == 'object' && !Array.isArray(ctx.value)) {
+  if (typeof field.value == 'object' && !Array.isArray(field.value)) {
     return true;
   }
-  ctx.report(NOT_AN_OBJECT, 'object', ctx);
+  field.report(NOT_AN_OBJECT, 'object', field);
   return false;
 };
-function ensureIsArray(ctx) {
-  if (!ctx.isDefined) {
+function ensureIsArray(field) {
+  if (!field.isDefined) {
     return false;
   }
-  if (Array.isArray(ctx.value)) {
+  if (Array.isArray(field.value)) {
     return true;
   }
-  ctx.report(NOT_AN_ARRAY, 'array', ctx);
+  field.report(NOT_AN_ARRAY, 'array', field);
   return false;
 };
 function copyProperties(val) {

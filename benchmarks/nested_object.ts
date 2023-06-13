@@ -12,9 +12,9 @@ const data = { profile: { username: 'virk' } }
 const meta = {}
 const refs = {
   'ref://1': {
-    validator(value: unknown, _: any, ctx: any) {
+    validator(value: unknown, _: any, field: any) {
       if (typeof value !== 'string') {
-        ctx.report('Value is not a string')
+        field.report('Value is not a string')
       }
     },
     options: {},

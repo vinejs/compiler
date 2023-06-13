@@ -77,7 +77,7 @@ export type FieldContext = {
   /**
    * Mutate the value of field under validation.
    */
-  mutate(newValue: any, ctx: FieldContext): void
+  mutate(newValue: any, field: FieldContext): void
 
   /**
    * Report error to the error reporter
@@ -128,7 +128,7 @@ export type ValidationRule = {
   /**
    * Performs validation
    */
-  validator(value: unknown, options: any, ctx: FieldContext): any
+  validator(value: unknown, options: any, field: FieldContext): any
 
   /**
    * Options to pass
@@ -144,12 +144,12 @@ export type ParseFn = (value: unknown) => any
 /**
  * The shape of transform function picked from the refs
  */
-export type TransformFn<Input, Output> = (value: Input, ctx: FieldContext) => Output
+export type TransformFn<Input, Output> = (value: Input, field: FieldContext) => Output
 
 /**
  * The shape of conditional function used for narrowing down unions.
  */
-export type ConditionalFn<Input> = (value: Input, ctx: FieldContext) => boolean
+export type ConditionalFn<Input> = (value: Input, field: FieldContext) => boolean
 
 /**
  * Shape of a validation rule accepted by the compiler
@@ -475,7 +475,7 @@ export interface ErrorReporterContract {
   /**
    * Report error for a field
    */
-  report(message: string, rule: string, ctx: FieldContext, args?: Record<string, any>): any
+  report(message: string, rule: string, field: FieldContext, args?: Record<string, any>): any
 }
 
 /**
@@ -490,7 +490,7 @@ export interface MessagesProviderContact {
   getMessage(
     defaultMessage: string,
     rule: string,
-    ctx: FieldContext,
+    field: FieldContext,
     args?: Record<string, any>
   ): string
 }
