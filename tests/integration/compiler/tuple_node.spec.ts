@@ -541,7 +541,7 @@ test.group('Tuple node', () => {
           assert.deepEqual(value, [])
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -555,7 +555,7 @@ test.group('Tuple node', () => {
           assert.deepEqual(value, [])
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -612,7 +612,7 @@ test.group('Tuple node', () => {
           assert.deepEqual(value, [])
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -679,7 +679,7 @@ test.group('Tuple node', () => {
           assert.deepEqual(value, [])
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -694,7 +694,7 @@ test.group('Tuple node', () => {
           assert.deepEqual(value, [])
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: false,
             meta: {},
@@ -781,7 +781,7 @@ test.group('Tuple node', () => {
           assert.deepEqual(value, ['hello world', 'hi world'])
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -874,7 +874,7 @@ test.group('Tuple node', () => {
           assert.deepEqual(value, ['hello world', 'hi world'])
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -890,7 +890,7 @@ test.group('Tuple node', () => {
             assert.equal(value, 'hello world')
             assert.isUndefined(options)
             assert.containsSubset(field, {
-              fieldName: 0,
+              name: 0,
               wildCardPath: '0',
               isArrayMember: true,
               isValid: true,
@@ -902,7 +902,7 @@ test.group('Tuple node', () => {
             assert.equal(value, 'hi world')
             assert.isUndefined(options)
             assert.containsSubset(field, {
-              fieldName: 1,
+              name: 1,
               wildCardPath: '1',
               isArrayMember: true,
               isValid: true,

@@ -343,7 +343,7 @@ test.group('Array node', () => {
           assert.deepEqual(value, ['hello world', 'hi world'])
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -357,7 +357,7 @@ test.group('Array node', () => {
           assert.deepEqual(value, ['hello world', 'hi world'])
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -421,7 +421,7 @@ test.group('Array node', () => {
           assert.deepEqual(value, ['hello world', 'hi world'])
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -496,7 +496,7 @@ test.group('Array node', () => {
           assert.deepEqual(value, ['hello world', 'hi world'])
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -511,7 +511,7 @@ test.group('Array node', () => {
           assert.deepEqual(value, ['hello world', 'hi world'])
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: false,
             meta: {},
@@ -581,7 +581,7 @@ test.group('Array node', () => {
           assert.deepEqual(value, ['hello world', 'hi world'])
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -657,7 +657,7 @@ test.group('Array node', () => {
           assert.deepEqual(value, ['hello world', 'hi world'])
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},

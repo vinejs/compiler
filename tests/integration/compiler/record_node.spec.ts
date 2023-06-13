@@ -364,7 +364,7 @@ test.group('Record node', () => {
           assert.deepEqual(value, { white: '#fff', black: '#000' })
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -378,7 +378,7 @@ test.group('Record node', () => {
           assert.deepEqual(value, { white: '#fff', black: '#000' })
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -442,7 +442,7 @@ test.group('Record node', () => {
           assert.deepEqual(value, { white: '#fff', black: '#000' })
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -517,7 +517,7 @@ test.group('Record node', () => {
           assert.deepEqual(value, { white: '#fff', black: '#000' })
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -532,7 +532,7 @@ test.group('Record node', () => {
           assert.deepEqual(value, { white: '#fff', black: '#000' })
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: false,
             meta: {},
@@ -602,7 +602,7 @@ test.group('Record node', () => {
           assert.deepEqual(value, { white: '#fff', black: '#000' })
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -678,7 +678,7 @@ test.group('Record node', () => {
           assert.deepEqual(value, { white: '#fff', black: '#000' })
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},

@@ -413,7 +413,7 @@ test.group('Object node', () => {
           assert.deepEqual(value, {})
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -427,7 +427,7 @@ test.group('Object node', () => {
           assert.deepEqual(value, {})
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -485,7 +485,7 @@ test.group('Object node', () => {
           assert.deepEqual(value, {})
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -553,7 +553,7 @@ test.group('Object node', () => {
           assert.deepEqual(value, {})
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -568,7 +568,7 @@ test.group('Object node', () => {
           assert.deepEqual(value, {})
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: false,
             meta: {},
@@ -654,7 +654,7 @@ test.group('Object node', () => {
           assert.deepEqual(value, { username: 'virk', age: 34 })
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -748,7 +748,7 @@ test.group('Object node', () => {
           assert.deepEqual(value, { username: 'virk', age: 34 })
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -764,7 +764,7 @@ test.group('Object node', () => {
             assert.equal(value, 'virk')
             assert.isUndefined(options)
             assert.containsSubset(field, {
-              fieldName: 'username',
+              name: 'username',
               wildCardPath: 'username',
               isArrayMember: false,
               isValid: true,
@@ -776,7 +776,7 @@ test.group('Object node', () => {
             assert.equal(value, 34)
             assert.isUndefined(options)
             assert.containsSubset(field, {
-              fieldName: 'age',
+              name: 'age',
               wildCardPath: 'age',
               isArrayMember: false,
               isValid: true,

@@ -40,7 +40,7 @@ export function defineFieldVariables({
   return `const ${variableName} = defineValue(${inValueExpression}, {
   data: root,
   meta: meta,
-  fieldName: ${fieldNameExpression},
+  name: ${fieldNameExpression},
   wildCardPath: '${wildCardPath}',
   mutate: defineValue,
   report: report,

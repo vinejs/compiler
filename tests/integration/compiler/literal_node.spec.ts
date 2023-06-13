@@ -165,7 +165,7 @@ test.group('Literal node', () => {
           assert.equal(value, 'virk')
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -179,7 +179,7 @@ test.group('Literal node', () => {
           assert.equal(value, 'virk')
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -234,7 +234,7 @@ test.group('Literal node', () => {
           assert.equal(value, 'virk')
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -249,7 +249,7 @@ test.group('Literal node', () => {
           assert.equal(value, 'virk')
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -308,7 +308,7 @@ test.group('Literal node', () => {
           assert.equal(value, 'virk')
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -323,7 +323,7 @@ test.group('Literal node', () => {
           assert.equal(value, 'virk')
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: false,
             meta: {},
@@ -381,7 +381,7 @@ test.group('Literal node', () => {
         assert.equal(value, 'virk')
         assert.isUndefined(options)
         assert.containsSubset(field, {
-          fieldName: '',
+          name: '',
           isArrayMember: false,
           isValid: true,
           meta: {},
@@ -439,7 +439,7 @@ test.group('Literal node', () => {
         assert.equal(value, 'virk')
         assert.isUndefined(options)
         assert.containsSubset(field, {
-          fieldName: '',
+          name: '',
           isArrayMember: false,
           isValid: true,
           meta: {},
@@ -661,7 +661,7 @@ test.group('Literal node | optional: true', () => {
           assert.equal(value, 'virk')
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -675,7 +675,7 @@ test.group('Literal node | optional: true', () => {
           assert.equal(value, 'virk')
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -786,7 +786,7 @@ test.group('Literal node | optional: true', () => {
           assert.equal(value, undefined)
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -978,7 +978,7 @@ test.group('Literal node | allowNull: true', () => {
           assert.equal(value, 'virk')
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -992,7 +992,7 @@ test.group('Literal node | allowNull: true', () => {
           assert.equal(value, 'virk')
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
@@ -1103,7 +1103,7 @@ test.group('Literal node | allowNull: true', () => {
           assert.isNull(value)
           assert.isUndefined(options)
           assert.containsSubset(field, {
-            fieldName: '',
+            name: '',
             isArrayMember: false,
             isValid: true,
             meta: {},
