@@ -51,7 +51,11 @@ test.group('Scripts | define field variables', () => {
 
     assert.doesNotThrows(() => validateCode(jsOutput))
     assert.assertFormatted(jsOutput, [
-      `const username = defineValue(refs['ref://1'](root['username']), {`,
+      `const username = defineValue(refs['ref://1'](root['username'], {`,
+      `  data: root,`,
+      `  meta: meta,`,
+      `  parent: root`,
+      `}), {`,
       `  data: root,`,
       `  meta: meta,`,
       `  name: 'username',`,

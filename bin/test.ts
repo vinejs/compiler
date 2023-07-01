@@ -1,9 +1,19 @@
+import { AssertionError } from 'node:assert'
 import { assert, Assert } from '@japa/assert'
 import { processCLIArgs, configure, run } from '@japa/runner'
 import { beautifyCode } from '../factories/code_beautifier.js'
 
-Assert.macro('assertFormatted', function (this: Assert, actual, expected) {
-  this.deepEqual(beautifyCode(actual).toArray(), beautifyCode(expected).toArray())
+Assert.macro('assertFormatted', function assertFormatted(this: Assert, actual, expected) {
+  try {
+    this.deepEqual(beautifyCode(actual).toArray(), beautifyCode(expected).toArray())
+  } catch (error) {
+    throw new AssertionError({
+      message: error.message,
+      actual: error.actual,
+      expected: error.expected,
+      stackStartFn: assertFormatted,
+    })
+  }
 })
 
 /*

@@ -34,7 +34,11 @@ export function defineFieldVariables({
   parentValueExpression,
 }: FieldOptions) {
   const inValueExpression = parseFnRefId
-    ? `refs['${parseFnRefId}'](${valueExpression})`
+    ? `refs['${parseFnRefId}'](${valueExpression}, {
+      data: root,
+      meta: meta,
+      parent: ${parentValueExpression}
+    })`
     : valueExpression
 
   return `const ${variableName} = defineValue(${inValueExpression}, {

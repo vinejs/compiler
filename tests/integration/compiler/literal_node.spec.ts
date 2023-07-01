@@ -491,7 +491,7 @@ test.group('Literal node', () => {
   })
 
   test('call parse function', async ({ assert }) => {
-    assert.plan(2)
+    assert.plan(3)
 
     const compiler = new Compiler({
       type: 'root',
@@ -510,8 +510,13 @@ test.group('Literal node', () => {
     const data = 'virk'
     const meta = {}
     const refs = refsBuilder()
-    refs.trackParser((value) => {
+    refs.trackParser((value, ctx) => {
       assert.equal(value, 'virk')
+      assert.deepEqual(ctx, {
+        data: 'virk',
+        meta: {},
+        parent: 'virk',
+      })
       return value
     })
 

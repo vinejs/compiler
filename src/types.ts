@@ -139,7 +139,7 @@ export type ValidationRule = {
 /**
  * The shape of parse function picked from the refs
  */
-export type ParseFn = (value: unknown) => any
+export type ParseFn = (value: unknown, ctx: Pick<FieldContext, 'data' | 'parent' | 'meta'>) => any
 
 /**
  * The shape of transform function picked from the refs
