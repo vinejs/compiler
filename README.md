@@ -117,7 +117,7 @@ The validation rules are not executed by default when the field's value is `null
 
 If the value of a field is `null` or `undefined` it will not be written to the output. However, the `null` values are written to the output when `allowNull` flag is enabled.
 
-[gh-workflow-image]: https://img.shields.io/github/actions/workflow/status/vinejs/compiler/test.yml?style=for-the-badge
+[gh-workflow-image]: https://img.shields.io/github/actions/workflow/status/vinejs/compiler/checks.yml?style=for-the-badge
 [gh-workflow-url]: https://github.com/vinejs/compiler/actions/workflows/test.yml 'Github action'
 [npm-image]: https://img.shields.io/npm/v/@vinejs/compiler/latest.svg?style=for-the-badge&logo=npm
 [npm-url]: https://www.npmjs.com/package/@vinejs/compiler/v/latest 'npm'
