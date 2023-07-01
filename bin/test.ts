@@ -1,11 +1,8 @@
 import { assert, Assert } from '@japa/assert'
-import { pathToFileURL } from 'node:url'
-import { specReporter } from '@japa/spec-reporter'
-import { runFailedTests } from '@japa/run-failed-tests'
-import { processCliArgs, configure, run } from '@japa/runner'
+import { processCLIArgs, configure, run } from '@japa/runner'
 import { beautifyCode } from '../factories/code_beautifier.js'
 
-Assert.macro('assertFormatted', function (actual, expected) {
+Assert.macro('assertFormatted', function (this: Assert, actual, expected) {
   this.deepEqual(beautifyCode(actual).toArray(), beautifyCode(expected).toArray())
 })
 
@@ -22,23 +19,19 @@ Assert.macro('assertFormatted', function (actual, expected) {
 |
 | Please consult japa.dev/runner-config for the config docs.
 */
+processCLIArgs(process.argv.slice(2))
 configure({
-  ...processCliArgs(process.argv.slice(2)),
-  ...{
-    plugins: [assert(), runFailedTests()],
-    reporters: [specReporter()],
-    importer: (filePath) => import(pathToFileURL(filePath).href),
-    suites: [
-      {
-        name: 'unit',
-        files: ['tests/unit/**/*.spec.ts'],
-      },
-      {
-        name: 'integration',
-        files: ['tests/integration/**/*.spec.ts'],
-      },
-    ],
-  },
+  plugins: [assert()],
+  suites: [
+    {
+      name: 'unit',
+      files: ['tests/unit/**/*.spec.ts'],
+    },
+    {
+      name: 'integration',
+      files: ['tests/integration/**/*.spec.ts'],
+    },
+  ],
 })
 
 /*

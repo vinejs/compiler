@@ -1,4 +1,4 @@
-import '@japa/runner'
+import '@japa/assert'
 
 declare module '@japa/assert' {
   interface Assert {
