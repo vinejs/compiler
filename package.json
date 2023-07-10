@@ -90,6 +90,7 @@
     ],
     "exclude": [
       "tests/**",
+      "bin/**",
       "factories/**"
     ]
   },
