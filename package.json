@@ -13,7 +13,6 @@
   },
   "scripts": {
     "clean": "del-cli build",
-    "copy:templates": "copyfiles \"stubs/**/*.stub\" build",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --ext=.ts",
     "format": "prettier --write .",
@@ -22,7 +21,6 @@
     "test": "c8 npm run quick:test",
     "prebuild": "npm run lint && npm run clean",
     "build": "tsup-node",
-    "postbuild": "npm run copy:templates",
     "release": "np",
     "version": "npm run build",
     "prepublishOnly": "npm run build"
@@ -46,7 +44,6 @@
     "ajv": "^8.12.0",
     "benchmark": "^2.1.4",
     "c8": "^8.0.0",
-    "copyfiles": "^2.4.1",
     "del-cli": "^5.0.0",
     "eslint": "^8.45.0",
     "js-beautify": "^1.14.8",
