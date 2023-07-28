@@ -1,6 +1,6 @@
 {
   "name": "@vinejs/compiler",
-  "version": "2.1.2",
+  "version": "2.2.0",
   "description": "Low level compiler for VineJS validator",
   "type": "module",
   "main": "build/index.js",
