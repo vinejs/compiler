@@ -5,53 +5,61 @@
   "type": "module",
   "main": "build/index.js",
   "files": [
-    "build"
+    "build",
+    "!build/benchmarks",
+    "!build/bin",
+    "!build/examples",
+    "!build/factories",
+    "!build/tests"
   ],
   "exports": {
     ".": "./build/index.js",
     "./types": "./build/src/types.js"
   },
   "scripts": {
-    "clean": "del-cli build",
-    "typecheck": "tsc --noEmit",
-    "lint": "eslint . --ext=.ts",
-    "format": "prettier --write .",
-    "quick:test": "node --loader=ts-node/esm bin/test.ts",
     "pretest": "npm run lint",
     "test": "c8 npm run quick:test",
-    "prebuild": "npm run lint && npm run clean",
-    "build": "tsup-node",
+    "quick:test": "node --loader=ts-node/esm bin/test.ts",
+    "clean": "del-cli build",
+    "typecheck": "tsc --noEmit",
+    "precompile": "npm run lint && npm run clean",
+    "compile": "tsup-node && tsc --emitDeclarationOnly --declaration",
+    "build": "npm run compile",
     "release": "np",
     "version": "npm run build",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "lint": "eslint . --ext=.ts",
+    "format": "prettier --write .",
+    "sync-labels": "github-label-sync --labels .github/labels.json vinejs/compiler"
   },
   "keywords": [
     "vinejs",
     "compiler",
     "validator"
   ],
-  "author": "virk",
+  "author": "virk,vinejs",
   "license": "MIT",
   "devDependencies": {
     "@adonisjs/eslint-config": "^1.1.8",
     "@adonisjs/prettier-config": "^1.1.8",
     "@adonisjs/tsconfig": "^1.1.8",
-    "@japa/assert": "^2.0.0",
-    "@japa/runner": "^3.0.4",
+    "@japa/assert": "^2.0.1",
+    "@japa/runner": "^3.0.5",
     "@swc/core": "^1.3.96",
-    "@types/node": "^20.8.10",
+    "@types/node": "^20.9.2",
     "acorn": "^8.11.2",
     "ajv": "^8.12.0",
     "benchmark": "^2.1.4",
     "c8": "^8.0.1",
     "del-cli": "^5.1.0",
-    "eslint": "^8.53.0",
-    "js-beautify": "^1.14.9",
+    "eslint": "^8.54.0",
+    "github-label-sync": "^2.3.1",
+    "js-beautify": "^1.14.11",
     "np": "^8.0.3",
-    "prettier": "^3.0.3",
+    "prettier": "^3.1.0",
     "tinybench": "^2.5.1",
     "ts-node": "^10.9.1",
-    "tsup": "^7.1.0",
+    "tsup": "^8.0.0",
     "typescript": "^5.2.2",
     "zod": "^3.22.4"
   },
@@ -99,7 +107,8 @@
     "outDir": "./build",
     "clean": true,
     "format": "esm",
-    "dts": true,
+    "dts": false,
+    "sourcemap": true,
     "target": "esnext"
   }
 }
