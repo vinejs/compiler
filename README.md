@@ -8,7 +8,7 @@ The compiler is used to convert an array of schema nodes to a function with impe
 
 Ajv performs better in some instances because Ajv holds a reference to the input data object and does not create a new output object. Though Ajv behavior results in slightly better performance, it comes at the cost of sharing the same pointers between the input and output objects, and hence mutating one will mutate the other as well.
 
-![](./vine_benchmarks.png)
+![](./vinejs_benchmarks.png)
 
 ## Schema
 
