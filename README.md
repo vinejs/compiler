@@ -1,6 +1,6 @@
 # @vinejs/compiler
 
-[![gh-workflow-image]][gh-workflow-url] [![npm-image]][npm-url] ![][typescript-image] [![license-image]][license-url] [![snyk-image]][snyk-url]
+[![gh-workflow-image]][gh-workflow-url] [![npm-image]][npm-url] ![][typescript-image] [![license-image]][license-url]
 
 The compiler is used to convert an array of schema nodes to a function with imperative JavaScript code that can be executed to validate a data object. The compiler operates at the low-level and does not offer any JavaScript API for creating the schema (see vinejs for user-land APIs).
 
@@ -124,5 +124,3 @@ If the value of a field is `null` or `undefined` it will not be written to the o
 [typescript-image]: https://img.shields.io/badge/Typescript-294E80.svg?style=for-the-badge&logo=typescript
 [license-url]: LICENSE.md
 [license-image]: https://img.shields.io/github/license/vinejs/compiler?style=for-the-badge
-[snyk-image]: https://img.shields.io/snyk/vulnerabilities/github/vinejs/compiler?label=Snyk%20Vulnerabilities&style=for-the-badge
-[snyk-url]: https://snyk.io/test/github/vinejs/compiler?targetFile=package.json 'snyk'
