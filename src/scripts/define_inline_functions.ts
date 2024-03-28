@@ -19,7 +19,7 @@ export function defineInlineFunctions(options: { convertEmptyStringsToNull: bool
 function memo(fn) {
   let value;
   return () => {
-    if (value) {
+    if (value !== undefined) {
       return value
     }
     value = fn()
