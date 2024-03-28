@@ -789,6 +789,61 @@ test.group('Array node', () => {
     data[0] = 'foo'
     assert.deepEqual(output, [])
   })
+
+  test('get nested runtime field path', async ({ assert }) => {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
+        type: 'array',
+        bail: true,
+        fieldName: '*',
+        validations: [],
+        propertyName: '*',
+        allowNull: false,
+        isOptional: false,
+        each: {
+          type: 'array',
+          bail: true,
+          fieldName: '*',
+          validations: [],
+          propertyName: '*',
+          allowNull: false,
+          isOptional: false,
+          each: {
+            type: 'literal',
+            bail: true,
+            fieldName: '*',
+            allowNull: false,
+            isOptional: false,
+            propertyName: '*',
+            validations: [],
+            transformFnId: 'ref://1',
+          },
+        },
+      },
+    })
+
+    const data: any = [['hello world'], ['hi world']]
+    const meta = {}
+
+    const refs = refsBuilder()
+    refs.trackTransformer((value, ctx) => {
+      assert.oneOf(ctx.getFieldPath(), ['0.0', '1.0'])
+      assert.equal(ctx.wildCardPath, '*.*')
+      return value
+    })
+
+    const messagesProvider = new MessagesProviderFactory().create()
+    const errorReporter = new ErrorReporterFactory().create()
+
+    const fn = compiler.compile()
+    const output = await fn(data, meta, refs.toJSON(), messagesProvider, errorReporter)
+    assert.deepEqual(output, [['hello world'], ['hi world']])
+
+    // Mutation test
+    data[0][0] = 'foo'
+    assert.deepEqual(output, [['hello world'], ['hi world']])
+  })
 })
 
 test.group('Array node | optional: true', () => {

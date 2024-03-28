@@ -1038,6 +1038,97 @@ test.group('Object node', () => {
     data.profile = {}
     assert.deepEqual(output, {})
   })
+
+  test('get nested runtime field path', async ({ assert }) => {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
+        type: 'object',
+        groups: [],
+        bail: true,
+        fieldName: '*',
+        validations: [],
+        propertyName: '*',
+        allowNull: false,
+        isOptional: false,
+        allowUnknownProperties: false,
+        properties: [
+          {
+            type: 'object',
+            groups: [],
+            bail: true,
+            fieldName: 'social',
+            validations: [],
+            propertyName: 'social',
+            allowNull: false,
+            isOptional: false,
+            allowUnknownProperties: false,
+            properties: [
+              {
+                type: 'literal',
+                bail: true,
+                fieldName: 'twitter_handle',
+                allowNull: false,
+                isOptional: false,
+                propertyName: 'twitterHandle',
+                validations: [],
+                transformFnId: 'ref://1',
+              },
+              {
+                type: 'literal',
+                bail: true,
+                fieldName: 'github_username',
+                allowNull: false,
+                isOptional: false,
+                propertyName: 'githubUsername',
+                validations: [],
+                transformFnId: 'ref://2',
+              },
+            ],
+          },
+        ],
+      },
+    })
+
+    const data = {
+      social: {
+        github_username: 'thetutlage',
+        twitter_handle: 'AmanVirk1',
+      },
+    }
+
+    const refs = refsBuilder()
+    refs.trackTransformer((value, ctx) => {
+      assert.equal(ctx.getFieldPath(), 'social.twitter_handle')
+      return value
+    })
+    refs.trackTransformer((value, ctx) => {
+      assert.equal(ctx.getFieldPath(), 'social.github_username')
+      return value
+    })
+
+    const meta = {}
+    const messagesProvider = new MessagesProviderFactory().create()
+    const errorReporter = new ErrorReporterFactory().create()
+
+    const fn = compiler.compile()
+    const output = await fn(data, meta, refs.toJSON(), messagesProvider, errorReporter)
+    assert.deepEqual(output, {
+      social: {
+        githubUsername: 'thetutlage',
+        twitterHandle: 'AmanVirk1',
+      },
+    })
+
+    // Mutation test:
+    data.social.github_username = 'foo'
+    assert.deepEqual(output, {
+      social: {
+        githubUsername: 'thetutlage',
+        twitterHandle: 'AmanVirk1',
+      },
+    })
+  })
 })
 
 test.group('Object node | optional: true', () => {

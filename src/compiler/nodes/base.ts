@@ -40,6 +40,7 @@ export abstract class BaseNode {
         defineFieldVariables({
           fieldNameExpression: this.field.fieldNameExpression,
           isArrayMember: this.field.isArrayMember,
+          parentExpression: this.field.parentExpression,
           parentValueExpression: this.field.parentValueExpression,
           valueExpression: this.field.valueExpression,
           variableName: this.field.variableName,

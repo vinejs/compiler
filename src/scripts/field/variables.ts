@@ -10,6 +10,7 @@
 import { RefIdentifier } from '../../types.js'
 
 type FieldOptions = {
+  parentExpression: string
   variableName: string
   valueExpression: string
   fieldNameExpression: string
@@ -30,6 +31,7 @@ export function defineFieldVariables({
   wildCardPath,
   isArrayMember,
   valueExpression,
+  parentExpression,
   fieldNameExpression,
   parentValueExpression,
 }: FieldOptions) {
@@ -41,11 +43,35 @@ export function defineFieldVariables({
     })`
     : valueExpression
 
+  /**
+   * Field path output expression is the value that is
+   * returned when "field.getFieldPath" method is
+   * called.
+   */
+  let fieldPathOutputExpression = ''
+
+  /**
+   * When we are a direct member of a root field, we will not prefix the root path, since
+   * there is no path to prefix, its just root.
+   */
+  if (parentExpression === 'root' || parentExpression === 'root_item') {
+    fieldPathOutputExpression = fieldNameExpression
+  } else if (fieldNameExpression !== "''") {
+    /**
+     * When we are the root ourselves, we will return an empty string
+     * value.
+     */
+    fieldPathOutputExpression = `${parentExpression}.getFieldPath() + '.' + ${fieldNameExpression}`
+  }
+
   return `const ${variableName} = defineValue(${inValueExpression}, {
   data: root,
   meta: meta,
   name: ${fieldNameExpression},
   wildCardPath: '${wildCardPath}',
+  getFieldPath: memo(() => {
+    return ${fieldPathOutputExpression};
+  }),
   mutate: defineValue,
   report: report,
   isValid: true,

@@ -10,17 +10,10 @@
 import type { CompilerField, CompilerParent } from '../../types.js'
 
 export function createArrayField(parent: CompilerParent): CompilerField {
-  /**
-   * Commented to see if a use case arrives for using this.
-   */
-  // const fieldPathExpression =
-  //   parent.fieldPathExpression !== `''`
-  //     ? `${parent.fieldPathExpression} + '.' + ${parent.variableName}_i`
-  //     : `${parent.variableName}_i`
-
   const wildCardPath = parent.wildCardPath !== '' ? `${parent.wildCardPath}.*` : `*`
 
   return {
+    parentExpression: parent.variableName,
     parentValueExpression: `${parent.variableName}.value`,
     fieldNameExpression: `${parent.variableName}_i`,
     fieldPathExpression: wildCardPath,

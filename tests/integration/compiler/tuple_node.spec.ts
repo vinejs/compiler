@@ -1040,6 +1040,116 @@ test.group('Tuple node', () => {
     data[0] = 'foo'
     assert.deepEqual(output, ['hello world', 'hi world'])
   })
+
+  test('get nested runtime field path', async ({ assert }) => {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
+        type: 'tuple',
+        bail: true,
+        fieldName: '*',
+        validations: [],
+        propertyName: '*',
+        allowNull: false,
+        isOptional: false,
+        allowUnknownProperties: false,
+        properties: [
+          {
+            type: 'tuple',
+            bail: true,
+            fieldName: '0',
+            validations: [],
+            propertyName: '0',
+            allowNull: false,
+            isOptional: false,
+            allowUnknownProperties: false,
+            properties: [
+              {
+                type: 'literal',
+                bail: true,
+                fieldName: '0',
+                allowNull: false,
+                isOptional: false,
+                propertyName: '0',
+                validations: [],
+                transformFnId: 'ref://1',
+              },
+              {
+                type: 'literal',
+                bail: true,
+                fieldName: '1',
+                allowNull: false,
+                isOptional: false,
+                propertyName: '1',
+                validations: [],
+                transformFnId: 'ref://1',
+              },
+            ],
+          },
+          {
+            type: 'tuple',
+            bail: true,
+            fieldName: '1',
+            validations: [],
+            propertyName: '1',
+            allowNull: false,
+            isOptional: false,
+            allowUnknownProperties: false,
+            properties: [
+              {
+                type: 'literal',
+                bail: true,
+                fieldName: '0',
+                allowNull: false,
+                isOptional: false,
+                propertyName: '0',
+                validations: [],
+                transformFnId: 'ref://1',
+              },
+              {
+                type: 'literal',
+                bail: true,
+                fieldName: '1',
+                allowNull: false,
+                isOptional: false,
+                propertyName: '1',
+                validations: [],
+                transformFnId: 'ref://1',
+              },
+            ],
+          },
+        ],
+      },
+    })
+
+    const data = [
+      ['hello world', 'hi world'],
+      ['hi world', 'hello world'],
+    ]
+    const meta = {}
+    const refs = refsBuilder()
+    refs.trackTransformer((value, ctx) => {
+      assert.oneOf(ctx.getFieldPath(), ['0.0', '0.1', '1.0', '1.1'])
+      assert.equal(ctx.getFieldPath(), ctx.wildCardPath)
+      return value
+    })
+    const messagesProvider = new MessagesProviderFactory().create()
+    const errorReporter = new ErrorReporterFactory().create()
+
+    const fn = compiler.compile()
+    const output = await fn(data, meta, refs.toJSON(), messagesProvider, errorReporter)
+    assert.deepEqual(output, [
+      ['hello world', 'hi world'],
+      ['hi world', 'hello world'],
+    ])
+
+    // Mutation test
+    data[0][0] = 'foo'
+    assert.deepEqual(output, [
+      ['hello world', 'hi world'],
+      ['hi world', 'hello world'],
+    ])
+  })
 })
 
 test.group('Tuple node | optional: true', () => {

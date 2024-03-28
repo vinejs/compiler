@@ -95,6 +95,12 @@ export type FieldContext = {
   isDefined: boolean
 
   /**
+   * Returns the nested path to the field. The parts
+   * are joined by a dot notation.
+   */
+  getFieldPath(): string
+
+  /**
    * Wildcard path for the field. The value is a nested
    * pointer to the field under validation.
    *
@@ -446,6 +452,7 @@ export type CompilerParent = {
  * names for the JS output.
  */
 export type CompilerField = {
+  parentExpression: string
   parentValueExpression: string
   fieldNameExpression: string
   fieldPathExpression: string

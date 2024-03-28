@@ -810,6 +810,68 @@ test.group('Record node', () => {
     data.colors = { white: '#fff' }
     assert.deepEqual(output, {})
   })
+
+  test('get nested runtime field path', async ({ assert }) => {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
+        type: 'record',
+        bail: true,
+        fieldName: '*',
+        validations: [],
+        propertyName: '*',
+        allowNull: false,
+        isOptional: false,
+        each: {
+          type: 'record',
+          bail: true,
+          fieldName: '*',
+          propertyName: '*',
+          allowNull: false,
+          isOptional: false,
+          validations: [],
+          each: {
+            type: 'literal',
+            bail: true,
+            allowNull: false,
+            isOptional: false,
+            fieldName: '*',
+            propertyName: '*',
+            validations: [],
+            transformFnId: 'ref://1',
+          },
+        },
+      },
+    })
+
+    const data = {
+      white: { bg: '#f3f3f3', fg: '#fff' },
+      black: { bg: '#000', fg: '#000' },
+    }
+    const meta = {}
+    const refs = refsBuilder()
+    refs.trackTransformer((value, ctx) => {
+      assert.oneOf(ctx.getFieldPath(), ['white.bg', 'white.fg', 'black.bg', 'black.fg'])
+      assert.equal(ctx.wildCardPath, '*.*')
+      return value
+    })
+    const messagesProvider = new MessagesProviderFactory().create()
+    const errorReporter = new ErrorReporterFactory().create()
+
+    const fn = compiler.compile()
+    const output = await fn(data, meta, refs.toJSON(), messagesProvider, errorReporter)
+    assert.deepEqual(output, {
+      white: { bg: '#f3f3f3', fg: '#fff' },
+      black: { bg: '#000', fg: '#000' },
+    })
+
+    // Mutation test:
+    data.white.bg = 'white'
+    assert.deepEqual(output, {
+      white: { bg: '#f3f3f3', fg: '#fff' },
+      black: { bg: '#000', fg: '#000' },
+    })
+  })
 })
 
 test.group('Record node | optional: true', () => {

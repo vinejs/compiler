@@ -14,6 +14,7 @@ import { defineFieldVariables } from '../../../../src/scripts/field/variables.js
 test.group('Scripts | define field variables', () => {
   test('get JS output for field variables', ({ assert }) => {
     const jsOutput = defineFieldVariables({
+      parentExpression: 'root',
       variableName: 'username',
       valueExpression: `root['username']`,
       fieldNameExpression: `'username'`,
@@ -29,6 +30,9 @@ test.group('Scripts | define field variables', () => {
       `meta: meta,`,
       `name: 'username',`,
       `wildCardPath: 'username',`,
+      `getFieldPath: memo(() => {`,
+      `  return 'username';`,
+      `}),`,
       `mutate: defineValue,`,
       `report: report,`,
       `isValid: true,`,
@@ -40,6 +44,7 @@ test.group('Scripts | define field variables', () => {
 
   test('get JS output with parse function', ({ assert }) => {
     const jsOutput = defineFieldVariables({
+      parentExpression: 'root',
       variableName: 'username',
       valueExpression: `root['username']`,
       fieldNameExpression: `'username'`,
@@ -60,6 +65,9 @@ test.group('Scripts | define field variables', () => {
       `  meta: meta,`,
       `  name: 'username',`,
       `  wildCardPath: 'username',`,
+      `  getFieldPath: memo(() => {`,
+      `    return 'username';`,
+      `  }),`,
       `  mutate: defineValue,`,
       `  report: report,`,
       `  isValid: true,`,

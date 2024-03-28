@@ -13,18 +13,11 @@ export function createTupleField(
   node: Pick<FieldNode, 'fieldName' | 'propertyName'>,
   parent: CompilerParent
 ): CompilerField {
-  /**
-   * Commented to see if a use case arrives for using this.
-   */
-  // const fieldPathExpression =
-  //   parent.fieldPathExpression !== `''`
-  //     ? `${parent.fieldPathExpression} + '.' + '${node.fieldName}'`
-  //     : `'${node.fieldName}'`
-
   const wildCardPath =
     parent.wildCardPath !== '' ? `${parent.wildCardPath}.${node.fieldName}` : node.fieldName
 
   return {
+    parentExpression: parent.variableName,
     parentValueExpression: `${parent.variableName}.value`,
     fieldNameExpression: `${node.fieldName}`,
     fieldPathExpression: wildCardPath,

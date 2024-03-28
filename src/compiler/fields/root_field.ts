@@ -11,6 +11,7 @@ import type { CompilerField, CompilerParent } from '../../types.js'
 
 export function createRootField(parent: CompilerParent): CompilerField {
   return {
+    parentExpression: parent.variableName,
     parentValueExpression: parent.variableName,
     fieldNameExpression: `''`,
     fieldPathExpression: `''`,

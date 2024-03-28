@@ -8,7 +8,7 @@
  */
 
 import { test } from '@japa/runner'
-import { Refs } from '../../../src/types.js'
+import { FieldContext, Refs } from '../../../src/types.js'
 import { refsBuilder } from '../../../index.js'
 import { Compiler } from '../../../src/compiler/main.js'
 import { ErrorReporterFactory } from '../../../factories/error_reporter.js'
@@ -664,5 +664,109 @@ test.group('Union node', () => {
 
     const fn = compiler.compile()
     assert.deepEqual(await fn(data, meta, refs.toJSON(), messagesProvider, errorReporter), 'VIRK')
+  })
+
+  test('get nested runtime field path', async ({ assert }) => {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
+        type: 'union',
+        fieldName: '*',
+        propertyName: '*',
+        conditions: [
+          {
+            conditionalFnRefId: 'ref://1',
+            schema: {
+              type: 'array',
+              bail: true,
+              fieldName: '*',
+              validations: [],
+              propertyName: '*',
+              allowNull: false,
+              isOptional: false,
+              each: {
+                type: 'object',
+                groups: [],
+                allowNull: false,
+                allowUnknownProperties: false,
+                bail: false,
+                fieldName: '*',
+                isOptional: false,
+                propertyName: '*',
+                validations: [],
+                properties: [
+                  {
+                    type: 'literal',
+                    bail: true,
+                    fieldName: 'email',
+                    allowNull: false,
+                    isOptional: false,
+                    propertyName: 'email',
+                    validations: [],
+                    transformFnId: 'ref://3',
+                  },
+                ],
+              },
+            },
+          },
+          {
+            conditionalFnRefId: 'ref://2',
+            schema: {
+              type: 'array',
+              bail: true,
+              fieldName: '*',
+              validations: [],
+              propertyName: '*',
+              allowNull: false,
+              isOptional: false,
+              each: {
+                type: 'object',
+                groups: [],
+                allowNull: false,
+                allowUnknownProperties: false,
+                bail: false,
+                fieldName: '*',
+                isOptional: false,
+                propertyName: '*',
+                validations: [],
+                properties: [
+                  {
+                    type: 'literal',
+                    bail: true,
+                    fieldName: 'phone',
+                    allowNull: false,
+                    isOptional: false,
+                    propertyName: 'phone',
+                    validations: [],
+                    transformFnId: 'ref://3',
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      },
+    })
+
+    const data = [{ phone: '123456789' }]
+    const meta = {}
+
+    const refs = {
+      'ref://1': () => false,
+      'ref://2': () => true,
+      'ref://3': (value: any, ctx: FieldContext) => {
+        assert.equal(ctx.getFieldPath(), '0.phone')
+        assert.equal(ctx.wildCardPath, '*.phone')
+        return value
+      },
+    }
+
+    const messagesProvider = new MessagesProviderFactory().create()
+    const errorReporter = new ErrorReporterFactory().create()
+
+    const fn = compiler.compile()
+    assert.deepEqual(await fn(data, meta, refs, messagesProvider, errorReporter), [
+      { phone: '123456789' },
+    ])
   })
 })

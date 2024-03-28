@@ -527,6 +527,40 @@ test.group('Literal node', () => {
     const output = await fn(data, meta, refs.toJSON(), messagesProvider, errorReporter)
     assert.deepEqual(output, 'virk')
   })
+
+  test('get nested runtime field path', async ({ assert }) => {
+    assert.plan(3)
+
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
+        type: 'literal',
+        bail: true,
+        fieldName: '*',
+        validations: [],
+        propertyName: '*',
+        allowNull: false,
+        isOptional: false,
+        transformFnId: 'ref://1',
+      },
+    })
+
+    const data = 'virk'
+    const meta = {}
+    const refs = refsBuilder()
+    refs.trackTransformer((value, ctx) => {
+      assert.equal(value, 'virk')
+      assert.equal(ctx.getFieldPath(), '')
+      return value
+    })
+
+    const messagesProvider = new MessagesProviderFactory().create()
+    const errorReporter = new ErrorReporterFactory().create()
+
+    const fn = compiler.compile()
+    const output = await fn(data, meta, refs.toJSON(), messagesProvider, errorReporter)
+    assert.deepEqual(output, 'virk')
+  })
 })
 
 test.group('Literal node | optional: true', () => {
