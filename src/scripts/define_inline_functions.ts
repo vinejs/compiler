@@ -16,16 +16,6 @@ export function defineInlineFunctions(options: { convertEmptyStringsToNull: bool
   field.isValid = false;
   errorReporter.report(messagesProvider.getMessage(message, rule, field, args), rule, field, args);
 };
-function memo(fn) {
-  let value;
-  return () => {
-    if (value !== undefined) {
-      return value
-    }
-    value = fn()
-    return value
-  }
-};
 function defineValue(value, field) {
   ${options.convertEmptyStringsToNull ? `if (value === '') { value = null; }` : ''}
   field.value = value;

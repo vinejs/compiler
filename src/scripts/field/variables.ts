@@ -69,9 +69,9 @@ export function defineFieldVariables({
   meta: meta,
   name: ${fieldNameExpression},
   wildCardPath: '${wildCardPath}',
-  getFieldPath: memo(() => {
+  getFieldPath() {
     return ${fieldPathOutputExpression};
-  }),
+  },
   mutate: defineValue,
   report: report,
   isValid: true,
