@@ -7,6 +7,7 @@
  * file that was distributed with this source code.
  */
 
+import { toVariableName } from '../../helpers.js'
 import type { CompilerField, FieldNode, CompilerParent } from '../../types.js'
 
 export function createObjectField(
@@ -23,7 +24,7 @@ export function createObjectField(
     fieldNameExpression: `'${node.fieldName}'`,
     fieldPathExpression: wildCardPath,
     wildCardPath: wildCardPath,
-    variableName: `${node.propertyName}_${variablesCounter}`,
+    variableName: `${toVariableName(node.propertyName)}_${variablesCounter}`,
     valueExpression: `${parent.variableName}.value['${node.fieldName}']`,
     outputExpression: `${parent.variableName}_out['${node.propertyName}']`,
     isArrayMember: false,
