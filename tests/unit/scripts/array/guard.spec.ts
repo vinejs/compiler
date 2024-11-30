@@ -18,11 +18,7 @@ test.group('Scripts | define array guard', () => {
       guardedCodeSnippet: 'console.log(contacts)',
     })
 
-    assert.doesNotThrows(() => validateCode(jsOutput))
-    assert.assertFormatted(jsOutput, [
-      `if (ensureIsArray(contacts)) {`,
-      `console.log(contacts)`,
-      `}`,
-    ])
+    assert.doesNotThrow(() => validateCode(jsOutput))
+    assert.assertFormatted(jsOutput, [`if (contacts_is_array) {`, `console.log(contacts)`, `}`])
   })
 })

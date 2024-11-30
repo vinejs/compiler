@@ -18,6 +18,7 @@ import { defineFieldValidations } from '../../scripts/field/validations.js'
 import type { CompilerField, CompilerParent, RecordNode } from '../../types.js'
 import { defineObjectInitialOutput } from '../../scripts/object/initial_output.js'
 import { defineFieldExistenceValidations } from '../../scripts/field/existence_validations.js'
+import { defineObjectVariables } from '../../scripts/object/variables.js'
 
 /**
  * Compiles a record schema node to JS string output.
@@ -84,6 +85,28 @@ export class RecordNodeCompiler extends BaseNode {
     )
 
     /**
+     * Step 3: Define the code to validate the field is an object
+     */
+    this.#buffer.writeStatement(
+      defineObjectVariables({
+        variableName: this.field.variableName,
+      })
+    )
+
+    /**
+     * Step 4: Execute object validations
+     */
+    this.#buffer.writeStatement(
+      defineFieldValidations({
+        variableName: this.field.variableName,
+        validations: this.#node.validations,
+        bail: this.#node.bail,
+        dropMissingCheck: false,
+        existenceCheckExpression: `${this.field.variableName}_is_object`,
+      })
+    )
+
+    /**
      * Wrapping initialization of output + tuple validation + array elements
      * validation inside `if array field is valid` block.
      *
@@ -107,12 +130,7 @@ export class RecordNodeCompiler extends BaseNode {
      */
     const isValueAnObjectBlock = defineObjectGuard({
       variableName: this.field.variableName,
-      guardedCodeSnippet: `${defineFieldValidations({
-        variableName: this.field.variableName,
-        validations: this.#node.validations,
-        bail: this.#node.bail,
-        dropMissingCheck: true,
-      })}${this.#buffer.newLine}${isObjectValidBlock}`,
+      guardedCodeSnippet: `${this.#buffer.newLine}${isObjectValidBlock}`,
     })
 
     /**

@@ -20,6 +20,7 @@ import { defineObjectInitialOutput } from '../../scripts/object/initial_output.j
 import { defineMoveProperties } from '../../scripts/object/move_unknown_properties.js'
 import { defineFieldExistenceValidations } from '../../scripts/field/existence_validations.js'
 import type { CompilerField, CompilerParent, ObjectNode, ObjectGroupNode } from '../../types.js'
+import { defineObjectVariables } from '../../scripts/object/variables.js'
 
 /**
  * Compiles an object schema node to JS string output.
@@ -149,10 +150,32 @@ export class ObjectNodeCompiler extends BaseNode {
     )
 
     /**
+     * Step 3: Define the code to validate the field is an object
+     */
+    this.#buffer.writeStatement(
+      defineObjectVariables({
+        variableName: this.field.variableName,
+      })
+    )
+
+    /**
+     * Step 4: Execute object validations
+     */
+    this.#buffer.writeStatement(
+      defineFieldValidations({
+        variableName: this.field.variableName,
+        validations: this.#node.validations,
+        bail: this.#node.bail,
+        dropMissingCheck: false,
+        existenceCheckExpression: `${this.field.variableName}_is_object`,
+      })
+    )
+
+    /**
      * Wrapping initialization of output + object children validations
      * validation inside `if object field is valid` block.
      *
-     * Pre step: 3
+     * Pre step: 5
      */
     const isObjectValidBlock = defineIsValidGuard({
       variableName: this.field.variableName,
@@ -174,20 +197,15 @@ export class ObjectNodeCompiler extends BaseNode {
      * Wrapping field validations + "isObjectValidBlock" inside
      * `if value is object` check.
      *
-     * Pre step: 3
+     * Pre step: 5
      */
     const isValueAnObject = defineObjectGuard({
       variableName: this.field.variableName,
-      guardedCodeSnippet: `${defineFieldValidations({
-        variableName: this.field.variableName,
-        validations: this.#node.validations,
-        bail: this.#node.bail,
-        dropMissingCheck: true,
-      })}${isObjectValidBlock}`,
+      guardedCodeSnippet: `${isObjectValidBlock}`,
     })
 
     /**
-     * Step 3: Define `if value is an object` block and `else if value is null`
+     * Step 5: Define `if value is an object` block and `else if value is null`
      * block.
      */
     this.#buffer.writeStatement(

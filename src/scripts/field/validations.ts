@@ -22,6 +22,12 @@ type ValidationOptions = {
    * rule is implicit or not
    */
   dropMissingCheck: boolean
+
+  /**
+   * The expression to use for performing the existence check.
+   * Defaults to "item.isDefined"
+   */
+  existenceCheckExpression?: string
 }
 
 /**
@@ -57,10 +63,12 @@ function emitValidationSnippet(
   { isAsync, implicit, ruleFnId }: ValidationNode,
   variableName: string,
   bail: boolean,
-  dropMissingCheck: boolean
+  dropMissingCheck: boolean,
+  existenceCheckExpression?: string
 ) {
   const rule = `refs['${ruleFnId}']`
   const callable = `${rule}.validator(${variableName}.value, ${rule}.options, ${variableName});`
+  existenceCheckExpression = existenceCheckExpression || `${variableName}.isDefined`
 
   /**
    * Add "isValid" condition when the bail flag is turned on.
@@ -70,7 +78,7 @@ function emitValidationSnippet(
   /**
    * Add the "!is_[variableName]_missing" conditional when the rule is not implicit.
    */
-  const implicitCondition = implicit || dropMissingCheck ? '' : `${variableName}.isDefined`
+  const implicitCondition = implicit || dropMissingCheck ? '' : existenceCheckExpression
 
   /**
    * Wrapping the validation invocation inside conditionals based upon
@@ -90,8 +98,11 @@ export function defineFieldValidations({
   validations,
   variableName,
   dropMissingCheck,
+  existenceCheckExpression,
 }: ValidationOptions) {
   return `${validations
-    .map((one) => emitValidationSnippet(one, variableName, bail, dropMissingCheck))
+    .map((one) =>
+      emitValidationSnippet(one, variableName, bail, dropMissingCheck, existenceCheckExpression)
+    )
     .join('\n')}`
 }
