@@ -80,6 +80,7 @@
   "tsup": {
     "entry": [
       "./index.ts",
+      "./benchmarks/*.ts",
       "./src/types.ts"
     ],
     "outDir": "./build",
