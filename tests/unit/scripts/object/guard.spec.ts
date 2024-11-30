@@ -18,11 +18,7 @@ test.group('Scripts | define object guard', () => {
       guardedCodeSnippet: 'console.log(profile)',
     })
 
-    assert.doesNotThrows(() => validateCode(jsOutput))
-    assert.assertFormatted(jsOutput, [
-      `if (ensureIsObject(profile)) {`,
-      `console.log(profile)`,
-      `}`,
-    ])
+    assert.doesNotThrow(() => validateCode(jsOutput))
+    assert.assertFormatted(jsOutput, [`if (profile_is_object) {`, `console.log(profile)`, `}`])
   })
 })
