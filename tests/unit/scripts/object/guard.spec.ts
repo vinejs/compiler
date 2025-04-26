@@ -19,6 +19,10 @@ test.group('Scripts | define object guard', () => {
     })
 
     assert.doesNotThrow(() => validateCode(jsOutput))
-    assert.assertFormatted(jsOutput, [`if (profile_is_object) {`, `console.log(profile)`, `}`])
+    assert.assertFormatted(jsOutput, [
+      `if (profile.isValidDataType) {`,
+      `console.log(profile)`,
+      `}`,
+    ])
   })
 })

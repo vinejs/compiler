@@ -95,7 +95,7 @@ export class TupleNodeCompiler extends BaseNode {
         validations: this.#node.validations,
         bail: this.#node.bail,
         dropMissingCheck: false,
-        existenceCheckExpression: `${this.field.variableName}_is_array`,
+        existenceCheckExpression: `${this.field.variableName}.isValidDataType`,
       })
     )
 

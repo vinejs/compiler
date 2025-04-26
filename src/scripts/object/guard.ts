@@ -16,7 +16,7 @@ type ObjectGuardOptions = {
  * Returns JS fragment to wrap code inside an object conditional
  */
 export function defineObjectGuard({ variableName, guardedCodeSnippet }: ObjectGuardOptions) {
-  return `if (${variableName}_is_object) {
+  return `if (${variableName}.isValidDataType) {
 ${guardedCodeSnippet}
 }`
 }

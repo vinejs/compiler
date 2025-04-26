@@ -15,5 +15,5 @@ type FieldOptions = {
  * Returns JS fragment for defining the array variables
  */
 export function defineArrayVariables({ variableName }: FieldOptions) {
-  return `const ${variableName}_is_array = ensureIsArray(${variableName});`
+  return `${variableName}.isValidDataType = ensureIsArray(${variableName});`
 }

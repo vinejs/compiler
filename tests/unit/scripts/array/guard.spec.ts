@@ -19,6 +19,10 @@ test.group('Scripts | define array guard', () => {
     })
 
     assert.doesNotThrow(() => validateCode(jsOutput))
-    assert.assertFormatted(jsOutput, [`if (contacts_is_array) {`, `console.log(contacts)`, `}`])
+    assert.assertFormatted(jsOutput, [
+      `if (contacts.isValidDataType) {`,
+      `console.log(contacts)`,
+      `}`,
+    ])
   })
 })

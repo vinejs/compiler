@@ -15,5 +15,5 @@ type FieldOptions = {
  * Returns JS fragment for defining the object variables
  */
 export function defineObjectVariables({ variableName }: FieldOptions) {
-  return `const ${variableName}_is_object = ensureIsObject(${variableName});`
+  return `${variableName}.isValidDataType = ensureIsObject(${variableName});`
 }

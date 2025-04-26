@@ -85,7 +85,20 @@ export type FieldContext = {
   report: ErrorReporterContract['report']
 
   /**
-   * Is this field valid. Default: true
+   * Does this field has valid data-type for which it
+   * is validated.
+   *
+   * For literal nodes, the first validation rule should
+   * set this to true.
+   *
+   * @default: false
+   */
+  isValidDataType: boolean
+
+  /**
+   * Is this field valid.
+   *
+   * @default: true
    */
   isValid: boolean
 

@@ -102,7 +102,7 @@ export class RecordNodeCompiler extends BaseNode {
         validations: this.#node.validations,
         bail: this.#node.bail,
         dropMissingCheck: false,
-        existenceCheckExpression: `${this.field.variableName}_is_object`,
+        existenceCheckExpression: `${this.field.variableName}.isValidDataType`,
       })
     )
 

@@ -75,6 +75,7 @@ export function defineFieldVariables({
   mutate: defineValue,
   report: report,
   isValid: true,
+  isValidDataType: false,
   parent: ${parentValueExpression},
   isArrayMember: ${isArrayMember},
 });`

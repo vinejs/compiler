@@ -18,7 +18,7 @@ test.group('Scripts | define record loop', () => {
       loopCodeSnippet: 'console.log(colors_i)',
     })
 
-    assert.doesNotThrows(() => validateCode(jsOutput))
+    assert.doesNotThrow(() => validateCode(jsOutput))
     assert.assertFormatted(jsOutput, [
       `const colors_keys = Object.keys(colors.value);`,
       `const colors_keys_size = colors_keys.length;`,
