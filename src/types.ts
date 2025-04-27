@@ -137,7 +137,7 @@ export type FieldContext = {
    * Is this field an array member
    */
   isArrayMember: boolean
-}
+} & Record<string, any>
 
 /**
  * The shape of validation rule picked from the
@@ -174,6 +174,11 @@ export type ConditionalFn<Input> = (value: Input, field: FieldContext) => boolea
  * Shape of a validation rule accepted by the compiler
  */
 export type ValidationNode = {
+  /**
+   * Specify the validation node name
+   */
+  name?: string
+
   /**
    * Rule implementation function id.
    */
