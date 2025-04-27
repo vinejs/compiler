@@ -18,7 +18,7 @@ import { defineFieldValidations } from '../../scripts/field/validations.js'
 import type { CompilerField, CompilerParent, ArrayNode } from '../../types.js'
 import { defineArrayInitialOutput } from '../../scripts/array/initial_output.js'
 import { defineFieldExistenceValidations } from '../../scripts/field/existence_validations.js'
-import { defineArrayVariables } from '../../scripts/array/variables.js'
+import { validateArrayField } from '../../scripts/array/variables.js'
 
 /**
  * Compiles an array schema node to JS string output.
@@ -88,7 +88,7 @@ export class ArrayNodeCompiler extends BaseNode {
      * Step 3: Define the code to validate the field is an array
      */
     this.#buffer.writeStatement(
-      defineArrayVariables({
+      validateArrayField({
         variableName: this.field.variableName,
       })
     )

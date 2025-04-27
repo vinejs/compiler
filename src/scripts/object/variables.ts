@@ -12,8 +12,8 @@ type FieldOptions = {
 }
 
 /**
- * Returns JS fragment for defining the object variables
+ * Returns JS fragment for validating the field to be an object
  */
-export function defineObjectVariables({ variableName }: FieldOptions) {
+export function validateObjectField({ variableName }: FieldOptions) {
   return `${variableName}.isValidDataType = ensureIsObject(${variableName});`
 }

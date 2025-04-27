@@ -169,4 +169,165 @@ test.group('Literal node', () => {
       ...getClosingOutput(),
     ])
   })
+
+  test('create JS output with custom datatype validator', async ({ assert }) => {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
+        type: 'literal',
+        allowNull: false,
+        isOptional: false,
+        bail: true,
+        fieldName: '*',
+        propertyName: '*',
+        dataTypeValidatorFnId: 'ref://1',
+        validations: [
+          {
+            implicit: false,
+            isAsync: false,
+            ruleFnId: 'ref://2',
+          },
+        ],
+      },
+    })
+
+    const compiledOutput = compiler.compile().toString()
+    validateCode(compiledOutput)
+
+    assert.assertFormatted(compiledOutput, [
+      ...getInitialOutput(),
+      `const root_item = defineValue(root, {`,
+      `  data: root,`,
+      `  meta: meta,`,
+      `  name: '',`,
+      `  wildCardPath: '',`,
+      `  getFieldPath() {`,
+      `    return '';`,
+      `  },`,
+      `  mutate: defineValue,`,
+      `  report: report,`,
+      `  isValid: true,`,
+      `  isValidDataType: false,`,
+      `  parent: root,`,
+      `  isArrayMember: false,`,
+      '});',
+      `ensureExists(root_item);`,
+      `root_item.isValidDataType = refs['ref://1'].validator(root_item.value, refs['ref://1'].options, root_item);`,
+      `if (root_item.isValid && root_item.isValidDataType) {`,
+      `  refs['ref://2'].validator(root_item.value, refs['ref://2'].options, root_item);`,
+      `}`,
+      `if (root_item.isDefined && root_item.isValid) {`,
+      `  out = root_item.value;`,
+      `}`,
+      ...getClosingOutput(),
+    ])
+  })
+
+  test('create JS output with custom datatype validator by disabling bail mode', async ({
+    assert,
+  }) => {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
+        type: 'literal',
+        allowNull: false,
+        isOptional: false,
+        bail: false,
+        fieldName: '*',
+        propertyName: '*',
+        dataTypeValidatorFnId: 'ref://1',
+        validations: [
+          {
+            implicit: false,
+            isAsync: false,
+            ruleFnId: 'ref://2',
+          },
+        ],
+      },
+    })
+
+    const compiledOutput = compiler.compile().toString()
+    validateCode(compiledOutput)
+
+    assert.assertFormatted(compiledOutput, [
+      ...getInitialOutput(),
+      `const root_item = defineValue(root, {`,
+      `  data: root,`,
+      `  meta: meta,`,
+      `  name: '',`,
+      `  wildCardPath: '',`,
+      `  getFieldPath() {`,
+      `    return '';`,
+      `  },`,
+      `  mutate: defineValue,`,
+      `  report: report,`,
+      `  isValid: true,`,
+      `  isValidDataType: false,`,
+      `  parent: root,`,
+      `  isArrayMember: false,`,
+      '});',
+      `ensureExists(root_item);`,
+      `root_item.isValidDataType = refs['ref://1'].validator(root_item.value, refs['ref://1'].options, root_item);`,
+      `if (root_item.isValidDataType) {`,
+      `  refs['ref://2'].validator(root_item.value, refs['ref://2'].options, root_item);`,
+      `}`,
+      `if (root_item.isDefined && root_item.isValid) {`,
+      `  out = root_item.value;`,
+      `}`,
+      ...getClosingOutput(),
+    ])
+  })
+
+  test('create JS output with custom datatype validator and implicit rules', async ({ assert }) => {
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
+        type: 'literal',
+        allowNull: false,
+        isOptional: false,
+        bail: true,
+        fieldName: '*',
+        propertyName: '*',
+        dataTypeValidatorFnId: 'ref://1',
+        validations: [
+          {
+            implicit: true,
+            isAsync: false,
+            ruleFnId: 'ref://2',
+          },
+        ],
+      },
+    })
+
+    const compiledOutput = compiler.compile().toString()
+    validateCode(compiledOutput)
+
+    assert.assertFormatted(compiledOutput, [
+      ...getInitialOutput(),
+      `const root_item = defineValue(root, {`,
+      `  data: root,`,
+      `  meta: meta,`,
+      `  name: '',`,
+      `  wildCardPath: '',`,
+      `  getFieldPath() {`,
+      `    return '';`,
+      `  },`,
+      `  mutate: defineValue,`,
+      `  report: report,`,
+      `  isValid: true,`,
+      `  isValidDataType: false,`,
+      `  parent: root,`,
+      `  isArrayMember: false,`,
+      '});',
+      `ensureExists(root_item);`,
+      `root_item.isValidDataType = refs['ref://1'].validator(root_item.value, refs['ref://1'].options, root_item);`,
+      `if (root_item.isValid) {`,
+      `  refs['ref://2'].validator(root_item.value, refs['ref://2'].options, root_item);`,
+      `}`,
+      `if (root_item.isDefined && root_item.isValid) {`,
+      `  out = root_item.value;`,
+      `}`,
+      ...getClosingOutput(),
+    ])
+  })
 })

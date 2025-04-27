@@ -245,6 +245,12 @@ export type LiteralNode = FieldNode & {
   type: 'literal'
 
   /**
+   * Function to validate the literal data type and update the
+   * value of "field.isValidDataType" property
+   */
+  dataTypeValidatorFnId?: RefIdentifier
+
+  /**
    * Transform the output value of a field. The output of this method is the
    * final source of truth. The function is executed at the time of writing the
    * value to the output.

@@ -80,3 +80,18 @@ export function defineFieldVariables({
   isArrayMember: ${isArrayMember},
 });`
 }
+
+/**
+ * Returns JS fragment for validating the literal field
+ */
+export function validateLiteralField({
+  variableName,
+  validatorFnId,
+}: {
+  variableName: string
+  validatorFnId: string
+}) {
+  const rule = `refs['${validatorFnId}']`
+  const callable = `${rule}.validator(${variableName}.value, ${rule}.options, ${variableName});`
+  return `${variableName}.isValidDataType = ${callable}`
+}

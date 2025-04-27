@@ -561,6 +561,91 @@ test.group('Literal node', () => {
     const output = await fn(data, meta, refs.toJSON(), messagesProvider, errorReporter)
     assert.deepEqual(output, 'virk')
   })
+
+  test('define custom data type validator', async ({ assert }) => {
+    assert.plan(10)
+
+    const compiler = new Compiler({
+      type: 'root',
+      schema: {
+        type: 'literal',
+        bail: true,
+        fieldName: '',
+        dataTypeValidatorFnId: 'ref://1',
+        validations: [
+          {
+            ruleFnId: 'ref://2',
+            implicit: false,
+            isAsync: false,
+          },
+          {
+            ruleFnId: 'ref://3',
+            implicit: false,
+            isAsync: false,
+          },
+        ],
+        propertyName: '',
+        allowNull: false,
+        isOptional: false,
+      },
+    })
+
+    const data = 'virk'
+    const meta = {}
+
+    const refs: Record<string, ValidationRule> = {
+      'ref://1': {
+        validator(value, options, field) {
+          assert.equal(value, 'virk')
+          assert.isUndefined(options)
+          assert.containsSubset(field, {
+            name: '',
+            isArrayMember: false,
+            isValid: true,
+            meta: {},
+            parent: data,
+            data,
+          })
+          return true
+        },
+      },
+      'ref://2': {
+        validator(value, options, field) {
+          assert.equal(value, 'virk')
+          assert.isUndefined(options)
+          assert.containsSubset(field, {
+            name: '',
+            isArrayMember: false,
+            isValid: true,
+            meta: {},
+            parent: data,
+            data,
+          })
+        },
+      },
+      'ref://3': {
+        validator(value, options, field) {
+          assert.equal(value, 'virk')
+          assert.isUndefined(options)
+          assert.containsSubset(field, {
+            name: '',
+            isArrayMember: false,
+            isValid: true,
+            meta: {},
+            parent: data,
+            data,
+          })
+        },
+      },
+    }
+
+    const messagesProvider = new MessagesProviderFactory().create()
+    const errorReporter = new ErrorReporterFactory().create()
+
+    const fn = compiler.compile()
+    const output = await fn(data, meta, refs, messagesProvider, errorReporter)
+    assert.deepEqual(output, 'virk')
+  })
 })
 
 test.group('Literal node | optional: true', () => {

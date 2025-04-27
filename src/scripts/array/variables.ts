@@ -12,8 +12,8 @@ type FieldOptions = {
 }
 
 /**
- * Returns JS fragment for defining the array variables
+ * Returns JS fragment for validating the field to be an array
  */
-export function defineArrayVariables({ variableName }: FieldOptions) {
+export function validateArrayField({ variableName }: FieldOptions) {
   return `${variableName}.isValidDataType = ensureIsArray(${variableName});`
 }

@@ -20,7 +20,7 @@ import { defineObjectInitialOutput } from '../../scripts/object/initial_output.j
 import { defineMoveProperties } from '../../scripts/object/move_unknown_properties.js'
 import { defineFieldExistenceValidations } from '../../scripts/field/existence_validations.js'
 import type { CompilerField, CompilerParent, ObjectNode, ObjectGroupNode } from '../../types.js'
-import { defineObjectVariables } from '../../scripts/object/variables.js'
+import { validateObjectField } from '../../scripts/object/variables.js'
 
 /**
  * Compiles an object schema node to JS string output.
@@ -153,7 +153,7 @@ export class ObjectNodeCompiler extends BaseNode {
      * Step 3: Define the code to validate the field is an object
      */
     this.#buffer.writeStatement(
-      defineObjectVariables({
+      validateObjectField({
         variableName: this.field.variableName,
       })
     )

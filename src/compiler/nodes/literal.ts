@@ -15,6 +15,7 @@ import { defineFieldNullOutput } from '../../scripts/field/null_output.js'
 import { defineFieldValueOutput } from '../../scripts/field/value_output.js'
 import type { LiteralNode, CompilerParent, CompilerField } from '../../types.js'
 import { defineFieldExistenceValidations } from '../../scripts/field/existence_validations.js'
+import { validateLiteralField } from '../../scripts/field/variables.js'
 
 /**
  * Compiles a literal schema node to JS string output.
@@ -53,19 +54,34 @@ export class LiteralNodeCompiler extends BaseNode {
     )
 
     /**
-     * Step 3: Define code to run validations on field
+     * Step 3: Define code to validate the field's data-type (if ref is provided)
+     */
+    if (this.#node.dataTypeValidatorFnId) {
+      this.#buffer.writeStatement(
+        validateLiteralField({
+          variableName: this.field.variableName,
+          validatorFnId: this.#node.dataTypeValidatorFnId,
+        })
+      )
+    }
+
+    /**
+     * Step 4: Define code to run validations on field
      */
     this.#buffer.writeStatement(
       defineFieldValidations({
         variableName: this.field.variableName,
         validations: this.#node.validations,
         bail: this.#node.bail,
+        existenceCheckExpression: this.#node.dataTypeValidatorFnId
+          ? `${this.field.variableName}.isValidDataType`
+          : undefined,
         dropMissingCheck: false,
       })
     )
 
     /**
-     * Step 4: Define block to save the output value or the null value
+     * Step 5: Define block to save the output value or the null value
      */
     this.#buffer.writeStatement(
       `${defineFieldValueOutput({

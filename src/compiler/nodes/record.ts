@@ -18,7 +18,7 @@ import { defineFieldValidations } from '../../scripts/field/validations.js'
 import type { CompilerField, CompilerParent, RecordNode } from '../../types.js'
 import { defineObjectInitialOutput } from '../../scripts/object/initial_output.js'
 import { defineFieldExistenceValidations } from '../../scripts/field/existence_validations.js'
-import { defineObjectVariables } from '../../scripts/object/variables.js'
+import { validateObjectField } from '../../scripts/object/variables.js'
 
 /**
  * Compiles a record schema node to JS string output.
@@ -88,7 +88,7 @@ export class RecordNodeCompiler extends BaseNode {
      * Step 3: Define the code to validate the field is an object
      */
     this.#buffer.writeStatement(
-      defineObjectVariables({
+      validateObjectField({
         variableName: this.field.variableName,
       })
     )
