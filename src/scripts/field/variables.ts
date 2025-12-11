@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import { RefIdentifier } from '../../types.js'
+import { type RefIdentifier } from '../../types.js'
 
 type FieldOptions = {
   parentExpression: string

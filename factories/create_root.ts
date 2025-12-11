@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import { ObjectNode, RootNode } from '../src/types.js'
+import { type ObjectNode, type RootNode } from '../src/types.js'
 
 export function createRoot(schema: ObjectNode): RootNode {
   return {

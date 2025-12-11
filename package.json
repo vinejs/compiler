@@ -29,7 +29,7 @@
     "release": "release-it",
     "version": "npm run build",
     "prepublishOnly": "npm run build",
-    "quick:test": "node --import=ts-node-maintained/register/esm --enable-source-maps bin/test.ts"
+    "quick:test": "node --import=@poppinss/ts-exec --enable-source-maps bin/test.ts"
   },
   "keywords": [
     "vinejs",
@@ -39,13 +39,13 @@
   "author": "virk,vinejs",
   "license": "MIT",
   "devDependencies": {
-    "@adonisjs/eslint-config": "^2.1.2",
+    "@adonisjs/eslint-config": "^3.0.0-next.4",
     "@adonisjs/prettier-config": "^1.4.5",
-    "@adonisjs/tsconfig": "^1.4.1",
+    "@adonisjs/tsconfig": "^2.0.0-next.3",
     "@japa/assert": "^4.1.1",
     "@japa/runner": "^4.4.0",
+    "@poppinss/ts-exec": "^1.4.1",
     "@release-it/conventional-changelog": "^10.0.3",
-    "@swc/core": "1.15.3",
     "@types/node": "^25.0.0",
     "acorn": "^8.15.0",
     "ajv": "^8.17.1",
@@ -57,7 +57,6 @@
     "prettier": "^3.7.4",
     "release-it": "^19.1.0",
     "tinybench": "^6.0.0",
-    "ts-node-maintained": "^10.9.6",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
     "zod": "^4.1.13"

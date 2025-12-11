@@ -8,7 +8,7 @@
  */
 
 import { test } from '@japa/runner'
-import { FieldContext, Refs } from '../../../src/types.js'
+import { type FieldContext, type Refs } from '../../../src/types.js'
 import { refsBuilder } from '../../../index.js'
 import { Compiler } from '../../../src/compiler/main.js'
 import { ErrorReporterFactory } from '../../../factories/error_reporter.js'

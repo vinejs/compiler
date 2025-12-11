@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import { CompilerOptions } from '../types.js'
+import { type CompilerOptions } from '../types.js'
 
 /**
  * Returns JS fragment for inline error messages for errors raised

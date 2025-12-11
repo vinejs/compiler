@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import { ValidationNode } from '../../types.js'
+import { type ValidationNode } from '../../types.js'
 
 /**
  * Options accepts by the validation script

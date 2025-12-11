@@ -9,7 +9,7 @@
 
 import { test } from '@japa/runner'
 import { refsBuilder } from '../../../index.js'
-import { ValidationRule } from '../../../src/types.js'
+import { type ValidationRule } from '../../../src/types.js'
 import { Compiler } from '../../../src/compiler/main.js'
 import { ErrorReporterFactory } from '../../../factories/error_reporter.js'
 import { MessagesProviderFactory } from '../../../factories/messages_provider.js'

@@ -1,4 +1,4 @@
-import { RootNode } from '../../src/types.js'
+import { type RootNode } from '../../src/types.js'
 
 export const schema: RootNode = {
   type: 'root',

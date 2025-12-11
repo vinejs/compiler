@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import { MessagesProviderContact } from '../src/types.js'
+import { type MessagesProviderContact } from '../src/types.js'
 
 export class MessagesProviderFactory {
   create() {

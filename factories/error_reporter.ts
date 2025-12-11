@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import { ErrorReporterContract } from '../src/types.js'
+import { type ErrorReporterContract } from '../src/types.js'
 
 class ValidationError extends Error {
   declare messages: string[]

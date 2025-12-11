@@ -1,7 +1,7 @@
 import { z } from 'zod'
 // @ts-ignore
 import Benchmark from 'benchmark'
-import Ajv, { AsyncValidateFunction } from 'ajv'
+import Ajv, { type AsyncValidateFunction } from 'ajv'
 import { Compiler } from '../src/compiler/main.js'
 import { ErrorReporterFactory } from '../factories/error_reporter.js'
 import { MessagesProviderFactory } from '../factories/messages_provider.js'
