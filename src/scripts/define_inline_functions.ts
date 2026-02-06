@@ -17,7 +17,7 @@ export function defineInlineFunctions(options: { convertEmptyStringsToNull: bool
   errorReporter.report(messagesProvider.getMessage(message, rule, field, args), rule, field, args);
 };
 function defineValue(value, field) {
-  ${options.convertEmptyStringsToNull ? `if (value === '') { value = null; }` : ''}
+  ${options.convertEmptyStringsToNull ? `if (typeof value === 'string' && value.trim() === '') { value = null; }` : ''}
   field.value = value;
   field.isDefined = value !== undefined && value !== null;
   return field;
