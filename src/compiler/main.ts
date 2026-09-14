@@ -23,14 +23,13 @@ import { createRecordField } from './fields/record_field.js'
 import { defineInlineFunctions } from '../scripts/define_inline_functions.js'
 import { defineInlineErrorMessages } from '../scripts/define_error_messages.js'
 import type {
-  Refs,
   RootNode,
   CompilerField,
   CompilerNodes,
   CompilerParent,
   CompilerOptions,
-  ErrorReporterContract,
-  MessagesProviderContact,
+  CompiledValidator,
+  CompiledSyncValidator,
 } from '../types.js'
 
 /**
@@ -64,6 +63,11 @@ export class Compiler {
    */
   #buffer: CompilerBuffer = new CompilerBuffer()
 
+  /**
+   * Whether the current compilation targets a synchronous function
+   */
+  #synchronous: boolean = false
+
   constructor(rootNode: RootNode, options?: CompilerOptions) {
     this.#rootNode = rootNode
     this.#options = options || { convertEmptyStringsToNull: false }
@@ -81,7 +85,7 @@ export class Compiler {
         ...this.#options.messages,
       })
     )
-    this.#buffer.writeStatement(defineInlineFunctions(this.#options))
+    this.#buffer.writeStatement(defineInlineFunctions(this.#options, this.#synchronous))
     this.#buffer.writeStatement('let out;')
   }
 
@@ -109,13 +113,7 @@ export class Compiler {
   /**
    * Returns compiled output as a function
    */
-  #toAsyncFunction<T extends Record<string, any>>(): (
-    data: any,
-    meta: Record<string, any>,
-    refs: Refs,
-    messagesProvider: MessagesProviderContact,
-    errorReporter: ErrorReporterContract
-  ) => Promise<T> {
+  #toAsyncFunction(): CompiledValidator {
     return new AsyncFunction(
       'root',
       'meta',
@@ -124,6 +122,36 @@ export class Compiler {
       'errorReporter',
       this.#buffer.toString()
     )
+  }
+
+  /**
+   * Returns compiled output as a synchronous function
+   */
+  #toFunction(): CompiledSyncValidator {
+    return new Function(
+      'root',
+      'meta',
+      'refs',
+      'messagesProvider',
+      'errorReporter',
+      this.#buffer.toString()
+    ) as CompiledSyncValidator
+  }
+
+  /**
+   * Ensures async validation rules are not part of synchronous compilation
+   */
+  #ensureCanCompileSync(node: CompilerNodes) {
+    if (!this.#synchronous || !('validations' in node)) {
+      return
+    }
+
+    const asyncRule = node.validations.find((validation) => validation.isAsync)
+    if (asyncRule) {
+      throw new Error(
+        `Cannot compile validation rule "${asyncRule.name || asyncRule.ruleFnId}" for field "${node.fieldName}" synchronously because it is async`
+      )
+    }
   }
 
   /**
@@ -154,17 +182,54 @@ export class Compiler {
     parent: CompilerParent,
     parentField?: CompilerField
   ) {
+    this.#ensureCanCompileSync(node)
+
     switch (node.type) {
       case 'literal':
-        return new LiteralNodeCompiler(node, buffer, this, parent, parentField).compile()
+        return new LiteralNodeCompiler(
+          node,
+          buffer,
+          this,
+          parent,
+          parentField,
+          this.#synchronous
+        ).compile()
       case 'array':
-        return new ArrayNodeCompiler(node, buffer, this, parent, parentField).compile()
+        return new ArrayNodeCompiler(
+          node,
+          buffer,
+          this,
+          parent,
+          parentField,
+          this.#synchronous
+        ).compile()
       case 'record':
-        return new RecordNodeCompiler(node, buffer, this, parent, parentField).compile()
+        return new RecordNodeCompiler(
+          node,
+          buffer,
+          this,
+          parent,
+          parentField,
+          this.#synchronous
+        ).compile()
       case 'object':
-        return new ObjectNodeCompiler(node, buffer, this, parent, parentField).compile()
+        return new ObjectNodeCompiler(
+          node,
+          buffer,
+          this,
+          parent,
+          parentField,
+          this.#synchronous
+        ).compile()
       case 'tuple':
-        return new TupleNodeCompiler(node, buffer, this, parent, parentField).compile()
+        return new TupleNodeCompiler(
+          node,
+          buffer,
+          this,
+          parent,
+          parentField,
+          this.#synchronous
+        ).compile()
       case 'union':
         return new UnionNodeCompiler(node, buffer, this, parent, parentField).compile()
     }
@@ -173,16 +238,35 @@ export class Compiler {
   /**
    * Compile schema nodes to an async function
    */
-  compile() {
+  compile(): CompiledValidator {
+    return this.#compile(false)
+  }
+
+  /**
+   * Compile schema nodes to a synchronous function
+   */
+  compileSync(): CompiledSyncValidator {
+    return this.#compile(true)
+  }
+
+  /**
+   * Compile schema nodes to a function using the requested execution mode
+   */
+  #compile(synchronous: false): CompiledValidator
+  #compile(synchronous: true): CompiledSyncValidator
+  #compile(synchronous: boolean) {
+    this.#synchronous = synchronous
     this.#initiateJSOutput()
-    this.#compileNodes()
-    this.#finishJSOutput()
 
-    const outputFunction = this.#toAsyncFunction()
+    try {
+      this.#compileNodes()
+      this.#finishJSOutput()
 
-    this.variablesCounter = 0
-    this.#buffer.flush()
-
-    return outputFunction
+      return synchronous ? this.#toFunction() : this.#toAsyncFunction()
+    } finally {
+      this.#synchronous = false
+      this.variablesCounter = 0
+      this.#buffer.flush()
+    }
   }
 }

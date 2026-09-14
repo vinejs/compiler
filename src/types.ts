@@ -434,12 +434,7 @@ export type RootNode = {
  * Known tree nodes accepted by the compiler
  */
 export type CompilerNodes =
-  | LiteralNode
-  | ObjectNode
-  | ArrayNode
-  | UnionNode
-  | RecordNode
-  | TupleNode
+  LiteralNode | ObjectNode | ArrayNode | UnionNode | RecordNode | TupleNode
 
 /**
  * Properties of a parent node as the compiler loops through the
@@ -525,6 +520,28 @@ export interface MessagesProviderContact {
     args?: Record<string, any>
   ): string
 }
+
+/**
+ * A validator produced by Compiler.compile
+ */
+export type CompiledValidator<Output = Record<string, any>> = (
+  data: any,
+  meta: Record<string, any>,
+  refs: Refs,
+  messagesProvider: MessagesProviderContact,
+  errorReporter: ErrorReporterContract
+) => Promise<Output>
+
+/**
+ * A validator produced by Compiler.compileSync
+ */
+export type CompiledSyncValidator<Output = Record<string, any>> = (
+  data: any,
+  meta: Record<string, any>,
+  refs: Refs,
+  messagesProvider: MessagesProviderContact,
+  errorReporter: ErrorReporterContract
+) => Output
 
 /**
  * Options accepted by the compiler
