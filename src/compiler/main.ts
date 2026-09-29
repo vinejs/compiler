@@ -68,6 +68,13 @@ export class Compiler {
    */
   #synchronous: boolean = false
 
+  /**
+   * Read by node compilers to emit synchronous validation calls
+   */
+  get synchronous() {
+    return this.#synchronous
+  }
+
   constructor(rootNode: RootNode, options?: CompilerOptions) {
     this.#rootNode = rootNode
     this.#options = options || { convertEmptyStringsToNull: false }
@@ -186,50 +193,15 @@ export class Compiler {
 
     switch (node.type) {
       case 'literal':
-        return new LiteralNodeCompiler(
-          node,
-          buffer,
-          this,
-          parent,
-          parentField,
-          this.#synchronous
-        ).compile()
+        return new LiteralNodeCompiler(node, buffer, this, parent, parentField).compile()
       case 'array':
-        return new ArrayNodeCompiler(
-          node,
-          buffer,
-          this,
-          parent,
-          parentField,
-          this.#synchronous
-        ).compile()
+        return new ArrayNodeCompiler(node, buffer, this, parent, parentField).compile()
       case 'record':
-        return new RecordNodeCompiler(
-          node,
-          buffer,
-          this,
-          parent,
-          parentField,
-          this.#synchronous
-        ).compile()
+        return new RecordNodeCompiler(node, buffer, this, parent, parentField).compile()
       case 'object':
-        return new ObjectNodeCompiler(
-          node,
-          buffer,
-          this,
-          parent,
-          parentField,
-          this.#synchronous
-        ).compile()
+        return new ObjectNodeCompiler(node, buffer, this, parent, parentField).compile()
       case 'tuple':
-        return new TupleNodeCompiler(
-          node,
-          buffer,
-          this,
-          parent,
-          parentField,
-          this.#synchronous
-        ).compile()
+        return new TupleNodeCompiler(node, buffer, this, parent, parentField).compile()
       case 'union':
         return new UnionNodeCompiler(node, buffer, this, parent, parentField).compile()
     }

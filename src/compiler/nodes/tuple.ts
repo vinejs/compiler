@@ -26,21 +26,18 @@ export class TupleNodeCompiler extends BaseNode {
   #node: TupleNode
   #buffer: CompilerBuffer
   #compiler: Compiler
-  #synchronous: boolean
 
   constructor(
     node: TupleNode,
     buffer: CompilerBuffer,
     compiler: Compiler,
     parent: CompilerParent,
-    parentField: CompilerField | undefined,
-    synchronous: boolean
+    parentField?: CompilerField
   ) {
     super(node, compiler, parent, parentField)
     this.#node = node
     this.#buffer = buffer
     this.#compiler = compiler
-    this.#synchronous = synchronous
   }
 
   /**
@@ -94,7 +91,7 @@ export class TupleNodeCompiler extends BaseNode {
      */
     this.#buffer.writeStatement(
       defineFieldValidations({
-        synchronous: this.#synchronous,
+        synchronous: this.#compiler.synchronous,
         variableName: this.field.variableName,
         validations: this.#node.validations,
         bail: this.#node.bail,

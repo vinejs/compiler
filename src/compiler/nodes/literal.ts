@@ -23,20 +23,19 @@ import { validateLiteralField } from '../../scripts/field/variables.js'
 export class LiteralNodeCompiler extends BaseNode {
   #node: LiteralNode
   #buffer: CompilerBuffer
-  #synchronous: boolean
+  #compiler: Compiler
 
   constructor(
     node: LiteralNode,
     buffer: CompilerBuffer,
     compiler: Compiler,
     parent: CompilerParent,
-    parentField: CompilerField | undefined,
-    synchronous: boolean
+    parentField?: CompilerField
   ) {
     super(node, compiler, parent, parentField)
     this.#node = node
     this.#buffer = buffer
-    this.#synchronous = synchronous
+    this.#compiler = compiler
   }
 
   compile() {
@@ -73,7 +72,7 @@ export class LiteralNodeCompiler extends BaseNode {
      */
     this.#buffer.writeStatement(
       defineFieldValidations({
-        synchronous: this.#synchronous,
+        synchronous: this.#compiler.synchronous,
         variableName: this.field.variableName,
         validations: this.#node.validations,
         bail: this.#node.bail,
