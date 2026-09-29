@@ -63,6 +63,9 @@ ${
   synchronous
     ? `function ensureIsNotPromise(result, rule, field) {
   if (result !== null && (typeof result === 'object' || typeof result === 'function') && typeof result.then === 'function') {
+    try {
+      result.then(undefined, function () {});
+    } catch {}
     throw new Error(\`Validation rule "\${rule}" for field "\${field.getFieldPath()}" returned a promise or thenable while marked as synchronous\`);
   }
 };`

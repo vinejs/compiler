@@ -170,6 +170,49 @@ test.group('Synchronous compilation', () => {
     )
   })
 
+  test('handles rejections of thenables returned by rules marked as synchronous', ({ assert }) => {
+    let rejectionHandler: unknown
+    const compiler = new Compiler({
+      type: 'root',
+      schema: object('*', [
+        {
+          type: 'array',
+          bail: true,
+          fieldName: 'emails',
+          validations: [],
+          propertyName: 'emails',
+          allowNull: false,
+          isOptional: false,
+          each: literal('*', [
+            {
+              name: 'unique',
+              ruleFnId: 'ref://1',
+              implicit: false,
+              isAsync: false,
+            },
+          ]),
+        },
+      ]),
+    })
+    const refs: Refs = {
+      'ref://1': {
+        validator() {
+          return {
+            then(_: unknown, onRejected: unknown) {
+              rejectionHandler = onRejected
+            },
+          }
+        },
+      },
+    }
+
+    assert.throws(
+      () => executeSync(compiler, { emails: ['romain@adonisjs.com'] }, refs),
+      'Validation rule "unique" for field "emails.0" returned a promise or thenable while marked as synchronous'
+    )
+    assert.isFunction(rejectionHandler)
+  })
+
   test('keeps compile asynchronous and awaits async rules', async ({ assert }) => {
     let ruleCompleted = false
     const compiler = new Compiler({
