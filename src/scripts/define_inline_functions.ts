@@ -11,7 +11,10 @@
  * Returns JS fragment for inline function needed by the
  * validation runtime code.
  */
-export function defineInlineFunctions(options: { convertEmptyStringsToNull: boolean }) {
+export function defineInlineFunctions(
+  options: { convertEmptyStringsToNull: boolean },
+  synchronous: boolean = false
+) {
   return `function report(message, rule, field, args) {
   field.isValid = false;
   errorReporter.report(messagesProvider.getMessage(message, rule, field, args), rule, field, args);
@@ -56,6 +59,18 @@ function ensureIsArray(field) {
   field.report(NOT_AN_ARRAY, 'array', field);
   return false;
 };
+${
+  synchronous
+    ? `function ensureIsNotPromise(result, rule, field) {
+  if (result !== null && (typeof result === 'object' || typeof result === 'function') && typeof result.then === 'function') {
+    try {
+      result.then(undefined, function () {});
+    } catch {}
+    throw new Error(\`Validation rule "\${rule}" for field "\${field.getFieldPath()}" returned a promise or thenable while marked as synchronous\`);
+  }
+};`
+    : ''
+}
 function copyProperties(val) {
   let k, out, tmp;
 

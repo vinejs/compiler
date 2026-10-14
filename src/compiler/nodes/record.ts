@@ -98,6 +98,7 @@ export class RecordNodeCompiler extends BaseNode {
      */
     this.#buffer.writeStatement(
       defineFieldValidations({
+        synchronous: this.#compiler.synchronous,
         variableName: this.field.variableName,
         validations: this.#node.validations,
         bail: this.#node.bail,

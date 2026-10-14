@@ -14,6 +14,7 @@ import { type ValidationNode } from '../../types.js'
  */
 type ValidationOptions = {
   bail: boolean
+  synchronous?: boolean
   variableName: string
   validations: ValidationNode[]
 
@@ -60,14 +61,15 @@ function wrapInConditional(conditions: [string, string], wrappingCode: string) {
  * Emits code for executing a validation function
  */
 function emitValidationSnippet(
-  { isAsync, implicit, ruleFnId }: ValidationNode,
+  { name, isAsync, implicit, ruleFnId }: ValidationNode,
   variableName: string,
   bail: boolean,
+  synchronous: boolean,
   dropMissingCheck: boolean,
   existenceCheckExpression?: string
 ) {
   const rule = `refs['${ruleFnId}']`
-  const callable = `${rule}.validator(${variableName}.value, ${rule}.options, ${variableName});`
+  const callable = `${rule}.validator(${variableName}.value, ${rule}.options, ${variableName})`
   existenceCheckExpression = existenceCheckExpression || `${variableName}.isDefined`
 
   /**
@@ -86,7 +88,11 @@ function emitValidationSnippet(
    */
   return wrapInConditional(
     [bailCondition, implicitCondition],
-    isAsync ? `await ${callable}` : `${callable}`
+    isAsync
+      ? `await ${callable};`
+      : synchronous
+        ? `ensureIsNotPromise(${callable}, ${JSON.stringify(name || ruleFnId)}, ${variableName});`
+        : `${callable};`
   )
 }
 
@@ -95,6 +101,7 @@ function emitValidationSnippet(
  */
 export function defineFieldValidations({
   bail,
+  synchronous = false,
   validations,
   variableName,
   dropMissingCheck,
@@ -102,7 +109,14 @@ export function defineFieldValidations({
 }: ValidationOptions) {
   return `${validations
     .map((one) =>
-      emitValidationSnippet(one, variableName, bail, dropMissingCheck, existenceCheckExpression)
+      emitValidationSnippet(
+        one,
+        variableName,
+        bail,
+        synchronous,
+        dropMissingCheck,
+        existenceCheckExpression
+      )
     )
     .join('\n')}`
 }
